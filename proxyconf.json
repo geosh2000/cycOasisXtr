@@ -1,0 +1,7 @@
+{
+    "/api/rf": {
+        "target": "http://cyc-oasishoteles.com",
+        "secure": false,
+        "changeOrigin": true
+    }
+}
