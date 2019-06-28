@@ -9,6 +9,9 @@
     <div *ngIf="currentUser && currentUser['credentials']['viewOnlyAffiliates'] != 1">
         <button class="btn btn-sm btn-light" (click)="openSideBar()">Menu <span *ngIf="!sbStatus"><i class="far fa-arrow-alt-circle-right"></i></span><span *ngIf="sbStatus"><i class="far fa-arrow-alt-circle-left"></i></span></button>
     </div>
+    <div class="ml-2" *ngIf="currentUser && currentUser['credentials']['app_cotizador'] == 1">
+        <button class="btn btn-sm btn-success text-light" [routerLink]="['/cotizador']">Cotizar</button>
+    </div>
     <div *ngIf="currentUser && currentUser['credentials']['viewOnlyAffiliates'] == 1">
         <button class="btn btn-sm btn-light" [routerLink]="['/afiliados']">Ver Reporte</button>
     </div>
@@ -21,7 +24,7 @@
     </button> -->
 
     <!-- NAVBAR -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="navbar-collapse" style="flex-basis: 0 !important" id="navbarSupportedContent">
 
         <div class="ml-auto d-flex justify-content-end">
             <!-- <div class="p-1" *ngIf="currentUser && currentUser['credentials']['viewOnlyAffiliates'] != 1">

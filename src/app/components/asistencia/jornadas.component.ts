@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import * as moment from 'moment-timezone';
-import { ZonaHorariaService } from '../../../services/service.index';
+import { ZonaHorariaService } from '../../services/service.index';
 
 @Component({
   selector: 'app-jornadas',

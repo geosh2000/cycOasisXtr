@@ -118,11 +118,11 @@ export class EditDetailsComponent implements OnChanges {
 
   populateProfiles(){
     let params = {}
-    this._api.postFromApi( params, 'listProfiles' )
+    this._api.restfulGet( '', 'Lists/listProfiles' )
             .subscribe( res => {
-              this.listProfiles = res
+              this.listProfiles = res['data']
               this.listProfileLoaded = true
-
+           
             })
   }
 

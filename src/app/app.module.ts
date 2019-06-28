@@ -100,9 +100,19 @@ import { SetBajaComponent } from './components/formularios/set-baja.component';
 import { AddContratoComponent } from './components/formularios/add-contrato.component';
 import { ReingresoAsesorComponent } from './components/formularios/reingreso-asesor.component';
 import { CambioPuestoComponent } from './components/formularios/cambio-puesto.component';
-import { JornadasComponent } from './components/reportes/asistencia/jornadas.component';
+import { JornadasComponent } from './components/asistencia/jornadas.component';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { PopoverModule } from 'ngx-popover';
+import { AddNewAgentComponent } from './components/formularios/add-new-agent/add-new-agent.component';
+import { AltasBatchComponent } from './components/hc/altas-batch/altas-batch.component';
+import { BatchAsesorFormComponent } from './components/hc/altas-batch/batch-asesor-form/batch-asesor-form.component';
+import { CargaHorariosComponent } from './components/asistencia/carga-horarios/carga-horarios.component';
+import { ContextMenuModule } from 'ngx-contextmenu';
+import { Select2Module } from 'ng2-select2';
+import { AsistenciaComponent } from './components/asistencia/asistencia.component';
+import { CotizadorComponent } from './components/cotizador/cotizador.component';
+import { SearchHotelModuleComponent } from './components/cotizador/search-hotel-module/search-hotel-module.component';
+import { FillPipe } from './pipes/fill.pipe';
 
 @NgModule({
   declarations: [
@@ -150,6 +160,14 @@ import { PopoverModule } from 'ngx-popover';
     ReingresoAsesorComponent,
     CambioPuestoComponent,
     JornadasComponent,
+    AddNewAgentComponent,
+    AltasBatchComponent,
+    BatchAsesorFormComponent,
+    CargaHorariosComponent,
+    AsistenciaComponent,
+    CotizadorComponent,
+    SearchHotelModuleComponent,
+    FillPipe,
 
   ],
   imports: [
@@ -163,14 +181,20 @@ import { PopoverModule } from 'ngx-popover';
     Ng2CompleterModule,
     FormsModule,
     ReactiveFormsModule,
-    UiSwitchModule,
+    UiSwitchModule.forRoot({
+      size: 'small',
+    }),
     NgbModule.forRoot(),
     ToastrModule.forRoot(),
     OrderModule,
     MultiselectDropdownModule,
     Daterangepicker,
     PopoverModule,
-    
+    ContextMenuModule.forRoot({
+      useBootstrap4: true,
+      autoFocus: true
+    }),
+    Select2Module,
 
     MatButtonModule, MatCheckboxModule,
 

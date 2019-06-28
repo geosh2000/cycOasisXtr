@@ -71,6 +71,7 @@ export class DetalleAsesoresComponent implements OnInit {
     this.activatedRoute.params.subscribe( params => {
       if ( params.id ){
         this.selected['id']     = params.id;
+
       }
     });
   }

@@ -3,5 +3,10 @@
         "target": "http://cyc-oasishoteles.com",
         "secure": false,
         "changeOrigin": true
+    },
+    "/ng2/json": {
+        "target": "http://cyc-oasishoteles.com",
+        "secure": false,
+        "changeOrigin": true
     }
 }

@@ -22,7 +22,7 @@ export class DetContratoComponent implements OnChanges {
 
   loading:Object = {}
   data:Object = {}
-  contratos:Object = {}
+  contratos:any = []
   solicitudes:any
   bajaTipo:boolean = false
   evalModal:Object = {}
@@ -40,6 +40,8 @@ export class DetContratoComponent implements OnChanges {
 
   getData(){
     this.loading['data'] = true
+
+    console.log('contratos', this.asesor)
 
     this._api.restfulGet( this.asesor,'DetalleAsesores/contrato' )
               .subscribe( res => {

@@ -33,9 +33,9 @@
                     <div class="p-2">
                         <button type="button" class="btn btn-sm btn-success" *ngIf="_init.checkSingleCredential('hc_agregar_asesore')" (click)="addNewAgent('MX')">Agregar Asesor MX</button>
                     </div>
-                    <div class="p-2">
+                    <!-- <div class="p-2">
                         <button type="button" class="btn btn-sm btn-success" *ngIf="_init.checkSingleCredential('hc_agregar_asesore')" (click)="addNewAgent('CO')">Agregar Asesor CO</button>
-                    </div>
+                    </div> -->
                 </div>
                 <!-- <div class="d-flex justify-content-end">
                     <div class="p-2">
@@ -46,7 +46,7 @@
         </div>
     </div>
     <br>
-    <ng-container *ngIf="selected['id']">
+    <ng-container *ngIf="selected['id'] > 0">
         <div class="container" *ngIf="selected['id']">
             <app-det-detalle [asesor]="selected['id']" *ngIf="_init.checkSingleCredential('hc_detalle_asesores')"></app-det-detalle>
             <app-det-contrato [asesor]="selected['id']" (showEval)="showEval( $event )" (reload)="reload()" *ngIf="_init.checkSingleCredential('hc_contratos_view')" [time]="now"></app-det-contrato>
@@ -75,6 +75,6 @@
     </ng-container>
 
     <!-- AGREGAR ASESOR -->
-    <!-- <app-add-new-agent (goTo)="onSelected($event)"></app-add-new-agent> -->
+    <app-add-new-agent (goTo)="onSelected($event)"></app-add-new-agent>
 
 </div>

@@ -75,6 +75,8 @@ export class DetDiasPendientesComponent implements OnChanges {
                 this.loading['list'] = false
                 this.loading['detail'] = false
 
+                console.log(res['data'])
+
                 if( asesor ){
                   this.detail['data'] = res['data']
                   this.detail['Nombre'] = res['data']['Nombre']

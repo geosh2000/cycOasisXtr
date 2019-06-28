@@ -64,29 +64,34 @@ export class DetDetalleComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.getData()
+    if( this.asesor ){
+      this.getData()
+    }
   }
 
   getData(){
-    this.loading['data'] = true
+    if( this.asesor != undefined ){
+     
+      this.loading['data'] = true
 
-    this._api.restfulGet( this.asesor,'DetalleAsesores/detalle' )
-              .subscribe( res => {
+      this._api.restfulGet( this.asesor,'DetalleAsesores/detalle' )
+                .subscribe( res => {
 
-                this.loading['data'] = false
-                this.data = res['data']
-                this.updateImg( this.data['num_colaborador'] )
+                  this.loading['data'] = false
+                  this.data = res['data']
+                  this.updateImg( this.data['num_colaborador'] )
 
-              }, err => {
-                console.log('ERROR', err)
+                }, err => {
+                  console.log('ERROR', err)
 
-                this.loading['data'] = false
+                  this.loading['data'] = false
 
-                let error = err.error
-                this.error.emit( {msg: error.msg, status: err.status, text: err.statusText} )
-                console.error(err.statusText, error.msg)
+                  let error = err.error
+                  this.error.emit( {msg: error.msg, status: err.status, text: err.statusText} )
+                  console.error(err.statusText, error.msg)
 
-              })
+                })
+    }
   }
 
   uploadFoto(){
