@@ -37,8 +37,8 @@
                       'btn-outline-secondary': asistData['js'] == null}" placement="top" [ngbPopover]="popContent" popoverTitle="Logs de Jornada">
 
               <span class="text-center">
-                <small *ngIf="asistData['Descanso'] == 1">Descanso</small>
-                <small *ngIf="asistData['Descanso'] != 1 && asistData['js'] != null" style="font-size: xx-small">
+                <small *ngIf="asistData['Descanso'] == 1">Descanso </small>
+                <small *ngIf="asistData['Descanso'] != 1 && asistData['js'] != null">
                   {{ formatDate(asistData['js'], 'HH:mm') }} - {{ formatDate(asistData['je'], 'HH:mm') }}
                   <i class="fa fa-fw fa-info-circle"></i>
                 </small>

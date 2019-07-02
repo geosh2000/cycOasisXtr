@@ -6,6 +6,7 @@ import { DetalleAsesoresComponent } from './components/hc/detalle-asesores/detal
 import { CargaHorariosComponent } from './components/asistencia/carga-horarios/carga-horarios.component';
 import { AsistenciaComponent } from './components/asistencia/asistencia.component';
 import { CotizadorComponent } from './components/cotizador/cotizador.component';
+import { CotizadorV2Component } from './components/cotizador/cotizador-v2.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'asistencia/editarHorarios', component: CargaHorariosComponent },
   
   { path: 'cotizador', component: CotizadorComponent },
+  { path: 'cotizadorV2', component: CotizadorV2Component },
 
   
 ];

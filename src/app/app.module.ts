@@ -113,6 +113,11 @@ import { AsistenciaComponent } from './components/asistencia/asistencia.componen
 import { CotizadorComponent } from './components/cotizador/cotizador.component';
 import { SearchHotelModuleComponent } from './components/cotizador/search-hotel-module/search-hotel-module.component';
 import { FillPipe } from './pipes/fill.pipe';
+import { HorariosSemanaComponent } from './components/home/horarios-semana/horarios-semana.component';
+import { PersonalDataComponent } from './components/home/personal-data.component';
+import { CotizadorV2Component } from './components/cotizador/cotizador-v2.component';
+import { CreateRsvComponent } from './components/cotizador/create-rsv/create-rsv.component';
+import { SearchZdUserComponent } from './shared/search-zd-user/search-zd-user.component';
 
 @NgModule({
   declarations: [
@@ -168,6 +173,11 @@ import { FillPipe } from './pipes/fill.pipe';
     CotizadorComponent,
     SearchHotelModuleComponent,
     FillPipe,
+    HorariosSemanaComponent,
+    PersonalDataComponent,
+    CotizadorV2Component,
+    CreateRsvComponent,
+    SearchZdUserComponent,
 
   ],
   imports: [

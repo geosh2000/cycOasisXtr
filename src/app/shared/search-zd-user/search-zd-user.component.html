@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-3 d-flex justify-content-start flex-wrap">
+        <div class="p-1">
+            <mat-form-field>
+                <input matInput placeholder="correo del cliente" name="mail" [(ngModel)]="mail">
+            </mat-form-field>
+        </div>
+        <div class="p-1">
+            <button mat-raised-button color="primary" (click)="search()" [disabled]="loading['search']">Buscar <span *ngIf="loading['search']"><i class="fas fa-spinner fa-pulse"></i></span></button>
+        </div>
+    </div>
+    <div class="col-9">
+        <mat-list>
+            <ng-container *ngFor="let item of data; index as i">
+                <mat-list-item>
+                    <span [style.width.px]="200" class="text-primary">{{ item['name'] }}</span>
+                    <span [style.width.px]="10"></span>
+                    <span class="text-center bg-secondary text-light" [style.width.px]="40"><i class="fas fa-phone"></i></span>
+                    <span [style.width.px]="150" class="ml-2">{{ item['phone'] }}</span>
+                    <span [style.width.px]="10"></span>
+                    <span class="text-center bg-secondary text-light" [style.width.px]="40"><i class="fas fa-envelope"></i></span>
+                    <span [style.width.px]="250" class="ml-2">{{ item['email'] }}</span>
+                    <button mat-raised-button color="primary" (click)="search()" [disabled]="loading['search']">Select</button>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </ng-container>
+        </mat-list>
+        <pre>{{ data | json }}</pre>
+    </div>
+</div>
