@@ -52,6 +52,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { HomeComponent } from './components/home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgDragDropModule } from 'ng-drag-drop';
 
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { OrderModule } from 'ngx-order-pipe';
@@ -118,6 +119,9 @@ import { PersonalDataComponent } from './components/home/personal-data.component
 import { CotizadorV2Component } from './components/cotizador/cotizador-v2.component';
 import { CreateRsvComponent } from './components/cotizador/create-rsv/create-rsv.component';
 import { SearchZdUserComponent } from './shared/search-zd-user/search-zd-user.component';
+import { CcSuperAssignComponent } from './components/config/cc-super-assign/cc-super-assign.component';
+import { CotHabDetailComponent } from './components/cotizador/cot-hab-detail/cot-hab-detail.component';
+import { SearchLocComponent } from './shared/search-loc/search-loc.component';
 
 @NgModule({
   declarations: [
@@ -178,6 +182,9 @@ import { SearchZdUserComponent } from './shared/search-zd-user/search-zd-user.co
     CotizadorV2Component,
     CreateRsvComponent,
     SearchZdUserComponent,
+    CcSuperAssignComponent,
+    CotHabDetailComponent,
+    SearchLocComponent,
 
   ],
   imports: [
@@ -185,7 +192,7 @@ import { SearchZdUserComponent } from './shared/search-zd-user/search-zd-user.co
     AppRoutingModule,
     BrowserModule,
     CommonModule,
-
+    NgDragDropModule.forRoot(),
     BrowserAnimationsModule,
     HttpClientModule,
     Ng2CompleterModule,

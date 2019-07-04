@@ -1,30 +1,65 @@
 <div class="row">
-    <div class="col-3 d-flex justify-content-start flex-wrap">
+    <div class="col d-flex justify-content-center flex-wrap">
         <div class="p-1">
             <mat-form-field>
-                <input matInput placeholder="correo del cliente" name="mail" [(ngModel)]="mail">
+                <input matInput placeholder="Nombre o Correo" name="mail" [(ngModel)]="mail">
             </mat-form-field>
         </div>
         <div class="p-1">
-            <button mat-raised-button color="primary" (click)="search()" [disabled]="loading['search']">Buscar <span *ngIf="loading['search']"><i class="fas fa-spinner fa-pulse"></i></span></button>
+            <button mat-raised-button color="primary" (click)="search()" [disabled]="loading['search'] || mail == ''">Buscar <span *ngIf="loading['search']"><i class="fas fa-spinner fa-pulse"></i></span></button>
         </div>
     </div>
-    <div class="col-9">
-        <mat-list>
+    <div class="col-9" *ngIf="data.length > 0 || noResults">
+        <mat-list *ngIf="data.length > 0">
             <ng-container *ngFor="let item of data; index as i">
                 <mat-list-item>
-                    <span [style.width.px]="200" class="text-primary">{{ item['name'] }}</span>
+                    <span [style.width.px]="200" class="text-info">{{ item['name'] }}</span>
                     <span [style.width.px]="10"></span>
-                    <span class="text-center bg-secondary text-light" [style.width.px]="40"><i class="fas fa-phone"></i></span>
+                    <span class="text-center bg-info text-light" [style.width.px]="40"><i class="fas fa-phone"></i></span>
                     <span [style.width.px]="150" class="ml-2">{{ item['phone'] }}</span>
                     <span [style.width.px]="10"></span>
-                    <span class="text-center bg-secondary text-light" [style.width.px]="40"><i class="fas fa-envelope"></i></span>
+                    <span class="text-center bg-info text-light" [style.width.px]="40"><i class="fas fa-envelope"></i></span>
                     <span [style.width.px]="250" class="ml-2">{{ item['email'] }}</span>
-                    <button mat-raised-button color="primary" (click)="search()" [disabled]="loading['search']">Select</button>
+                    <button mat-raised-button color="primary" (click)="select(item)" [disabled]="loading['select']">Select</button>
                 </mat-list-item>
                 <mat-divider></mat-divider>
             </ng-container>
+            <mat-divider></mat-divider>
         </mat-list>
-        <pre>{{ data | json }}</pre>
+        <div class="alert alert-warning" role="alert" *ngIf="noResults">
+            No se encontraron coincidencias
+        </div>
+        <form [formGroup]="newClientForm" (ngSubmit)="newClient()">
+            <div class="d-flex justify-content-start">
+                <mat-form-field [style.width.px]="200" class="ml-2">
+                    <mat-icon matPrefix>account_circle</mat-icon>
+
+                    <input matInput placeholder="Nombre" formControlName="name" [style.width.px]="200">
+                    <mat-error *ngIf="newClientForm.controls['name'].errors && newClientForm.controls['name'].errors['required']">
+                        El nombre es obligatorio
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field [style.width.px]="200" class="ml-2">
+                    <mat-icon matPrefix>phone</mat-icon>
+                    <input matInput class="ml-2" placeholder="Telefono" formControlName="phone">
+                    <mat-error *ngIf="newClientForm.controls['phone'].errors && newClientForm.controls['phone'].errors['pattern']">
+                        El formato debe ser +(codigo pais)(10 digitos)
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field [style.width.px]="250" class="ml-2">
+                    <mat-icon matPrefix>email</mat-icon>
+                    <input matInput class="ml-2" placeholder="Correo" formControlName="email">
+                    <mat-error *ngIf="newClientForm.controls['email'].errors && newClientForm.controls['email'].errors['required']">
+                        El correo es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="newClientForm.controls['email'].errors && newClientForm.controls['email'].errors['pattern']">
+                        El formato no coincide con un correo electrónico
+                    </mat-error>
+                </mat-form-field>
+                <div class='p-1'>
+                    <button mat-raised-button type="submit" color="accent" [disabled]="newClientForm.status=='INVALID'">Crear Cliente</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

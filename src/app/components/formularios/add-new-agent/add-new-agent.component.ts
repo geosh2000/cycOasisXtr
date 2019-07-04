@@ -57,6 +57,7 @@ export class AddNewAgentComponent implements OnInit, OnDestroy {
       public toastr: ToastrService) {
 
     this.populateProfiles()
+    this.build('MX')
 
   }
 

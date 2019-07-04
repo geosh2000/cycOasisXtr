@@ -81,7 +81,7 @@
                 </p>
             </div>
             <div class="p-1">
-                <button mat-raised-button class="m-1" color="primary" (click)="popReserve([1])">TEST</button>
+                <!-- <button mat-raised-button class="m-1" color="primary" (click)="popReserve([1])">TEST</button> -->
                 <button mat-raised-button color="primary" type="button" (click)="getCotizacion()" [disabled]="loading['cotizador']">Cotizar <span *ngIf="loading['cotizador']"><i class="fa fa-fw fa-spinner fa-pulse"></i></span></button>
             </div>
         </div>
@@ -123,35 +123,7 @@
                         </mat-panel-description>
                     </mat-expansion-panel-header>
 
-                    <mat-list>
-                        <ng-container *ngFor="let hb of h['habs']; index as i">
-                            <mat-list-item>
-                                <div class="d-flex justify-content-between container-fluid">
-                                    <div class="p-1 text-left">
-                                        <h3><i class="fas fa-bed p-1"></i> {{ i + 1 }}</h3>
-                                    </div>
-                                    <div class="p-1 text-left">
-                                        <span><i class="fas fa-user-friends p-1"></i>{{ hb['adults'] }} Adultos, {{ hb['minors'] }} Menores {{ hb['minors'] > 0 ? '(' + hb['m1'] + (hb['minors'] > 1 ? ','+hb['m2'] : '') + (hb['minors'] > 2 ? ','+hb['m3'] : '') + ')' : '' }}</span>
-                                    </div>
-                                    <div class="d-flex justify-content-around" [style.width.px]="300">
-                                        <ng-container *ngIf="hb['isOk'] == 0">
-                                            <div class="text-black-50 font-italic">
-                                                {{ hb['r5'] ? hb['r5'] : hb['r1'] ? hb['r1'] : hb['r2'] ? hb['r2'] : hb['r3'] ? hb['r3'] : hb['r4'] }}
-                                            </div>
-                                        </ng-container>
-                                        <ng-container *ngIf="hb['isOk'] != 0">
-                                            <div class='pr-1' style="text-decoration:line-through">{{ (moneda ? hb['MXN'] : hb['USD']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</div>
-                                            <div class='pr-1 text-success font-weight-bold'>{{ hb['lv'] | percent:'.0-0' }}</div>
-                                            <div class="font-weight-bold">
-                                                <h4>{{ (moneda ? hb['MXN_total'] : hb['USD_total']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</h4>
-                                            </div>
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </mat-list-item>
-                            <mat-divider></mat-divider>
-                        </ng-container>
-                    </mat-list>
+                    <app-cot-hab-detail [habs]="h['habs']" [moneda]="moneda"></app-cot-hab-detail>
                     <div class="ml-auto mr-auto d-flex justify-content-center flex-wrap pt-1">
                         <div [style.width.px]="55" [style.height.px]="30" class="pt-1 pr-2">Dispo:</div>
                         <mat-chip-list aria-label="Fish selection">
@@ -172,7 +144,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Send Budget Modal -->
 <div class="modal fade" id="cotizador" tabindex="-1" role="dialog" aria-labelledby="cotiazadorModal" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -236,4 +208,27 @@
         </div>
     </div>
 </div>
-<app-create-rsv></app-create-rsv>
+<!-- RSV Modal -->
+<app-create-rsv (error)="rsvError($event)" (save)="endRsv($event)"></app-create-rsv>
+<!-- Confirm Rsv Modal -->
+<div class="modal fade" id="confirmRsv" tabindex="-1" role="dialog" aria-labelledby="confirmRsvModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmRsvModal">Reservación Finalizada</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <h3>Localizador creado / modificado: <b>{{ lastLocCreated }}</b></h3>
+                <br>
+                <button mat-raised-button color="accent" type="button" (click)="viewRsv()">Gestionar Reserva</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" [disabled]="loading['cotizando']">Cancelar</button>
+                <button type="button" class="btn btn-primary" [disabled]="loading['cotizando'] || (budgetExistTicket && budgetTicket=='')" (click)="sendBudget()">Enviar  <span *ngIf="loading['cotizando']"><i class="fas fa-spinner fa-pulse"></i></span></button>
+            </div>
+        </div>
+    </div>
+</div>

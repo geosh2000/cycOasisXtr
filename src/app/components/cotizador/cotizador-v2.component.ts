@@ -127,6 +127,8 @@ export class CotizadorV2Component implements OnInit {
   budgetLang:boolean = true
   budgetTicket:any
 
+  lastLocCreated:any
+
   constructor(public _api: ApiService,
               private nbConfig: NgbDatepickerConfig,
               public _init: InitService,
@@ -384,6 +386,7 @@ export class CotizadorV2Component implements OnInit {
 
   popReserve( h ){
     this._rsv['data'] = h
+    this._rsv['moneda'] = this.moneda
     jQuery('#rsvPop').modal('show')
   }
 
@@ -435,6 +438,15 @@ export class CotizadorV2Component implements OnInit {
                   console.error(err.statusText, error.msg);
 
                 });
+  }
+
+  rsvError( e ){
+    this.toastr.error(e, 'ERROR!')
+  }
+
+  endRsv( e ){
+    this.lastLocCreated = e
+    jQuery('#confirmRsv').modal('show')
   }
 
 }
