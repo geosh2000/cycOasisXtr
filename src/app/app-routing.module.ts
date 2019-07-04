@@ -8,6 +8,7 @@ import { AsistenciaComponent } from './components/asistencia/asistencia.componen
 import { CotizadorComponent } from './components/cotizador/cotizador.component';
 import { CotizadorV2Component } from './components/cotizador/cotizador-v2.component';
 import { CcSuperAssignComponent } from './components/config/cc-super-assign/cc-super-assign.component';
+import { RsvManageComponent } from './components/rsv/rsv-manage/rsv-manage.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -23,6 +24,8 @@ const routes: Routes = [
   { path: 'cotizador', component: CotizadorComponent },
   { path: 'cotizadorV2', component: CotizadorV2Component },
   
+  { path: 'rsv', component: RsvManageComponent },
+  { path: 'rsv/:loc', component: RsvManageComponent },
   
   { path: 'config/chgSuperCC', component: CcSuperAssignComponent },
 

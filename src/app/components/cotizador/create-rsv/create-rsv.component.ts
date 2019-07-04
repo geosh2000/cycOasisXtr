@@ -105,6 +105,7 @@ export class CreateRsvComponent implements OnInit {
         edad_1: h['m1'],
         edad_2: h['m2'],
         edad_3: h['m3'],
+        isNR: h['isNR'],
         montoOriginal: this.moneda ? h['MXN'] : h['USD'],
         monto: this.moneda ? h['MXN_total'] : h['USD_total'],
         mon: this.moneda ? 'MXN' : 'USD',
@@ -126,7 +127,7 @@ export class CreateRsvComponent implements OnInit {
                 .subscribe( res => {
 
                   this.loading['save'] = false;
-                  this.toastr.success( 'Reserva creada', res['data']['masterlocator'] )
+                  // this.toastr.success( 'Reserva creada', res['data']['masterlocator'] )
                   this.save.emit(res['data'])
                   this.chgUser()
 
@@ -140,7 +141,7 @@ export class CreateRsvComponent implements OnInit {
                   this.toastr.error( error.msg, err.status );
                   console.error(err.statusText, error.msg);
 
-                });
+                }); 
   }
 
 }

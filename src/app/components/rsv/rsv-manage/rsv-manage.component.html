@@ -1,0 +1,180 @@
+<div class="alert alert-danger" role="alert" *ngIf="!showContents">
+    <p>No cuentas con los permisos para poder visualizar este módulo. Por favor contacta a <span class="font-weight-bold">WFM</span> si necesitas accesos.</p>
+</div>
+<div class="container-fluid" *ngIf="showContents">
+
+    <div class="jumbotron jumbotron-fluid text-white blueBkg animated fadeIn">
+        <div class="container">
+            <div class="d-flex justify-content-between">
+                <span><h1 class="display-3">RSV Manager</h1></span>
+            </div>
+            <p class="lead">Administrador de reservas</p>
+        </div>
+        <br>
+        <div class='container bg-light text-dark'>
+            <app-search-loc (selected)="selectLoc($event)" [maxHeight]="200"></app-search-loc>
+        </div>
+        <br>
+        <div class='container' *ngIf="data['masterLoc']">
+            <mat-card>
+                <div class='container d-flex justify-content-between flex-wrap align-content-center'>
+
+                    <span [style.width.px]="160" class="text-info text-bold"><b>{{ data['masterLoc']['nombreCliente'] }}</b></span>
+                    <span [style.width.px]="10"></span>
+                    <span class="text-center bg-info text-light pt-2" [style.width.px]="40"><i class="fas fa-envelope"></i></span>
+                    <span [style.width.px]="190" class="ml-2 pt-2">{{ data['masterLoc']['correoCliente'] }}</span>
+                    <span [style.width.px]="10"></span>
+                    <span class="text-center bg-info text-light pt-2" [style.width.px]="40"><i class="fas fa-phone-alt"></i></span>
+                    <span [style.width.px]="150" class="ml-2 pt-2">{{ data['masterLoc']['telCliente'] }}</span>
+                    <span [style.width.px]="10"></span>
+                    <span class="text-center bg-info text-light pt-2" [style.width.px]="40"><i class="fas fa-cash-register"></i></span>
+                    <span [style.width.px]="80" class="ml-2 pt-2">{{ formatDate(data['masterLoc']['dtCreated'],'DD-MMM-YY') }}</span>
+                    <mat-chip-list *ngIf="viewLoc">
+                        <mat-chip color="accent" selected>
+                            <div class='p-2 text-center'>Localizador</div>
+                            <div class='p-2 text-center'><b>{{ viewLoc }}</b></div>
+                        </mat-chip>
+                    </mat-chip-list>
+
+                </div>
+            </mat-card>
+        </div>
+    </div>
+
+    <div class="container" *ngIf="data['masterLoc']">
+        <ng-container *ngFor="let item of data['items']; index as i">
+            <mat-card class="mb-4">
+                <mat-card-header>
+                    <div class="container d-flex justify-content-between flex-wrap p-2">
+                        <div class="p-2 text-center" [style.width.px]="610">
+                            <mat-chip-list>
+                                <mat-chip color="primary" selected>
+                                    <div class='p-2 text-center'><b>Item:</b> {{ item['masterItemLocator'] }}</div>
+                                </mat-chip>
+                                <mat-chip color="primary" selected>
+                                    <div class='p-2 text-center'><b>Hotel:</b> {{ item['hotel'] }}</div>
+                                </mat-chip>
+                                <mat-chip color="primary" selected>
+                                    <div class='p-2 text-center'><b>Categoria:</b> {{ item['cat'] }}</div>
+                                </mat-chip>
+                                <mat-chip color="accent" selected *ngIf="item['isNR'] == '1'">
+                                    <div class='p-2 text-center'><b>NR</b></div>
+                                </mat-chip>
+                            </mat-chip-list>
+                        </div>
+                        <div class="p-2">
+                            <mat-chip-list>
+                                <mat-chip [color]="item['isNR'] == '1' ? 'warn' : item['systemCode'] ? 'primary' : 'accent'" selected>
+                                    <div class='p-2 text-center'>
+                                        <b *ngIf="item['isNR'] != '1'">Conf: </b>{{ item['isNR'] == '1' ? 'Pendiente de Pago' : item['systemCode'] ? item['systemCode'] : 'Pendiente' }}
+                                    </div>
+                                </mat-chip>
+                                <mat-chip [color]="item['monto'] > 0 ? 'warn' :'primary'" selected *ngIf="item['fdp'] != '1'">
+                                    <div class='p-2 text-center'>
+                                        <b>Saldo: </b>{{ item['monto'] | currency:'MXN':'symbol-narrow':'.2-2' }} {{ item['mon'] }}
+                                    </div>
+                                </mat-chip>
+                                <mat-chip [color]="'primary'" selected *ngIf="item['fdp'] == '1'">
+                                    <div class='p-2 text-center'>
+                                        <b>Pago en Hotel</b>
+                                    </div>
+                                </mat-chip>
+                            </mat-chip-list>
+                        </div>
+                    </div>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="container">
+                        <div class="row ml-4 mr-4">
+                            <div class="col-3">
+                                <mat-form-field>
+                                    <input matInput placeholder="Check-In" [value]="formatDate(item['llegada'],'DD-MMM-YY')" readonly>
+                                </mat-form-field><br>
+                                <mat-form-field>
+                                    <input matInput placeholder="Check-Out" [value]="formatDate(item['salida'],'DD-MMM-YY')" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                                <mat-form-field>
+                                    <input matInput placeholder="Adultos" [value]="item['disp_a']" readonly>
+                                </mat-form-field><br>
+                                <mat-form-field>
+                                    <input matInput placeholder="Menores" [value]="item['disp_m'] + (item['disp_m'] > 0 ? ' (' + item['edad_1'] + (item['disp_m'] > 1 ? ','+item['edad_2'] : '') + (item['disp_m'] > 2 ? ','+item['edad_3'] : '') + ')' : '')" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-6">
+                                <mat-form-field style="width: 450px;">
+                                    <input matInput placeholder="Titular" [(ngModel)]="item['titular']" [readonly]="!item['ro_titular']">
+                                    <button mat-icon-button matSuffix (click)="item['ro_titular'] = !item['ro_titular']" *ngIf="!item['ro_titular']">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                    <button mat-icon-button matSuffix (click)="editItem('titular',item)" *ngIf="item['ro_titular']">
+                                    <mat-icon>save</mat-icon>
+                                  </button>
+                                </mat-form-field><br>
+                                <mat-form-field style="width: 450px;">
+                                    <input matInput placeholder="Notas" [(ngModel)]="item['notas_hotel']" [readonly]="!item['ro_notas']">
+                                    <button mat-icon-button matSuffix (click)="item['ro_notas'] = !item['ro_notas']" *ngIf="!item['ro_notas']">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                    <button mat-icon-button matSuffix (click)="editItem('comment',item)" *ngIf="item['ro_notas']">
+                                    <mat-icon>save</mat-icon>
+                                  </button>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row ml-4 mr-4">
+                            <div class="col-3">
+                                <p><b>Status del pago: </b>
+                                    <mat-chip-list aria-label="Fish selection">
+                                        <mat-chip color="accent" selected>PDT</mat-chip>
+                                    </mat-chip-list>
+                                </p>
+
+                            </div>
+                            <div class="col-3">
+                                <p><b>Pagos Pendientes</b>
+                                    <mat-chip-list aria-label="Fish selection">
+                                        <mat-chip color="accent" selected>4</mat-chip>
+                                    </mat-chip-list>
+                                </p>
+
+                            </div>
+                            <div class="col-6 d-flex justify-content-between">
+                                <div>
+                                    <h3><b>Monto Total: </b></h3>
+                                    <h3>{{ item['monto'] | currency:'MXN':'symbol-narrow':'.2-2' }} {{ item['mon'] }}</h3>
+                                </div>
+                                <div [style.width.px]="220">
+                                    <div class="p-1">
+                                        <mat-radio-group aria-label="Forma de Pago" [value]="item['fdp']" [disabled]="item['fdp'] == '0'">
+                                            <mat-radio-button value="0">Prepago</mat-radio-button>
+                                            <mat-radio-button value="1" [disabled]="item['isNR']=='1'">PH</mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                    <div class="p-1">
+                                        <button mat-raised-button color="primary">Administrar Pagos</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row ml-4 mr-4">
+                            <span><small>Creada el {{ formatDate(item['dtCreated'],'DD MMM YY') }} por {{ item['creador'] }}</small></span>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-divider class="mb-4"></mat-divider>
+        </ng-container>
+    </div>
+
+    <div class="container">
+        <pre>
+        {{ data | json }}
+      </pre>
+
+    </div>
+
+
+</div>

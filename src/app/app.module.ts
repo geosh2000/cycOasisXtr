@@ -122,6 +122,7 @@ import { SearchZdUserComponent } from './shared/search-zd-user/search-zd-user.co
 import { CcSuperAssignComponent } from './components/config/cc-super-assign/cc-super-assign.component';
 import { CotHabDetailComponent } from './components/cotizador/cot-hab-detail/cot-hab-detail.component';
 import { SearchLocComponent } from './shared/search-loc/search-loc.component';
+import { RsvManageComponent } from './components/rsv/rsv-manage/rsv-manage.component';
 
 @NgModule({
   declarations: [
@@ -185,6 +186,7 @@ import { SearchLocComponent } from './shared/search-loc/search-loc.component';
     CcSuperAssignComponent,
     CotHabDetailComponent,
     SearchLocComponent,
+    RsvManageComponent,
 
   ],
   imports: [

@@ -133,8 +133,8 @@
                     </div>
                     <mat-action-row *ngIf="h['isOk']">
                         <div class="d-flex justify-content-around flex-wrap p-2">
-                            <button mat-raised-button class="m-1" color="accent" (click)="sendCotizacion(h)">Enviar Cotización</button>
-                            <button mat-raised-button class="m-1" color="primary" (click)="popReserve(h)">Reservar</button>
+                            <button mat-raised-button class="m-1" color="accent" (click)="sendCotizacion(h)" *ngIf="_init.checkSingleCredential('app_cotizador_budget')">Enviar Cotización</button>
+                            <button mat-raised-button class="m-1" color="primary" (click)="popReserve(h)" *ngIf="_init.checkSingleCredential('app_cotizador_rsv')">Reservar</button>
                         </div>
                     </mat-action-row>
                 </mat-expansion-panel>
@@ -221,13 +221,10 @@
                 </button>
             </div>
             <div class="modal-body text-center">
-                <h3>Localizador creado / modificado: <b>{{ lastLocCreated }}</b></h3>
+                <h3>Localizador creado / modificado:</h3>
+                <h2><b>{{ lastLocCreated }}</b></h2>
                 <br>
                 <button mat-raised-button color="accent" type="button" (click)="viewRsv()">Gestionar Reserva</button>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" [disabled]="loading['cotizando']">Cancelar</button>
-                <button type="button" class="btn btn-primary" [disabled]="loading['cotizando'] || (budgetExistTicket && budgetTicket=='')" (click)="sendBudget()">Enviar  <span *ngIf="loading['cotizando']"><i class="fas fa-spinner fa-pulse"></i></span></button>
             </div>
         </div>
     </div>

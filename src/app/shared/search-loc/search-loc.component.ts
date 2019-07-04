@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { OrderPipe } from 'ngx-order-pipe';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 export class SearchLocComponent implements OnInit {
 
   @Output() selected = new EventEmitter
+  @Input() maxHeight:any = 900
 
 
   mail:any
