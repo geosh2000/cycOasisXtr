@@ -36,13 +36,13 @@ export class RsvManageComponent implements OnInit {
   originalData:Object = {}
 
   constructor(public _api: ApiService,
-                public _init: InitService,
-                private titleService: Title,
-                private _tokenCheck: TokenCheckService,
-                private route: Router,
-                private orderPipe: OrderPipe,
-                private activatedRoute: ActivatedRoute,
-                public toastr: ToastrService) {
+              public _init: InitService,
+              private titleService: Title,
+              private _tokenCheck: TokenCheckService,
+              private route: Router,
+              private orderPipe: OrderPipe,
+              private activatedRoute: ActivatedRoute,
+              public toastr: ToastrService) {
 
     this.currentUser = this._init.getUserInfo();
     this.showContents = this._init.checkCredential( this.mainCredential, true );
@@ -100,12 +100,54 @@ export class RsvManageComponent implements OnInit {
 
                   this.originalData = JSON.parse(JSON.stringify(this.data))
 
+                  let scrollToTop = window.setInterval(() => {
+                    let pos = window.pageYOffset;
+                    let target = 380
+                    if (pos > target) {
+                      window.scrollTo(0, pos - 20); // how far to scroll on each step
+                  } else if (pos < target - 20) {
+                      window.scrollTo(0, pos + 20); // how far to scroll on each step
+                  } else {
+                      window.clearInterval(scrollToTop);
+                  }
+                }, 16);
+
                 }, err => {
                   this.loading['search'] = false;
 
                   const error = err.error;
                   this.toastr.error( error.msg, err.status );
                   console.error(err.statusText, error.msg);
+
+                });
+  }
+
+  updateLoc( field, val, ml, loader, f ){
+
+    this.loading[loader] = true;
+
+    let params = {
+      field,
+      val,
+      masterItemLocator: ml
+    }
+
+    this._api.restfulPut( params, 'Rsv/itemFieldChg' )
+                .subscribe( res => {
+
+                  this.loading[loader] = false;
+
+                  this.toastr.success('Cambio guardado', res['data']['msg'])
+
+                  f(true)
+
+                }, err => {
+                  this.loading[loader] = false;
+
+                  const error = err.error;
+                  this.toastr.error( error.msg, err.status );
+                  console.error(err.statusText, error.msg);
+                  f(false)
 
                 });
   }
@@ -122,5 +164,28 @@ export class RsvManageComponent implements OnInit {
     }
 
     i[fields[f][1]] = false
+  }
+
+  pMethodChg( o, e ){
+    this.updateLoc( 'fdp', e.value , o['masterItemLocator'], 'fdpChange', (f) => {
+      if( f ){
+        this.getLoc(o['masterlocatorid'])
+      }else{
+        o['fdp'] = o['fdp']
+      }
+    })
+
+  }
+
+  fieldEdit(f, o, e, l, fl ){
+    console.log(e)
+    this.updateLoc( f, e.target.value , o['masterItemLocator'], l, ( x ) => {
+      if ( x ){
+        return true
+      }else{
+        o[f] = o[f]
+      }
+      o[fl] = false
+    })
   }
 }

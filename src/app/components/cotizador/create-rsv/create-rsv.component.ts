@@ -97,6 +97,7 @@ export class CreateRsvComponent implements OnInit {
         llegada: h['@inicio'],
         salida: h['@fin'],
         noches: h['noches'],
+        titular: this.newRsvForm.controls['nombreCliente'].value,
         a: h['rateAdults'],
         j: parseInt(h['rateMinors']) > 2 ? 1 : 0,
         m: parseInt(h['rateMinors']) > 2 ? 2 : h['rateMinors'],

@@ -8,7 +8,7 @@
                         <h5 class="modal-title" id="rsvModal">Reservar</h5>
                     </div>
                     <div class="p-1 mr-3">
-                        <ui-switch color="#a8b5ff" size="small" name='exist' [(ngModel)]="isNew" checkedLabel='Nueva' uncheckedLabel='Existente'></ui-switch>
+                        <ui-switch color="#a8b5ff" (change)="chgUser()" size="small" name='exist' [(ngModel)]="isNew" checkedLabel='Nueva' uncheckedLabel='Existente'></ui-switch>
                     </div>
                 </div>
 

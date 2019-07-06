@@ -19,7 +19,7 @@
     <!-- <div class="alert alert-danger" role="alert" *ngIf="reloadVer">
         Existe una nueva versión del CyC. Por favor recarga el sitio para obtenerla.<br> Tu versión: <b>{{ myVersion }}</b>. Versión Actual: <b>{{ actualVersion }}</b>
     </div> -->
-    <router-outlet></router-outlet>
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
 </div>
 
 <app-login></app-login>

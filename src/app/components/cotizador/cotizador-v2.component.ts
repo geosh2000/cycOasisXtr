@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable,  ViewChildren, QueryList, ViewChild } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChildren, QueryList, ViewChild, OnDestroy } from '@angular/core';
 
 import { ToastrService } from 'ngx-toastr';
 import { Title, DomSanitizer } from '@angular/platform-browser';
@@ -12,6 +12,7 @@ import { CreateRsvComponent } from './create-rsv/create-rsv.component';
 declare var jQuery: any;
 import * as moment from 'moment-timezone';
 import * as Globals from '../../globals';
+import { Router } from '@angular/router';
 
 const equals = ({ one, two }: { one: NgbDateStruct; two: NgbDateStruct; }) => {
   return one && two && two.year == one.year && two.month == one.month && two.day == one.day;
@@ -93,7 +94,7 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   }
   `]
 })
-export class CotizadorV2Component implements OnInit {
+export class CotizadorV2Component implements OnInit, OnDestroy {
 
   @ViewChildren('fltr') _filters: QueryList<SearchHotelModuleComponent>;
   @ViewChild(CreateRsvComponent,{static:false}) _rsv:CreateRsvComponent;
@@ -131,6 +132,7 @@ export class CotizadorV2Component implements OnInit {
 
   constructor(public _api: ApiService,
               private nbConfig: NgbDatepickerConfig,
+              private route: Router,
               public _init: InitService,
               private titleService: Title,
               private _tokenCheck: TokenCheckService,
@@ -161,6 +163,13 @@ export class CotizadorV2Component implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('CyC - Cotizador');
+  }
+
+  ngOnDestroy() {
+    jQuery('#loginModal').modal('hide');
+    jQuery('#rsvPop').modal('hide');
+    jQuery('#cotizador').modal('hide');
+    jQuery('#confirmRsv').modal('hide');
   }
 
   isToday( date ) {
@@ -449,4 +458,7 @@ export class CotizadorV2Component implements OnInit {
     jQuery('#confirmRsv').modal('show')
   }
 
+  viewRsv(){
+    this.route.navigateByUrl(`/rsv/${this.lastLocCreated}`);
+  }
 }

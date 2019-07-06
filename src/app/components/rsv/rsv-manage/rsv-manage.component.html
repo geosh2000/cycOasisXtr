@@ -41,7 +41,8 @@
         </div>
     </div>
 
-    <div class="container" *ngIf="data['masterLoc']">
+    <mat-progress-bar mode="buffer" *ngIf="loading['search']"></mat-progress-bar>
+    <div class="container" *ngIf="data['masterLoc'] || !loading['search']">
         <ng-container *ngFor="let item of data['items']; index as i">
             <mat-card class="mb-4">
                 <mat-card-header>
@@ -69,9 +70,9 @@
                                         <b *ngIf="item['isNR'] != '1'">Conf: </b>{{ item['isNR'] == '1' ? 'Pendiente de Pago' : item['systemCode'] ? item['systemCode'] : 'Pendiente' }}
                                     </div>
                                 </mat-chip>
-                                <mat-chip [color]="item['monto'] > 0 ? 'warn' :'primary'" selected *ngIf="item['fdp'] != '1'">
+                                <mat-chip [color]="(item['monto'] - item['montoPagado']) > 0 ? 'warn' :'primary'" selected *ngIf="item['fdp'] != '1'">
                                     <div class='p-2 text-center'>
-                                        <b>Saldo: </b>{{ item['monto'] | currency:'MXN':'symbol-narrow':'.2-2' }} {{ item['mon'] }}
+                                        <b>Saldo: </b>{{ (item['monto'] - item['montoPagado']) | currency:'MXN':'symbol-narrow':'.2-2' }} {{ item['mon'] }}
                                     </div>
                                 </mat-chip>
                                 <mat-chip [color]="'primary'" selected *ngIf="item['fdp'] == '1'">
@@ -103,42 +104,53 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-6">
-                                <mat-form-field style="width: 450px;">
-                                    <input matInput placeholder="Titular" [(ngModel)]="item['titular']" [readonly]="!item['ro_titular']">
+                                <mat-progress-bar mode="buffer" *ngIf="loading['titularLoad']"></mat-progress-bar>
+                                <mat-form-field style="width: 450px;" *ngIf="!loading['titularLoad']">
+                                    <input matInput placeholder="Titular" [(ngModel)]="item['titular']" (change)="fieldEdit('titular', item, $event, 'titularLoad', 'ro_titular')" [readonly]="!item['ro_titular']">
                                     <button mat-icon-button matSuffix (click)="item['ro_titular'] = !item['ro_titular']" *ngIf="!item['ro_titular']">
                                   <mat-icon>edit</mat-icon>
                                 </button>
-                                    <button mat-icon-button matSuffix (click)="editItem('titular',item)" *ngIf="item['ro_titular']">
-                                    <mat-icon>save</mat-icon>
-                                  </button>
                                 </mat-form-field><br>
-                                <mat-form-field style="width: 450px;">
-                                    <input matInput placeholder="Notas" [(ngModel)]="item['notas_hotel']" [readonly]="!item['ro_notas']">
+                                <mat-progress-bar mode="buffer" *ngIf="loading['notaslLoad']"></mat-progress-bar>
+                                <mat-form-field style="width: 450px;" *ngIf="!loading['notaslLoad']">
+                                    <input matInput placeholder="Notas" [(ngModel)]="item['notas_hotel']" (change)="fieldEdit('notas_hotel', item, $event, 'notaslLoad', 'ro_notas')" [readonly]="!item['ro_notas']">
                                     <button mat-icon-button matSuffix (click)="item['ro_notas'] = !item['ro_notas']" *ngIf="!item['ro_notas']">
                                   <mat-icon>edit</mat-icon>
                                 </button>
-                                    <button mat-icon-button matSuffix (click)="editItem('comment',item)" *ngIf="item['ro_notas']">
-                                    <mat-icon>save</mat-icon>
-                                  </button>
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row ml-4 mr-4">
-                            <div class="col-3">
-                                <p><b>Status del pago: </b>
+                            <div class="col-2">
+                                <div class="d-flex justify-content-center">
+                                    <p><b>Status del pago</b></p>
+                                </div>
+                                <div class="d-flex justify-content-center">
                                     <mat-chip-list aria-label="Fish selection">
-                                        <mat-chip color="accent" selected>PDT</mat-chip>
+                                        <mat-chip [color]="item['pySt'] == 'PDT' ? 'accent' : item['pySt'] == 'Agregar' ? 'warn' : 'primary'" selected>{{ item['pySt'] }}</mat-chip>
                                     </mat-chip-list>
-                                </p>
-
+                                </div>
                             </div>
-                            <div class="col-3">
-                                <p><b>Pagos Pendientes</b>
-                                    <mat-chip-list aria-label="Fish selection">
-                                        <mat-chip color="accent" selected>4</mat-chip>
-                                    </mat-chip-list>
-                                </p>
 
+                            <div class="col-2">
+                                <div class="d-flex justify-content-center">
+                                    <p><b>Pagos Pendientes</b></p>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <mat-chip-list aria-label="Fish selection">
+                                        <mat-chip [color]="item['pagosPendientes'] > 0 ? 'accent' : 'primary'" selected>{{ item['pagosPendientes'] }}</mat-chip>
+                                    </mat-chip-list>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="d-flex justify-content-center">
+                                    <p><b>Pagos Completados</b></p>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <mat-chip-list aria-label="Fish selection">
+                                        <mat-chip color="primary" selected>{{ item['pagosCompletados'] }}</mat-chip>
+                                    </mat-chip-list>
+                                </div>
                             </div>
                             <div class="col-6 d-flex justify-content-between">
                                 <div>
@@ -147,7 +159,8 @@
                                 </div>
                                 <div [style.width.px]="220">
                                     <div class="p-1">
-                                        <mat-radio-group aria-label="Forma de Pago" [value]="item['fdp']" [disabled]="item['fdp'] == '0'">
+                                        <mat-progress-bar mode="buffer" *ngIf="loading['fdpChange']"></mat-progress-bar>
+                                        <mat-radio-group aria-label="Forma de Pago" [value]="item['fdp']" (change)="pMethodChg(item, $event)" [disabled]="!(item['pagosPendientes']==0 && item['montoPagado']==0)" *ngIf="!loading['fdpChange']">
                                             <mat-radio-button value="0">Prepago</mat-radio-button>
                                             <mat-radio-button value="1" [disabled]="item['isNR']=='1'">PH</mat-radio-button>
                                         </mat-radio-group>

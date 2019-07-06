@@ -205,6 +205,7 @@ import { RsvManageComponent } from './components/rsv/rsv-manage/rsv-manage.compo
     }),
     NgbModule.forRoot(),
     ToastrModule.forRoot(),
+    
     OrderModule,
     MultiselectDropdownModule,
     Daterangepicker,
