@@ -267,12 +267,14 @@ export class CotizadorComponent implements OnInit {
                   this.resultCot = res['data']
                   this.filterExp = false;
 
-                  let date1 = new Date(moment(res['data']['gen']['inicio']).format('YYYY'),moment(res['data']['gen']['inicio']).format('MM'),moment(res['data']['gen']['inicio']).format('DD'));
-                  let date2 = new Date(moment(res['data']['gen']['fin']).format('YYYY'),moment(res['data']['gen']['fin']).format('MM'),moment(res['data']['gen']['fin']).format('DD'));
-                  let diffTime = Math.abs(date2.getTime() - date1.getTime())
-                  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+                  // let date1 = new Date(moment(res['data']['gen']['inicio']).format('YYYY'),moment(res['data']['gen']['inicio']).format('MM'),moment(res['data']['gen']['inicio']).format('DD'));
+                  // let date2 = new Date(moment(res['data']['gen']['fin']).format('YYYY'),moment(res['data']['gen']['fin']).format('MM'),moment(res['data']['gen']['fin']).format('DD'));
+                  // let diffTime = Math.abs(date2.getTime() - date1.getTime())
+                  // let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-                  this.resultCot['gen']['noches'] = diffDays;
+                  let a = moment(res['data']['gen']['inicio'])
+                  let b = moment(res['data']['gen']['fin'])
+                  this.resultCot['gen']['noches'] = b.diff(a, 'days');
 
                   this.resultCot['habs'] = this.buildData(res['data'])
 
@@ -382,6 +384,7 @@ export class CotizadorComponent implements OnInit {
 
   sendCotizacion( h ){
     this.dataForBudget = h
+    console.log(h)
     jQuery('#cotizador').modal('show')
   }
 

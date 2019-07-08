@@ -13,6 +13,7 @@ declare var jQuery: any;
 import * as moment from 'moment-timezone';
 import * as Globals from '../../globals';
 import { Router } from '@angular/router';
+import { SearchZdUserComponent } from 'src/app/shared/search-zd-user/search-zd-user.component';
 
 const equals = ({ one, two }: { one: NgbDateStruct; two: NgbDateStruct; }) => {
   return one && two && two.year == one.year && two.month == one.month && two.day == one.day;
@@ -97,6 +98,7 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
 export class CotizadorV2Component implements OnInit, OnDestroy {
 
   @ViewChildren('fltr') _filters: QueryList<SearchHotelModuleComponent>;
+  @ViewChildren('zdu') _zdUser: QueryList<SearchZdUserComponent>;
   @ViewChild(CreateRsvComponent,{static:false}) _rsv:CreateRsvComponent;
 
   currentUser: any;
@@ -117,16 +119,19 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
   selectedCode: any = 'ccenter';
 
   moneda:boolean = true
+  searchUserFlag:boolean = true
   filterExp = true;
   dataForBudget:any
 
   budgetName:any
   budgetMail:any
   budgetNumber:any
+  budgetZenId:any
   budgetExistTicket:boolean = false
   budgetNoEdit:boolean = true
   budgetLang:boolean = true
   budgetTicket:any
+  budgetExistingBudgets:any = []
 
   lastLocCreated:any
 
@@ -280,12 +285,14 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                   this.resultCot = res['data']
                   this.filterExp = false;
 
-                  let date1 = new Date(moment(res['data']['gen']['inicio']).format('YYYY'),moment(res['data']['gen']['inicio']).format('MM'),moment(res['data']['gen']['inicio']).format('DD'));
-                  let date2 = new Date(moment(res['data']['gen']['fin']).format('YYYY'),moment(res['data']['gen']['fin']).format('MM'),moment(res['data']['gen']['fin']).format('DD'));
-                  let diffTime = Math.abs(date2.getTime() - date1.getTime())
-                  let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+                   // let date1 = new Date(moment(res['data']['gen']['inicio']).format('YYYY'),moment(res['data']['gen']['inicio']).format('MM'),moment(res['data']['gen']['inicio']).format('DD'));
+                  // let date2 = new Date(moment(res['data']['gen']['fin']).format('YYYY'),moment(res['data']['gen']['fin']).format('MM'),moment(res['data']['gen']['fin']).format('DD'));
+                  // let diffTime = Math.abs(date2.getTime() - date1.getTime())
+                  // let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-                  this.resultCot['gen']['noches'] = diffDays;
+                  let a = moment(res['data']['gen']['inicio'])
+                  let b = moment(res['data']['gen']['fin'])
+                  this.resultCot['gen']['noches'] = b.diff(a, 'days');
 
                   this.resultCot['habs'] = this.buildData(res['data'])
 
@@ -301,8 +308,12 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                 });
   }
 
-  formatDate(date, format) {
-    return moment(date).format(format);
+  formatDate(date, format, tz?) {
+    if( !tz ){
+      return moment(date).format(format);
+    }else{
+      return moment.tz(date).tz('America/Bogota').format(format);
+    }
   }
 
   buildData( data ){
@@ -401,7 +412,11 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
 
   sendCotizacion( h ){
     this.dataForBudget = h
+    this.budgetTicket = null
+    this.budgetExistTicket = false
+    this.budgetExistingBudgets = []
     jQuery('#cotizador').modal('show')
+    this.chgUser()
   }
 
   sendBudget(){
@@ -424,7 +439,7 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                 .subscribe( res => {
 
                   this.loading['cotizando'] = false;
-                  
+
                   jQuery('#cotizador').modal('hide')
                   this.budgetMail = ''
                   this.budgetName = ''
@@ -436,7 +451,6 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                   this.dataForBudget = []
 
                   this.toastr.success( "ticket creado", res['data'] )
-
                   console.log( 'ticket: '+res['data'] )
 
                 }, err => {
@@ -460,5 +474,53 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
 
   viewRsv(){
     this.route.navigateByUrl(`/rsv/${this.lastLocCreated}`);
+  }
+
+  selectedUser( e ){
+    this.budgetName = e['name']
+    this.budgetMail = e['email']
+    this.budgetNumber = e['phone']
+    this.budgetZenId = e['id']
+
+    this.getCotizaciones(e['id'])
+
+    this.searchUserFlag = false
+  }
+
+  chgUser(){
+    this._zdUser.forEach(reg => {
+      reg.reset()
+    })
+
+    this.searchUserFlag = true
+    this.budgetName = null
+    this.budgetMail = null
+    this.budgetNumber = null
+    this.budgetZenId = null
+    this.budgetExistingBudgets = []
+  }
+
+  getCotizaciones( rq ){
+    this.loading['getCot'] = true;
+
+    let params = {
+        query: `type:ticket tags:"cotizacioncyc" requester:${rq}`
+      };
+
+    this._api.restfulPut( params, 'Calls/getCot' )
+                .subscribe( res => {
+
+                  this.loading['getCot'] = false;
+
+                  this.budgetExistingBudgets = res['data']['details']
+
+                }, err => {
+                  this.loading['getCot'] = false;
+
+                  const error = err.error;
+                  this.toastr.error( error.msg, err.status );
+                  console.error(err.statusText, error.msg);
+
+                });
   }
 }

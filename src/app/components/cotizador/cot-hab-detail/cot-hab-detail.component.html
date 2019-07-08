@@ -11,6 +11,9 @@
                 <div class="p-1 text-left">
                     <span><i class="fas fa-user-friends"></i><span class='pl-1'>{{ hb['adults'] }} Adultos, {{ hb['minors'] }} Menores {{ hb['minors'] > 0 ? '(' + hb['m1'] + (hb['minors'] > 1 ? ','+hb['m2'] : '') + (hb['minors'] > 2 ? ','+hb['m3'] : '') + ')' : '' }}</span></span>
                 </div>
+                <div class="p-1 text-left" *ngIf="!paymentSelect">
+                    <span><i class="fas fa-moon"></i><span class='pl-1'>({{ ((moneda ? hb['MXN_total'] : hb['USD_total']) / hb['noches']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }} p/n)</span></span>
+                </div>
                 <div class="p-1 text-left" *ngIf="paymentSelect">
                     <mat-radio-group aria-label="Forma de Pago" [(ngModel)]="hb['fdp']">
                         <mat-radio-button value="0">Pre-pago</mat-radio-button>

@@ -43,7 +43,7 @@ export class SearchZdUserComponent implements OnInit {
     this.noResults = false
 
 
-    this._api.restfulGet( this.mail, 'Calls/searchUser' )
+    this._api.restfulPut( {mail: this.mail}, 'Calls/searchUser' )
                 .subscribe( res => {
 
                   this.loading['search'] = false;
@@ -67,6 +67,12 @@ export class SearchZdUserComponent implements OnInit {
 
   select( i ){
     this.selected.emit( i )
+    this.newClientForm.reset()
+    this.mail = ''
+    this.data= []
+  }
+
+  reset(){
     this.newClientForm.reset()
     this.mail = ''
     this.data= []

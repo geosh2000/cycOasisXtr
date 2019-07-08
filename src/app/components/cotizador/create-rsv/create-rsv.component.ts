@@ -108,7 +108,7 @@ export class CreateRsvComponent implements OnInit {
         edad_3: h['m3'],
         isNR: h['isNR'],
         montoOriginal: this.moneda ? h['MXN'] : h['USD'],
-        monto: this.moneda ? h['MXN_total'] : h['USD_total'],
+        monto: Math.round((this.moneda ? h['MXN_total'] : h['USD_total']) * 100) / 100,
         mon: this.moneda ? 'MXN' : 'USD',
         fdp: h['fdp'],
         userCreated: this._init.currentUser['hcInfo']['id'],

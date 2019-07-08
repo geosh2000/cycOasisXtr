@@ -456,3 +456,8 @@ button.toast-close-button {
 
 
 /* TOASTR END */
+
+.mat-success {
+    background-color: #33a933;
+    color: #fff;
+}

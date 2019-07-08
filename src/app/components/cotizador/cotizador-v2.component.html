@@ -124,7 +124,7 @@
                     </mat-expansion-panel-header>
 
                     <app-cot-hab-detail [habs]="h['habs']" [moneda]="moneda"></app-cot-hab-detail>
-                    <div class="ml-auto mr-auto d-flex justify-content-center flex-wrap pt-1">
+                    <div class="ml-auto mr-auto d-flex justify-content-center flex-wrap pt-2">
                         <div [style.width.px]="55" [style.height.px]="30" class="pt-1 pr-2">Dispo:</div>
                         <mat-chip-list aria-label="Fish selection">
                             <mat-chip [color]="d['blackout'] == '1' ? 'warn' : 'primary'" selected *ngFor="let d of h['bo']">{{ formatDate(d['fecha'],'DD MMM') }}</mat-chip>
@@ -146,7 +146,7 @@
 
 <!-- Send Budget Modal -->
 <div class="modal fade" id="cotizador" tabindex="-1" role="dialog" aria-labelledby="cotiazadorModal" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="cotiazadorModal">Enviar como cotización</h5>
@@ -155,7 +155,7 @@
             </button>
             </div>
             <div class="modal-body">
-                <div class="input-group mb-3" *ngIf="!budgetExistTicket || (budgetExistTicket && !budgetNoEdit)">
+                <!-- <div class="input-group mb-3" *ngIf="!budgetExistTicket || (budgetExistTicket && !budgetNoEdit)">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1" [style.width.px]="120">Nombre</span>
                     </div>
@@ -173,6 +173,66 @@
                         <span class="input-group-text" id="basic-addon1" [style.width.px]="120">Teléfono</span>
                     </div>
                     <input type="text" class="form-control" placeholder="+1 555-123-4567" aria-label="Username" aria-describedby="basic-addon1" name="bNumber" [(ngModel)]="budgetNumber">
+                </div> -->
+                <app-search-zd-user #zdu (selected)="selectedUser($event)" *ngIf="(!budgetExistTicket || (budgetExistTicket && !budgetNoEdit)) && searchUserFlag"></app-search-zd-user>
+                <div class='container d-flex justify-content-center' *ngIf="!searchUserFlag && !budgetExistTicket">
+                    <table class="example-full-width" cellspacing="0" [style.width.px]="880">
+                        <tr>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Nombre" readonly="true" [(ngModel)]="budgetName">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Correo" readonly="true" [(ngModel)]="budgetMail">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Telefono" readonly="true" [(ngModel)]="budgetNumber">
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="ZendeskId" readonly="true" [(ngModel)]="budgetZenId">
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class='p-1'>
+                        <button mat-raised-button type="button" (click)="chgUser()" color="accent">Cambiar Cliente</button>
+                    </div>
+                </div>
+                <mat-progress-bar mode="query" *ngIf="loading['getCot']"></mat-progress-bar>
+                <div class='container d-flex justify-content-center' *ngIf="!searchUserFlag && !budgetExistTicket && budgetExistingBudgets.length>0">
+                    <mat-accordion>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <p><span>Hay <b>{{budgetExistingBudgets.length}}</b> Cotizaciones Existentes</span></p>
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    Revisar cotizaciones existentes
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+
+                            <mat-list>
+                                <ng-container *ngFor="let c of budgetExistingBudgets">
+                                    <mat-list-item>
+                                        <mat-icon mat-list-icon>mail_outline</mat-icon>
+                                        <h4 mat-line><b>{{c['subject']}}</b></h4>
+                                        <p mat-line class="demo-2">
+                                            {{formatDate(c['created_at'], 'DD MMM YYYY', false)}} por
+                                            <span class="text-info"><b>{{c['agente']}}</b></span>
+                                            <span> (ver ticket <a [href]="c['ticketUrl']" target="_blank">#{{ c['id'] }}</a>)</span>
+                                        </p>
+                                    </mat-list-item>
+                                    <mat-divider></mat-divider>
+                                </ng-container>
+                            </mat-list>
+                        </mat-expansion-panel>
+                    </mat-accordion>
                 </div>
                 <div class="p-1 d-flex justify-content-center">
                     <div style="text-align: center" class="p-2">
@@ -194,11 +254,10 @@
                         </p>
                     </div>
                 </div>
-                <div class="input-group mb-3" *ngIf="budgetExistTicket">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">Ticket</span>
-                    </div>
-                    <input type="text" class="form-control" placeholder="# ticket" aria-label="ticket" aria-describedby="basic-addon1" name="bgTicket" [(ngModel)]="budgetTicket">
+                <div class="d-flex justify-content-center pb-2" *ngIf="budgetExistTicket">
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="# ticket" [(ngModel)]="budgetTicket">
+                    </mat-form-field>
                 </div>
             </div>
             <div class="modal-footer">

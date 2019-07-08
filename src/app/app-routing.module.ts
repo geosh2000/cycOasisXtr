@@ -20,13 +20,13 @@ const routes: Routes = [
 
   { path: 'asistencia', component: AsistenciaComponent },
   { path: 'asistencia/editarHorarios', component: CargaHorariosComponent },
-  
-  { path: 'cotizador', component: CotizadorComponent },
-  { path: 'cotizadorV2', component: CotizadorV2Component },
-  
+
+  { path: 'cotizador', component: CotizadorV2Component },
+  // { path: 'cotizadorV2', component: CotizadorV2Component },
+
   { path: 'rsv', component: RsvManageComponent },
   { path: 'rsv/:loc', component: RsvManageComponent },
-  
+
   { path: 'config/chgSuperCC', component: CcSuperAssignComponent },
 
 ];

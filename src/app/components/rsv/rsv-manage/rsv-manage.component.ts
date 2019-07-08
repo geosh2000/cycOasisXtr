@@ -17,7 +17,8 @@ import { OrderPipe } from 'ngx-order-pipe';
   templateUrl: './rsv-manage.component.html',
   styles: [`.mat-radio-button ~ .mat-radio-button {
     margin-left: 16px;
-  }`]
+  }
+`]
 })
 export class RsvManageComponent implements OnInit {
 
@@ -187,5 +188,9 @@ export class RsvManageComponent implements OnInit {
       }
       o[fl] = false
     })
+  }
+
+  toF(f){
+    return parseFloat(f)
   }
 }
