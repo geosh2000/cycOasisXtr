@@ -9,6 +9,9 @@ import { CotizadorComponent } from './components/cotizador/cotizador.component';
 import { CotizadorV2Component } from './components/cotizador/cotizador-v2.component';
 import { CcSuperAssignComponent } from './components/config/cc-super-assign/cc-super-assign.component';
 import { RsvManageComponent } from './components/rsv/rsv-manage/rsv-manage.component';
+import { AddExternalUserComponent } from './components/config/add-external-user/add-external-user.component';
+import { PrintVoucherComponent } from './components/pagos/print-voucher/print-voucher.component';
+import { RsvListComponent } from './components/rsv/rsv-list/rsv-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,12 +23,15 @@ const routes: Routes = [
 
   { path: 'asistencia', component: AsistenciaComponent },
   { path: 'asistencia/editarHorarios', component: CargaHorariosComponent },
+  
+  { path: 'config/addExternal', component: AddExternalUserComponent },
 
   { path: 'cotizador', component: CotizadorV2Component },
   // { path: 'cotizadorV2', component: CotizadorV2Component },
 
   { path: 'rsv', component: RsvManageComponent },
   { path: 'rsv/:loc', component: RsvManageComponent },
+  { path: 'rsvList', component: RsvListComponent },
 
   { path: 'config/chgSuperCC', component: CcSuperAssignComponent },
 

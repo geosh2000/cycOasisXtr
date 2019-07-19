@@ -98,13 +98,13 @@
             <ng-container *ngFor="let h of resultCot['habs']">
                 <mat-expansion-panel hideToggle>
                     <mat-expansion-panel-header class='d-flex justify-content-between'>
-                        <mat-panel-title>
+                        <!-- <mat-panel-title>
                             <div class="d-flex justify-content-start">
                                 <div style="background-size: cover; background-position: center; width: 100px; height: 35px; border-radius: 30px" [style.background-image]="h['hotelUrl']"></div>
-                                <div>{{ h['hotel'] }}</div>
+                                <div class="pl-1">{{ h['hotelCode'] }}</div>
                             </div>
-                        </mat-panel-title>
-                        <mat-panel-description>
+                        </mat-panel-title> -->
+                        <!-- <mat-panel-description>
                             <span><span class='pr-1 font-weight-bold'>{{ h['habitacion'] }}</span><span class="text-info">({{ h['habCat']}})</span></span>
                             <div class="d-flex justify-content-around" [style.width.px]="300">
                                 <ng-container *ngIf="!h['isOk']">
@@ -114,13 +114,47 @@
                                 </ng-container>
                                 <ng-container *ngIf="h['isOk']">
                                     <div class='pr-1' style="text-decoration:line-through">{{ (moneda ? h['mxn_total'] : h['usd_total']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</div>
-                                    <div class='pr-1 text-success font-weight-bold'>{{ h['desc'] | percent:'.0-0' }}</div>
+                                    <div class='pr-1 text-success font-weight-bold'>{{ (1-(h['l1usd_totalDisc']/h['usd_total'])) | percent:'.0-0' }}</div>
+                                    <div class="font-weight-bold">
+                                        <h6>{{ (moneda ? h['l1mxn_totalDisc'] : h['l1usd_totalDisc']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</h6>
+                                    </div>
+                                    <div class='pr-1 text-success font-weight-bold'>{{ (1-(h['usd_totalDisc']/h['l1usd_totalDisc'])) | percent:'.0-0' }}</div>
                                     <div class="font-weight-bold">
                                         <h4>{{ (moneda ? h['mxn_totalDisc'] : h['usd_totalDisc']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</h4>
                                     </div>
                                 </ng-container>
                             </div>
-                        </mat-panel-description>
+                        </mat-panel-description> -->
+                        <div class="d-flex justify-content-between container">
+                            <div class="d-flex justify-content-start">
+                                <div style="background-size: cover; background-position: center; width: 100px; height: 35px; border-radius: 30px" [style.background-image]="h['hotelUrl']"></div>
+                                <div class="pl-3" [style.width.px]="80">{{ h['hotelCode'] }}</div>
+                                <span><span class='pl-3 font-weight-bold'>{{ h['habitacion'] }}</span><span class="text-info">({{ h['habCat']}})</span></span>
+
+                                <ng-container *ngIf="!h['isOk']">
+                                    <div class="text-black-50 font-italic pl-3">
+                                        {{ h['no_disp'] ? h['no_disp'] : h['no_occ'] ? h['no_occ'] : h['no_adl'] ? h['no_adl'] : h['no_min'] ? h['no_min'] : h['no_comb'] }}
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <ng-container *ngIf="h['isOk']">
+                                <div class="d-flex justify-content-between">
+                                    <div [style.width.px]="110" class='text-right pl-3' style="text-decoration:line-through">{{ (moneda ? h['mxn_total'] : h['usd_total']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</div>
+                                    <div [style.width.px]="45" class='text-right pl-3 text-success font-weight-bold'>{{ (1-(h['l1usd_totalDisc']/h['usd_total'])) | percent:'.0-0' }}</div>
+                                    <div [style.width.px]="110" class="text-right text-primary font-weight-bold">
+                                        <h6>{{ (moneda ? h['l1mxn_totalDisc'] : h['l1usd_totalDisc']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</h6>
+                                    </div>
+                                    <div [style.width.px]="45" class='text-right pl-3 text-success font-weight-bold'>{{ (1-(h['usd_totalDisc']/h['l1usd_totalDisc'])) | percent:'.0-0' }}</div>
+                                    <div [style.width.px]="130" class="text-right text-success pl-3 font-weight-bold">
+                                        <mat-chip-list aria-label="Fish selection">
+                                            <mat-chip color='primary' selected><span [style.width.px]="120">{{ (moneda ? h['mxn_totalDisc'] : h['usd_totalDisc']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</span></mat-chip>
+                                        </mat-chip-list>
+                                        <!-- <h4>{{ (moneda ? h['mxn_totalDisc'] : h['usd_totalDisc']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</h4> -->
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                        </div>
                     </mat-expansion-panel-header>
 
                     <app-cot-hab-detail [habs]="h['habs']" [moneda]="moneda"></app-cot-hab-detail>
@@ -262,7 +296,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" [disabled]="loading['cotizando']">Cancelar</button>
-                <button type="button" class="btn btn-primary" [disabled]="loading['cotizando'] || (budgetExistTicket && budgetTicket=='')" (click)="sendBudget()">Enviar  <span *ngIf="loading['cotizando']"><i class="fas fa-spinner fa-pulse"></i></span></button>
+                <button type="button" class="btn btn-primary" [disabled]="loading['cotizando'] || (budgetExistTicket && budgetTicket=='') ||  (!budgetExistTicket && searchUserFlag)" (click)="sendBudget()">Enviar  <span *ngIf="loading['cotizando']"><i class="fas fa-spinner fa-pulse"></i></span></button>
             </div>
         </div>
     </div>
@@ -271,7 +305,7 @@
 <app-create-rsv (error)="rsvError($event)" (save)="endRsv($event)"></app-create-rsv>
 <!-- Confirm Rsv Modal -->
 <div class="modal fade" id="confirmRsv" tabindex="-1" role="dialog" aria-labelledby="confirmRsvModal" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmRsvModal">Reservación Finalizada</h5>
@@ -283,7 +317,23 @@
                 <h3>Localizador creado / modificado:</h3>
                 <h2><b>{{ lastLocCreated }}</b></h2>
                 <br>
-                <button mat-raised-button color="accent" type="button" (click)="viewRsv()">Gestionar Reserva</button>
+                <div *ngIf="!loading['callTicket']">
+                    <p class="text-alert" *ngIf="!flagSearchTicket && !linkedTicketFlag && updateTicket['ticket'] == ''">No se encontraron tickets de llamada</p>
+                    <p *ngIf="!flagSearchTicket && !linkedTicketFlag && updateTicket['ticket'] != ''">Desea ligar el ticket <b>{{ linkedTicket }}</b> a esta reserva?</p>
+                    <p *ngIf="!flagSearchTicket && linkedTicketFlag && updateTicket['ticket'] != ''"><b>{{ updateTicket['ticket'] != '' ? linkedTicket : 'Sin ticket' }}</b> Ligado</p>
+                    <mat-form-field class="example-full-width" *ngIf="flagSearchTicket">
+                        <input matInput placeholder="# ticket" [(ngModel)]="lTicket">
+                    </mat-form-field>
+                    <button class="m-1" mat-stroked-button *ngIf="flagSearchTicket" type="button" (click)="flagSearchTicket = false" [disabled]="loading['callTicket']">Cancelar</button>
+                    <button class="m-1" mat-stroked-button color="success" *ngIf="flagSearchTicket" type="button" (click)="getCallTicket( null, lTicket )" [disabled]="loading['callTicket']">Link</button>
+                    <div class="d-flex justify-content-end">
+                        <button class="m-1" mat-stroked-button type="button" (click)="omitLink()" [disabled]="loading['linkingTicket']">Omitir</button>
+                        <button class="m-1" mat-stroked-button color="accent" type="button" (click)="chgTicketLink()" [disabled]="loading['linkingTicket']" *ngIf="!flagSearchTicket">Cambiar Ticket</button>
+                        <button class="m-1" mat-stroked-button color="success" type="button" (click)="linkTickets()" [disabled]="loading['linkingTicket'] || flagSearchTicket || updateTicket['ticket'] == ''" *ngIf="!linkedTicketFlag">Si</button>
+                    </div>
+                </div>
+                <mat-progress-bar mode="query" *ngIf="loading['callTicket'] || loading['linkingTicket']"></mat-progress-bar>
+                <button mat-raised-button color="accent" type="button" (click)="viewRsv()" [disabled]="!flagManage">Gestionar Reserva</button>
             </div>
         </div>
     </div>

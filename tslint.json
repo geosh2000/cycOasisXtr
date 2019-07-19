@@ -6,6 +6,7 @@
         "deprecation": {
             "severity": "warn"
         },
+        "ban-types": false,
         "component-class-suffix": true,
         "contextual-lifecycle": true,
         "directive-class-suffix": true,
@@ -90,8 +91,11 @@
         "radix": false,
         "template-banana-in-box": true,
         "template-no-negated-async": true,
+        "typedef-whitespace": false,
+        "variable-name": false,
         "use-lifecycle-interface": true,
-        "use-pipe-transform-interface": true
+        "use-pipe-transform-interface": true,
+        "whitespace": false
     },
     "rulesDirectory": [
         "codelyzer"

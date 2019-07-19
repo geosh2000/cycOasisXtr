@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ViewContainerRef, Input, SimpleChanges, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ViewContainerRef, Input, SimpleChanges, HostListener, ElementRef, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { Title } from '@angular/platform-browser';
@@ -11,18 +11,31 @@ declare var jQuery: any;
 import * as moment from 'moment-timezone';
 import * as Globals from '../../../globals';
 import { OrderPipe } from 'ngx-order-pipe';
+import { RsvAddPaymentComponent } from '../rsv-add-payment/rsv-add-payment.component';
+import { RsvPaymentAdminComponent } from '../rsv-payment-admin/rsv-payment-admin.component';
 
 @Component({
   selector: 'app-rsv-manage',
   templateUrl: './rsv-manage.component.html',
-  styles: [`.mat-radio-button ~ .mat-radio-button {
-    margin-left: 16px;
-  }
+  styles: [`
+            .mat-radio-button ~ .mat-radio-button {
+              margin-left: 16px;
+            }
+            .mat-success {
+              background-color: #33a933;
+              color: #fff;
+            }
+            .mat-alert {
+              background-color: #e2be0c;
+              color: #fff;
+            }
 `]
 })
-export class RsvManageComponent implements OnInit {
+export class RsvManageComponent implements OnInit, OnDestroy {
 
   // @ViewChild(AddNewAgentComponent) addNew:AddNewAgentComponent
+  @ViewChild(RsvAddPaymentComponent,{static:false}) _addP:RsvAddPaymentComponent;
+  @ViewChild(RsvPaymentAdminComponent,{static:false}) _adminP:RsvPaymentAdminComponent;
 
   currentUser: any;
   showContents = false;
@@ -35,6 +48,8 @@ export class RsvManageComponent implements OnInit {
   viewLoc:any
   data:Object = {}
   originalData:Object = {}
+
+  addPaymentItem:Object = {}
 
   constructor(public _api: ApiService,
               public _init: InitService,
@@ -68,12 +83,19 @@ export class RsvManageComponent implements OnInit {
           title += ` Loc: ${this.viewLoc}`
         }
         this.titleService.setTitle(title);
+        jQuery('div.modal').modal('hide');
       }
     });
   }
 
   ngOnInit() {
     this.titleService.setTitle('CyC - Rsv Manager');
+  }
+
+  ngOnDestroy() {
+    // jQuery('#rsvAddPayment').modal('hide')
+    // jQuery('#rsvPaymentAdmin').modal('hide')
+    jQuery('div.modal').modal('hide');
   }
 
   selectLoc( e ){
@@ -84,7 +106,7 @@ export class RsvManageComponent implements OnInit {
 
     this.loading['search'] = true;
 
-    this._api.restfulGet( loc, 'Rsv/manageLoc' )
+    this._api.restfulPut( {loc}, 'Rsv/manageLoc' )
                 .subscribe( res => {
 
                   this.loading['search'] = false;
@@ -92,6 +114,9 @@ export class RsvManageComponent implements OnInit {
                   let items = res['data']['items']
                   items = this.orderPipe.transform(items, 'itemlocator')
 
+                  for( let i of items ){
+                    i['ticketUrl']='http://oasishoteles.zendesk.com/agent/tickets/' + i['ticket']
+                  }
                   let master = res['data']['master']
 
                   this.data = {
@@ -100,18 +125,8 @@ export class RsvManageComponent implements OnInit {
                   }
 
                   this.originalData = JSON.parse(JSON.stringify(this.data))
+                  window.scrollTo(0, 380);
 
-                  let scrollToTop = window.setInterval(() => {
-                    let pos = window.pageYOffset;
-                    let target = 380
-                    if (pos > target) {
-                      window.scrollTo(0, pos - 20); // how far to scroll on each step
-                  } else if (pos < target - 20) {
-                      window.scrollTo(0, pos + 20); // how far to scroll on each step
-                  } else {
-                      window.clearInterval(scrollToTop);
-                  }
-                }, 16);
 
                 }, err => {
                   this.loading['search'] = false;
@@ -192,5 +207,25 @@ export class RsvManageComponent implements OnInit {
 
   toF(f){
     return parseFloat(f)
+  }
+
+  addPayment( o, i, admin = false ){
+    if( admin ){
+      this._adminP.openModal( i )
+    }else{
+      this._addP.openModal(o, i)
+    }
+  }
+
+  closeAdd( flag ){
+    this.addPaymentItem = {}
+    jQuery('div.modal').modal('hide');
+    if( flag ){
+      this.getLoc( this.viewLoc )
+    }
+  }
+
+  checkSaldo( i ){
+    return parseFloat(i['monto']) > (parseFloat(i['montoPendiente']) + parseFloat(i['montoPagado']))
   }
 }

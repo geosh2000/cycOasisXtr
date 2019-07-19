@@ -15,7 +15,7 @@ export class SearchZdUserComponent implements OnInit {
   @Output() selected = new EventEmitter
 
 
-  mail:any
+  mail:any = ''
   loading:Object = {
   }
   data:any = []

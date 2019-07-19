@@ -6,7 +6,7 @@
             </mat-form-field>
         </div>
         <div class="p-1">
-            <button mat-raised-button color="primary" (click)="search()" [disabled]="loading['search'] || mail == ''">Buscar <span *ngIf="loading['search']"><i class="fas fa-spinner fa-pulse"></i></span></button>
+            <button mat-raised-button color="primary" (click)="search()" [disabled]="loading['search'] || mail.length<3">Buscar <span *ngIf="loading['search']"><i class="fas fa-spinner fa-pulse"></i></span></button>
         </div>
     </div>
     <div class="col-9" *ngIf="data.length > 0 || noResults">

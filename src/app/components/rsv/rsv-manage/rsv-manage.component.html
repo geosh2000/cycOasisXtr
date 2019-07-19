@@ -51,7 +51,7 @@
                                              'bg-danger': item['e'] == 'c' || item['e']=='n'
                 }" class="rounded-pill mb-1">
                     <div class="container d-flex justify-content-between flex-wrap p-2">
-                        <div class="p-2 text-center" [style.width.px]="610">
+                        <div class="p-2 text-center">
                             <mat-chip-list>
                                 <mat-chip color="primary" selected>
                                     <div class='p-2 text-center'><b>Item:</b> {{ item['masterItemLocator'] }}</div>
@@ -69,6 +69,9 @@
                         </div>
                         <div class="p-2">
                             <mat-chip-list>
+                                <mat-chip [color]="item['e'] ? item['e'] == 'c' ? 'warn' : item['e'] == 'o' || item['e'] == 'b' ? 'success' : item['e'] == 'n' ? 'alert' : 'primary' : 'warn'" selected>
+                                    <div class='p-2 text-center'>Status: {{ item['e'] ? item['e'].toUpperCase() : 'NA' }}</div>
+                                </mat-chip>
                                 <mat-chip [color]="item['isNR'] == '1' && (toF(item['monto']) - toF(item['montoPagado'])) > 0 ? 'warn' : item['cieloConf'] ? 'primary' : 'accent'" selected>
                                     <div class='p-2 text-center'>
                                         <b *ngIf="!(item['isNR'] == '1' && (toF(item['monto']) - toF(item['montoPagado'])) > 0)">Conf: </b> {{ item['isNR'] == '1' && (toF(item['monto']) - toF(item['montoPagado'])) > 0 ? 'Pendiente de Pago' : item['cieloConf']
@@ -134,7 +137,7 @@
                                         </div>
                                         <div class="d-flex justify-content-center">
                                             <mat-chip-list aria-label="Fish selection">
-                                                <mat-chip [color]="item['pySt'] == 'PDT' ? 'accent' : item['pySt'] == 'Agregar' ? 'warn' : 'primary'" selected>{{ item['pySt'] }}</mat-chip>
+                                                <mat-chip [color]="item['pySt'] == 'PDT' ? 'accent' : item['pySt'] == 'Agregar' ? 'warn' : 'success'" selected>{{ item['pySt'] }}</mat-chip>
                                             </mat-chip-list>
                                         </div>
                                     </div>
@@ -175,8 +178,8 @@
                                         </mat-radio-group>
                                     </div>
                                     <div class="p-1 d-flex justify-content-between">
-                                        <button mat-raised-button color="primary">Administrar Pagos</button>
-                                        <button mat-mini-fab color="success">
+                                        <button mat-raised-button color="primary" (click)="addPayment(null, item['masterItemLocator'], true)">Administrar Pagos</button>
+                                        <button mat-mini-fab color="success" (click)="addPayment(data['items'], i)" [disabled]="!checkSaldo( item )">
                                                 <span><i class="fas fa-plus-circle text-light"></i></span>
                                         </button>
                                     </div>
@@ -185,7 +188,7 @@
                             </div>
                         </div>
                         <div class="row ml-4 mr-4">
-                            <span><small>Creada el {{ formatDate(item['dtCreated'],'DD MMM YY') }} por {{ item['creador'] }}</small></span>
+                            <span><small>Creada el {{ formatDate(item['dtCreated'],'DD MMM YY') }} por {{ item['creador'] }} (Ver ticket <a [href]="item['ticketUrl']" target="_blank">#{{ item['ticket'] }}</a>)</small></span>
                         </div>
                     </div>
                 </mat-card-content>
@@ -194,12 +197,14 @@
         </ng-container>
     </div>
 
-    <div class="container">
+    <!-- <div class="container">
         <pre>
         {{ data | json }}
       </pre>
 
-    </div>
+    </div> -->
 
 
 </div>
+<app-rsv-add-payment (close)="closeAdd($event)"></app-rsv-add-payment>
+<app-rsv-payment-admin (close)="closeAdd($event)" (linkedPayment)="closeAdd($event)"></app-rsv-payment-admin>

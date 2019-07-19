@@ -53,6 +53,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { HomeComponent } from './components/home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgDragDropModule } from 'ng-drag-drop';
+import { TableModule } from 'ngx-easy-table';
 
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { OrderModule } from 'ngx-order-pipe';
@@ -123,6 +124,12 @@ import { CcSuperAssignComponent } from './components/config/cc-super-assign/cc-s
 import { CotHabDetailComponent } from './components/cotizador/cot-hab-detail/cot-hab-detail.component';
 import { SearchLocComponent } from './shared/search-loc/search-loc.component';
 import { RsvManageComponent } from './components/rsv/rsv-manage/rsv-manage.component';
+import { RsvAddPaymentComponent } from './components/rsv/rsv-add-payment/rsv-add-payment.component';
+import { AddExternalUserComponent } from './components/config/add-external-user/add-external-user.component';
+import { PrintVoucherComponent } from './components/pagos/print-voucher/print-voucher.component';
+import { RsvPaymentAdminComponent } from './components/rsv/rsv-payment-admin/rsv-payment-admin.component';
+import { RsvLinkPaymentComponent } from './components/rsv/rsv-link-payment/rsv-link-payment.component';
+import { RsvListComponent } from './components/rsv/rsv-list/rsv-list.component';
 
 @NgModule({
   declarations: [
@@ -187,6 +194,12 @@ import { RsvManageComponent } from './components/rsv/rsv-manage/rsv-manage.compo
     CotHabDetailComponent,
     SearchLocComponent,
     RsvManageComponent,
+    RsvAddPaymentComponent,
+    AddExternalUserComponent,
+    PrintVoucherComponent,
+    RsvPaymentAdminComponent,
+    RsvLinkPaymentComponent,
+    RsvListComponent,
 
   ],
   imports: [
@@ -215,6 +228,7 @@ import { RsvManageComponent } from './components/rsv/rsv-manage/rsv-manage.compo
       autoFocus: true
     }),
     Select2Module,
+    TableModule,
 
     MatButtonModule, MatCheckboxModule,
 

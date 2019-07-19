@@ -179,7 +179,7 @@
         <tbody>
             <ng-container *ngFor="let rac of orederedKeys">
                 <tr *ngIf="searchFilter.length <= 3 || (searchFilter.length > 3 && (sRep(asistData[rac].Nombre).match( sRep(searchFilter) ) || sRep(asistData[rac].Departamento).match( sRep(searchFilter) ) || sRep(asistData[rac].PuestoName).match( sRep(searchFilter) )))">
-                    <td scope="row"><small>{{ asistData[rac].Nombre }} <a class="cursor: pointer" [routerLink]="['/detail-asesor',rac]" target="_blank"><i class="fa fa-fw fa-info-circle"></i></a></small></td>
+                    <td scope="row"><small>{{ asistData[rac].Nombre }} <a class="cursor: pointer" [routerLink]="['/detalle-asesores',rac]" target="_blank"><i class="fa fa-fw fa-info-circle"></i></a></small></td>
                     <td class="text-center" scope="row"><small>{{ asistData[rac].Colaborador }}</small></td>
                     <td scope="row"><small class="text-center">{{ asistData[rac].Departamento }}</small></td>
                     <td scope="row"><small class="text-center">{{ asistData[rac].PuestoName }}</small></td>
@@ -187,7 +187,7 @@
                         <app-jornadas (exception)="_pya.build( $event.asesor, $event.nombre, $event.date, $event.showAll )" [asistData]="asistData[rac].data[date]" [date]="date" [asesor]="rac" [nombre]="asistData[rac].Nombre" (saveHx)="hxSave($event)" [showOpts]="showOpts">
                         </app-jornadas>
                     </td>
-                    <td scope="row"><small>{{ asistData[rac].Nombre }} <a class="cursor: pointer" [routerLink]="['/detail-asesor',rac]" target="_blank"><i class="fa fa-fw fa-info-circle"></i></a></small></td>
+                    <td scope="row"><small>{{ asistData[rac].Nombre }} <a class="cursor: pointer" [routerLink]="['/detalle-asesores',rac]" target="_blank"><i class="fa fa-fw fa-info-circle"></i></a></small></td>
                 </tr>
             </ng-container>
         </tbody>

@@ -118,8 +118,8 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
   resultCot: Object = {};
   selectedCode: any = 'ccenter';
 
-  moneda:boolean = true
-  searchUserFlag:boolean = true
+  moneda = true
+  searchUserFlag = true
   filterExp = true;
   dataForBudget:any
 
@@ -127,13 +127,20 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
   budgetMail:any
   budgetNumber:any
   budgetZenId:any
-  budgetExistTicket:boolean = false
-  budgetNoEdit:boolean = true
-  budgetLang:boolean = true
+  budgetExistTicket = false
+  budgetNoEdit = true
+  budgetLang = true
+  linkedTicketFlag = false
   budgetTicket:any
   budgetExistingBudgets:any = []
 
   lastLocCreated:any
+  linkTicket:any = []
+  linkedTicket:any
+  flagManage = false
+  flagSearchTicket = false
+  updateTicket:Object = {ticket: ''}
+  lTicket = ''
 
   constructor(public _api: ApiService,
               private nbConfig: NgbDatepickerConfig,
@@ -340,6 +347,8 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                   categoria: cat,
                   usd_total: 0,
                   mxn_total: 0,
+                  l1usd_totalDisc: 0,
+                  l1mxn_totalDisc: 0,
                   usd_totalDisc: 0,
                   mxn_totalDisc: 0,
                   totalOpaque: 0,
@@ -358,6 +367,8 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                     arr['totalOpaque'] = arr['totalOpaque'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['USD'])
                     arr['mxn_total'] = arr['mxn_total'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['MXN'])
                     arr['usd_total'] = arr['usd_total'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['USD'])
+                    arr['l1mxn_totalDisc'] = arr['l1mxn_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['l1MXN_total'])
+                    arr['l1usd_totalDisc'] = arr['l1usd_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['l1USD_total'])
                     arr['mxn_totalDisc'] = arr['mxn_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['MXN_total'])
                     arr['usd_totalDisc'] = arr['usd_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['USD_total'])
                     if( parseInt(data['habs'][h['code']]['cot'][cat][hab][0]['isOk']) == 0 ){
@@ -450,7 +461,7 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                   this.budgetLang = true
                   this.dataForBudget = []
 
-                  this.toastr.success( "ticket creado", res['data'] )
+                  this.toastr.success( 'ticket creado', res['data'] )
                   console.log( 'ticket: '+res['data'] )
 
                 }, err => {
@@ -468,8 +479,110 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
   }
 
   endRsv( e ){
-    this.lastLocCreated = e
+    // via:phone type:ticket status:open order_by:created sort:desc created>2019-07-17 asignee:
+    this.lastLocCreated = e['masterlocator']
+    this.lTicket = ''
+    this.flagManage = false
+    this.linkedTicketFlag = false
+    this.flagSearchTicket = false
+    this.getCallTicket(e['items'])
     jQuery('#confirmRsv').modal('show')
+  }
+
+  getCallTicket( e, t? ){
+    this.loading['callTicket'] = true;
+
+    let asignee = this._init.currentUser['hcInfo']['zdId']
+    let date = moment().subtract(2,'days').format('YYYY-MM-DD')
+
+    let query = t ? t : `via:phone type:ticket status:open order_by:created sort:desc created>${date}T00:00:00Z assignee:${asignee}`
+    let params = {
+        query
+      };
+
+    this._api.restfulPut( params, 'Calls/searchZdQuery' )
+                .subscribe( res => {
+
+                  this.loading['callTicket'] = false;
+
+                  let results = {}
+
+                  if( t ){
+                    for(let r of res['data']['results']){
+                      if( r['id'] == t ){
+                        results = [r]
+                        break
+                      }
+                    }
+                  }else{
+                    results = res['data']['results'][0] ? [res['data']['results'][0]] : []
+                  }
+
+                  this.linkTicketProc( results, e == null ? this.updateTicket['tickets'] : e, t ? true : false )
+
+                }, err => {
+                  this.loading['callTicket'] = false;
+
+                  const error = err.error;
+                  this.toastr.error( error.msg, err.status );
+                  console.error(err.statusText, error.msg);
+
+                });
+  }
+
+  linkTicketProc( results, e, f = false ){
+    let ticket = ''
+    let update = {
+      tickets: e,
+      ticket: ''
+    }
+
+    if( results.length > 0 ){
+      ticket = results[0]['id']
+      this.linkedTicket = `${ticket} (${results[0]['subject']})`
+      update['ticket'] = ticket
+      this.flagSearchTicket = false
+    }else{
+      if( f ){
+        this.toastr.error( 'No se encontró el ticket', 'Error' );
+      }
+
+      this.flagSearchTicket = true
+    }
+
+    this.linkedTicketFlag = false
+    this.updateTicket = update
+  }
+
+  linkTickets(){
+    this.loading['linkingTicket'] = true;
+
+    this._api.restfulPut( this.updateTicket, 'Rsv/linkTicket' )
+                .subscribe( res => {
+
+                  this.loading['linkingTicket'] = false;
+                  this.flagManage = true
+                  this.linkedTicketFlag = true
+                }, err => {
+                  this.loading['linkingTicket'] = false;
+
+                  const error = err.error;
+                  this.toastr.error( error.msg, err.status );
+                  console.error(err.statusText, error.msg);
+
+                });
+  }
+
+  omitLink(){
+    this.flagSearchTicket = false
+    this.flagManage = true
+    this.linkedTicketFlag = true
+  }
+
+  chgTicketLink(){
+    this.flagSearchTicket = true
+    this.flagManage = false
+    this.linkedTicketFlag = false
   }
 
   viewRsv(){
@@ -522,5 +635,9 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                   console.error(err.statusText, error.msg);
 
                 });
+  }
+
+  viewCurrent(){
+    console.log(this._init.currentUser)
   }
 }

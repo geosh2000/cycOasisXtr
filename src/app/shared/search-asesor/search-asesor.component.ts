@@ -16,6 +16,9 @@ export class SearchAsesorComponent implements OnChanges {
   @Input() placeholder:string = 'Buscar Asesor...'
   @Input() iconPosition:string = 'right'
   @Input() overrideAllAgents:boolean = false
+  @Input() matStyle:boolean = false
+  @Input() disableInput
+  @Input() inputClass
 
 
   @Output() result = new EventEmitter<any>()

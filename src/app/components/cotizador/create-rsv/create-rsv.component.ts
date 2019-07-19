@@ -93,7 +93,7 @@ export class CreateRsvComponent implements OnInit {
         hotel: h['hotel'],
         cat: h['cat'],
         grupo: h['grupoCielo'],
-        lv: h['level'],
+        lv: h['fdp'] == 1 ? 1 : 2,
         llegada: h['@inicio'],
         salida: h['@fin'],
         noches: h['noches'],
@@ -108,7 +108,7 @@ export class CreateRsvComponent implements OnInit {
         edad_3: h['m3'],
         isNR: h['isNR'],
         montoOriginal: this.moneda ? h['MXN'] : h['USD'],
-        monto: Math.round((this.moneda ? h['MXN_total'] : h['USD_total']) * 100) / 100,
+        monto: Math.round((this.moneda ? (h['fdp'] == 0 ? h['MXN_total'] : h['l1MXN_total']) : (h['fdp'] == 0 ? h['USD_total'] : h['l1USD_total'])) * 100) / 100,
         mon: this.moneda ? 'MXN' : 'USD',
         fdp: h['fdp'],
         userCreated: this._init.currentUser['hcInfo']['id'],
@@ -133,7 +133,7 @@ export class CreateRsvComponent implements OnInit {
                   this.chgUser()
 
                   jQuery('#rsvPop').modal('hide')
-                  this.save.emit(res['data']['masterlocator'])
+                  this.save.emit(res['data'])
 
                 }, err => {
                   this.loading['save'] = false;
