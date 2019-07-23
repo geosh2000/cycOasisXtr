@@ -131,13 +131,14 @@
                                 <div class="pl-3" [style.width.px]="80">{{ h['hotelCode'] }}</div>
                                 <span><span class='pl-3 font-weight-bold'>{{ h['habitacion'] }}</span><span class="text-info">({{ h['habCat']}})</span></span>
 
-                                <ng-container *ngIf="!h['isOk']">
-                                    <div class="text-black-50 font-italic pl-3">
-                                        {{ h['no_disp'] ? h['no_disp'] : h['no_occ'] ? h['no_occ'] : h['no_adl'] ? h['no_adl'] : h['no_min'] ? h['no_min'] : h['no_comb'] }}
-                                    </div>
-                                </ng-container>
+
                             </div>
-                            <ng-container *ngIf="h['isOk']">
+                            <ng-container *ngIf="!h['isOk'] || (moneda && h['mxn_total'] == 0) || (!moneda && h['usd_total'] == 0)">
+                                <div class="text-black-50 font-italic pl-3">
+                                    {{ moneda && h['mxn_total'] == 0 ? 'Sin tarifas cargadas' : !moneda && h['usd_total'] == 0 ? 'Sin tarifas cargadas' : h['no_disp'] ? h['no_disp'] : h['no_occ'] ? h['no_occ'] : h['no_adl'] ? h['no_adl'] : h['no_min'] ? h['no_min'] : h['no_comb'] }}
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="h['isOk'] && !(moneda && h['mxn_total'] == 0) && !(!moneda && h['usd_total'] == 0)">
                                 <div class="d-flex justify-content-between">
                                     <div [style.width.px]="110" class='text-right pl-3' style="text-decoration:line-through">{{ (moneda ? h['mxn_total'] : h['usd_total']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</div>
                                     <div [style.width.px]="45" class='text-right pl-3 text-success font-weight-bold'>{{ (1-(h['l1usd_totalDisc']/h['usd_total'])) | percent:'.0-0' }}</div>

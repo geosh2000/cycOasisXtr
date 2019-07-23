@@ -137,7 +137,7 @@
                                         </div>
                                         <div class="d-flex justify-content-center">
                                             <mat-chip-list aria-label="Fish selection">
-                                                <mat-chip [color]="item['pySt'] == 'PDT' ? 'accent' : item['pySt'] == 'Agregar' ? 'warn' : 'success'" selected>{{ item['pySt'] }}</mat-chip>
+                                                <mat-chip [color]="item['pySt'] == 'PDT' ? 'accent' : item['pySt'] == 'Agregar' ? 'warn' : item['pySt'] == 'PH' ? 'info' : item['pySt'] == 'PDT' ? 'pdt' : 'success'" selected>{{ item['pySt'] }}</mat-chip>
                                             </mat-chip-list>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
                                 <div class="col-6 border border-info rounded">
                                     <div class="p-1 d-flex justify-content-center">
                                         <mat-progress-bar mode="buffer" *ngIf="loading['fdpChange']"></mat-progress-bar>
-                                        <mat-radio-group aria-label="Forma de Pago" [value]="item['fdp']" (change)="pMethodChg(item, $event)" [disabled]="!(item['pagosPendientes']==0 && item['montoPagado']==0)" *ngIf="!loading['fdpChange']">
+                                        <mat-radio-group aria-label="Forma de Pago" [value]="item['fdp']" (change)="pMethodChg(item, $event)" [disabled]="!(item['pagosPendientes']==0 && item['montoPagado']==0)  && item['fdp']==0" *ngIf="!loading['fdpChange']">
                                             <mat-radio-button value="0">Prepago</mat-radio-button>
                                             <mat-radio-button value="1" [disabled]="item['isNR']=='1'">PH</mat-radio-button>
                                         </mat-radio-group>

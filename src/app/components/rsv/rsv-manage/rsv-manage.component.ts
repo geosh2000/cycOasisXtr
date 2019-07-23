@@ -29,6 +29,14 @@ import { RsvPaymentAdminComponent } from '../rsv-payment-admin/rsv-payment-admin
               background-color: #e2be0c;
               color: #fff;
             }
+            .mat-info {
+              background-color: #34a3b5;
+              color: #fff;
+            }
+            .mat-pdt {
+              background-color: #72658c;
+              color: #fff;
+            }
 `]
 })
 export class RsvManageComponent implements OnInit, OnDestroy {

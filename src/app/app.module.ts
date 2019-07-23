@@ -130,6 +130,10 @@ import { PrintVoucherComponent } from './components/pagos/print-voucher/print-vo
 import { RsvPaymentAdminComponent } from './components/rsv/rsv-payment-admin/rsv-payment-admin.component';
 import { RsvLinkPaymentComponent } from './components/rsv/rsv-link-payment/rsv-link-payment.component';
 import { RsvListComponent } from './components/rsv/rsv-list/rsv-list.component';
+import { RsvPaymentListComponent } from './components/rsv/rsv-payment-list/rsv-payment-list.component';
+import { RsvPaymentRegistryComponent } from './components/rsv/rsv-payment-registry/rsv-payment-registry.component';
+import { RsvLinkAnyPaymentComponent } from './components/rsv/rsv-link-any-payment/rsv-link-any-payment.component';
+import { SearchPaymentComponent } from './shared/search-payment/search-payment.component';
 
 @NgModule({
   declarations: [
@@ -200,6 +204,10 @@ import { RsvListComponent } from './components/rsv/rsv-list/rsv-list.component';
     RsvPaymentAdminComponent,
     RsvLinkPaymentComponent,
     RsvListComponent,
+    RsvPaymentListComponent,
+    RsvPaymentRegistryComponent,
+    RsvLinkAnyPaymentComponent,
+    SearchPaymentComponent,
 
   ],
   imports: [

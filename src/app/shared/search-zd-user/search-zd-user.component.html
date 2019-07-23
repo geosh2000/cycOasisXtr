@@ -38,6 +38,9 @@
                     <mat-error *ngIf="newClientForm.controls['name'].errors && newClientForm.controls['name'].errors['required']">
                         El nombre es obligatorio
                     </mat-error>
+                    <mat-error *ngIf="newClientForm.controls['name'].errors && newClientForm.controls['name'].errors['pattern']">
+                        Usa mayúsculas y minúsculas (ej. Jon Doe)
+                    </mat-error>
                 </mat-form-field>
                 <mat-form-field [style.width.px]="200" class="ml-2">
                     <mat-icon matPrefix>phone</mat-icon>

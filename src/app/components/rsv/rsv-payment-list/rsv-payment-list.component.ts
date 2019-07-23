@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { EasyTableServiceService } from '../../../services/easy-table-service.service';
 import { ApiService, InitService, TokenCheckService } from 'src/app/services/service.index';
 import { NgbDateAdapter, NgbDateStruct, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 
 declare var jQuery:any;
 import * as moment from 'moment-timezone';
+import { RsvPaymentRegistryComponent } from '../rsv-payment-registry/rsv-payment-registry.component';
+import { RsvLinkAnyPaymentComponent } from '../rsv-link-any-payment/rsv-link-any-payment.component';
 
 const equals = ({ one, two }: { one: NgbDateStruct; two: NgbDateStruct; }) => {
   return one && two && two.year == one.year && two.month == one.month && two.day == one.day;
@@ -36,8 +38,8 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   }
 }
 @Component({
-  selector: 'app-rsv-list',
-  templateUrl: './rsv-list.component.html',
+  selector: 'app-rsv-payment-list',
+  templateUrl: './rsv-payment-list.component.html',
   providers: [NgbDatepickerConfig],
   styles: [`
     .custom-day {
@@ -81,6 +83,10 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
       background-color: #72658c;
       color: #fff;
     }
+    .mat-danger {
+      background-color: #e00f0f;
+      color: #fff;
+    }
 
     mat-accordion{
       width: 100% !important;
@@ -110,7 +116,10 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   }
   `]
 })
-export class RsvListComponent implements OnInit {
+export class RsvPaymentListComponent implements OnInit {
+
+  @ViewChild(RsvPaymentRegistryComponent,{static:false}) _regP:RsvPaymentRegistryComponent;
+  @ViewChild(RsvLinkAnyPaymentComponent,{static:false}) _linkP:RsvLinkAnyPaymentComponent;
 
   currentUser: any
   showContents = false
@@ -132,27 +141,24 @@ export class RsvListComponent implements OnInit {
 
   config:EasyTableServiceService
   columns:any = [
-    { type: 'default', key: 'masterItemLocator', title: 'Loc.' },
-    { type: 'default', key: 'hotel', title: 'Hotel' },
-    { type: 'default', key: 'cat', title: 'Cat.' },
-    { type: 'default', key: 'grupo', title: 'Grupo Tfa' },
-    { type: 'nr', key: 'isNR', title: 'NR' },
-    { type: 'npropio', key: 'titular', title: 'Nombre' },
-    { type: 'date', key: 'llegada', title: 'Inicio' },
-    { type: 'date', key: 'salida', title: 'Fin' },
-    { type: 'default', key: 'noches', title: 'Noches' },
-    { type: 'ocup', key: 'a', title: 'Ocup' },
+    { type: 'default', key: 'operacion', title: 'Operacion' },
+    { type: 'prov', key: 'proveedor', title: 'Proveedor' },
+    { type: 'default', key: 'tipo', title: 'Tipo' },
+    { type: 'default', key: 'complejo', title: 'Complejo' },
+    { type: 'ticket', key: 'ticket', title: 'ticket' },
+    { type: 'money', key: 'monto', title: 'Monto'},
+    { type: 'default', key: 'moneda', title: 'Mon' },
+    { type: 'default', key: 'referencia', title: 'Ref.' },
+    { type: 'default', key: 'aut', title: 'Aut.' },
+    { type: 'date', key: 'fechaCreacion', title: 'F. Creada' },
+    { type: 'date', key: 'dtCreated', title: 'F. Pago' },
+    { type: 'default', key: 'creador', title: 'Creador' },
+    { type: 'default', key: 'paymentId', title: 'Id Pago' },
     // { type: 'default', key: 'j', title: 'Jrs' },
     // { type: 'default', key: 'm', title: 'Mnrs' },
-    { type: 'money', key: 'monto', title: 'Monto' },
-    { type: 'default', key: 'mon', title: 'Moneda' },
-    { type: 'money', key: 'montoPendiente', title: 'Pagos Pdt' },
-    { type: 'money', key: 'montoPagado', title: 'Pagos OK' },
-    { type: 'status', key: 'pySt', title: 'Status Pago' },
-    { type: 'default', key: 'cieloConf', title: 'Conf.' },
-    { type: 'conf', key: 'e', title: 'Status Rsva' },
-    { type: 'date', key: 'dtCreated', title: 'Creacion' },
-    { type: 'default', key: 'creador', title: 'Creador' },
+    { type: 'locs', key: 'Locs', title: 'Locs' },
+    { type: 'consist', key: 'consistencia', title: 'Consistente' },
+    { type: 'posib', key: 'possibleLink', title: 'Posibles' },
     { type: 'button', key: 'view', title: 'Ver' }
   ]
 
@@ -178,25 +184,11 @@ export class RsvListComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.titleService.setTitle('CyC - RSV Listado');
+    this.titleService.setTitle('CyC - RSV Listado de pagos');
     this.config = EasyTableServiceService.config
     this.config['paginationEnabled'] = true
     this.config['rows'] = 20
     this.config['paginationRangeEnabled'] = true
-  }
-
-  getTableConfig(){
-    this._api.restfulGet( this.search, 'Rsv/tableConfig' )
-                .subscribe( res => {
-
-                  this.columns = res['data']
-
-                }, err => {
-                  const error = err.error;
-                  this.toastr.error( error.msg, err.status );
-                  console.error(err.statusText, error.msg);
-
-                });
   }
 
   isToday( date ) {
@@ -239,7 +231,7 @@ export class RsvListComponent implements OnInit {
     this.loading['locs'] = true;
 
 
-    this._api.restfulPut( this.search, 'Rsv/manageLoc' )
+    this._api.restfulPut( this.search, 'Rsv/listPayments' )
                 .subscribe( res => {
 
                   this.loading['locs'] = false;
@@ -260,4 +252,8 @@ export class RsvListComponent implements OnInit {
     return moment(e).format(f)
   }
 
+  linked(e){
+    this._linkP.closeModal()
+    this.searchLocs()
+  }
 }
