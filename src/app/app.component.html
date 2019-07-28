@@ -1,4 +1,4 @@
-<mat-toolbar class='matNavbar p-0'>
+<mat-toolbar class='matNavbar p-0' role="heading">
     <!-- <div>TOOLBAR</div> -->
     <app-navbar (sideBar)="openSideBar($event)" [sbStatus]="opened" (globalAdv)="openAdv($event)" [advStatus]="advOpened" (lOut)="logout($event)" (tokenStatus)="token = $event" style="width: 100%"></app-navbar>
 </mat-toolbar>

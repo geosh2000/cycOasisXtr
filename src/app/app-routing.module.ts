@@ -13,6 +13,8 @@ import { AddExternalUserComponent } from './components/config/add-external-user/
 import { PrintVoucherComponent } from './components/pagos/print-voucher/print-voucher.component';
 import { RsvListComponent } from './components/rsv/rsv-list/rsv-list.component';
 import { RsvPaymentListComponent } from './components/rsv/rsv-payment-list/rsv-payment-list.component';
+import { CieloListComponent } from './components/cielo/cielo-list/cielo-list.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -30,10 +32,14 @@ const routes: Routes = [
   { path: 'cotizador', component: CotizadorV2Component },
   // { path: 'cotizadorV2', component: CotizadorV2Component },
 
+  { path: 'dashboard', component: DashboardComponent },
+
   { path: 'rsv', component: RsvManageComponent },
   { path: 'rsv/:loc', component: RsvManageComponent },
   { path: 'rsvList', component: RsvListComponent },
   { path: 'rsvPaymentList', component: RsvPaymentListComponent },
+  
+  { path: 'cieloList', component: CieloListComponent },
 
   { path: 'config/chgSuperCC', component: CcSuperAssignComponent },
 

@@ -134,6 +134,14 @@ import { RsvPaymentListComponent } from './components/rsv/rsv-payment-list/rsv-p
 import { RsvPaymentRegistryComponent } from './components/rsv/rsv-payment-registry/rsv-payment-registry.component';
 import { RsvLinkAnyPaymentComponent } from './components/rsv/rsv-link-any-payment/rsv-link-any-payment.component';
 import { SearchPaymentComponent } from './shared/search-payment/search-payment.component';
+import { CieloListComponent } from './components/cielo/cielo-list/cielo-list.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DasboardVentaAlDiaComponent } from './components/dashboard/dasboard-venta-al-dia/dasboard-venta-al-dia.component';
+import { DasboardVentaFcComponent } from './components/dashboard/dasboard-venta-fc/dasboard-venta-fc.component';
+import { DasboardVentaShareComponent } from './components/dashboard/dasboard-venta-share/dasboard-venta-share.component';
+import { DasboardVentaPerMonthComponent } from './components/dashboard/dasboard-venta-per-month/dasboard-venta-per-month.component';
+import { DasboardVentaPrepagoPorDiaComponent } from './components/dashboard/dasboard-venta-prepago-por-dia/dasboard-venta-prepago-por-dia.component';
+import { DasboardVentaPrepagoPorAsesorComponent } from './components/dashboard/dasboard-venta-prepago-por-asesor/dasboard-venta-prepago-por-asesor.component';
 
 @NgModule({
   declarations: [
@@ -208,6 +216,14 @@ import { SearchPaymentComponent } from './shared/search-payment/search-payment.c
     RsvPaymentRegistryComponent,
     RsvLinkAnyPaymentComponent,
     SearchPaymentComponent,
+    CieloListComponent,
+    DashboardComponent,
+    DasboardVentaAlDiaComponent,
+    DasboardVentaFcComponent,
+    DasboardVentaShareComponent,
+    DasboardVentaPerMonthComponent,
+    DasboardVentaPrepagoPorDiaComponent,
+    DasboardVentaPrepagoPorAsesorComponent,
 
   ],
   imports: [
