@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 
 import { ApiService, InitService, TokenCheckService } from '../../services/service.index';
 
@@ -8,6 +8,8 @@ declare var jQuery:any;
 import * as Globals from '../../globals';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment-timezone';
+import { DasboardVentaFcComponent } from '../dashboard/dasboard-venta-fc/dasboard-venta-fc.component';
+import { DasboardComisionesComponent } from '../dashboard/dasboard-comisiones/dasboard-comisiones.component';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +23,8 @@ export class HomeComponent implements OnInit, OnChanges {
   birthday:any = false
 
   @Input() tokenStatus:boolean
+  @ViewChild(DasboardVentaFcComponent, {static: false}) _gphVenta:DasboardVentaFcComponent
+  @ViewChild(DasboardComisionesComponent, {static: false}) _comision:DasboardComisionesComponent
 
   token:boolean
   asesorShow:any
@@ -53,6 +57,8 @@ export class HomeComponent implements OnInit, OnChanges {
     this.nameShow = item.nCorto
     this.getBD( item.asesor )
     this.changeHome()
+    this._gphVenta.getData( false, item.asesor)
+    this._comision.getData( item.asesor)
   }
 
   constructor( private _api:ApiService,
@@ -101,7 +107,6 @@ export class HomeComponent implements OnInit, OnChanges {
   }
 
   changeHome(){
-    console.log( this.depAsesorShow)
     if( this.depAsesorShow['dep'] == 29 ){
 
       let index = ''

@@ -142,6 +142,8 @@ import { DasboardVentaShareComponent } from './components/dashboard/dasboard-ven
 import { DasboardVentaPerMonthComponent } from './components/dashboard/dasboard-venta-per-month/dasboard-venta-per-month.component';
 import { DasboardVentaPrepagoPorDiaComponent } from './components/dashboard/dasboard-venta-prepago-por-dia/dasboard-venta-prepago-por-dia.component';
 import { DasboardVentaPrepagoPorAsesorComponent } from './components/dashboard/dasboard-venta-prepago-por-asesor/dasboard-venta-prepago-por-asesor.component';
+import { XlsDownloadComponent } from './shared/xls-download/xls-download.component';
+import { DasboardComisionesComponent } from './components/dashboard/dasboard-comisiones/dasboard-comisiones.component';
 
 @NgModule({
   declarations: [
@@ -224,6 +226,8 @@ import { DasboardVentaPrepagoPorAsesorComponent } from './components/dashboard/d
     DasboardVentaPerMonthComponent,
     DasboardVentaPrepagoPorDiaComponent,
     DasboardVentaPrepagoPorAsesorComponent,
+    XlsDownloadComponent,
+    DasboardComisionesComponent,
 
   ],
   imports: [

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { ApiService } from 'src/app/services/service.index';
 import { ToastrService } from 'ngx-toastr';
@@ -43,6 +43,7 @@ noData(Highcharts);
 })
 export class DasboardVentaFcComponent implements OnInit {
 
+  @Input() asesor = 0
   chart:any
 
   public options: any = {
@@ -245,12 +246,12 @@ export class DasboardVentaFcComponent implements OnInit {
     this.chart.series[6].setData( series['fcDia'] )
   }
 
-  getData( ft = false) {
+  getData( ft = false, a? ) {
 
     this.loading['data'] = true;
 
 
-    this._api.restfulGet( '', 'Dashboard/ventaFc' )
+    this._api.restfulGet( a ? a : this.asesor, 'Dashboard/ventaFc' )
                 .subscribe( res => {
 
                   this.loading['data'] = false;

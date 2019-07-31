@@ -1,5 +1,5 @@
 import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
-import { EasyTableServiceService } from '../../../services/easy-table-service.service';
+import { ConfigService } from './configuration.service';
 import { ApiService, InitService, TokenCheckService } from 'src/app/services/service.index';
 import { NgbDateAdapter, NgbDateStruct, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Title } from '@angular/platform-browser';
@@ -139,7 +139,7 @@ export class RsvPaymentListComponent implements OnInit {
   inicio: any;
   fin: any;
 
-  config:EasyTableServiceService
+  config:any
   columns:any = [
     { type: 'default', key: 'operacion', title: 'Operacion' },
     { type: 'prov', key: 'proveedor', title: 'Proveedor' },
@@ -148,7 +148,7 @@ export class RsvPaymentListComponent implements OnInit {
     { type: 'ticket', key: 'ticket', title: 'ticket' },
     { type: 'money', key: 'monto', title: 'Monto'},
     { type: 'default', key: 'moneda', title: 'Mon' },
-    { type: 'default', key: 'referencia', title: 'Ref.' },
+    { type: 'ref', key: 'referencia', title: 'Ref.' },
     { type: 'default', key: 'aut', title: 'Aut.' },
     { type: 'date', key: 'fechaCreacion', title: 'F. Creada' },
     { type: 'date', key: 'dtCreated', title: 'F. Pago' },
@@ -185,10 +185,11 @@ export class RsvPaymentListComponent implements OnInit {
   }
   ngOnInit() {
     this.titleService.setTitle('CyC - RSV Listado de pagos');
-    this.config = EasyTableServiceService.config
+    this.config = ConfigService.config
     this.config['paginationEnabled'] = true
     this.config['rows'] = 20
     this.config['paginationRangeEnabled'] = true
+    this.config['threeWaySort'] = true
   }
 
   isToday( date ) {
@@ -255,5 +256,10 @@ export class RsvPaymentListComponent implements OnInit {
   linked(e){
     this._linkP.closeModal()
     this.searchLocs()
+  }
+
+  toggle(key: string, v: any): void {
+    this.config[key] = v;
+    this.config = { ...this.config };
   }
 }

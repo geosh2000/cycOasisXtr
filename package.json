@@ -37,7 +37,7 @@
         "ng2-daterangepicker": "^2.0.12",
         "ng2-select2": "^1.0.0-beta.16",
         "ngx-contextmenu": "^5.2.0",
-        "ngx-easy-table": "^10.0.0",
+        "ngx-easy-table": "^10.1.2",
         "ngx-order-pipe": "^2.0.2",
         "ngx-popover": "0.0.16",
         "ngx-toastr": "^10.0.4",

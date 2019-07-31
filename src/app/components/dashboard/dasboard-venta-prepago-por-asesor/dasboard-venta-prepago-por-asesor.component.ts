@@ -48,7 +48,7 @@ export class DasboardVentaPrepagoPorAsesorComponent implements OnInit {
   public options: any = {
       chart: {
           zoomType: 'xy',
-          height: '40%'
+          // height: '40%'
       },
       title: {
           text: 'Monto Prepagado por día'
@@ -119,24 +119,41 @@ export class DasboardVentaPrepagoPorAsesorComponent implements OnInit {
         }
       },
       series: [
-        {
-          name: 'Monto PH',
-          type: 'column',
-          data: [],
-          tooltip: {
-              valuePrefix: '$'
-          },
-          color: '#ff9800',
-        },{
-          name: 'Monto Prepagado',
-          type: 'column',
-          data: [],
-          tooltip: {
-              valuePrefix: '$'
-          },
-          color: '#8bc34a',
-        }
-        ]
+      {
+        name: 'Monto PH',
+        type: 'column',
+        data: [],
+        tooltip: {
+            valuePrefix: '$'
+        },
+        color: '#03a9f4',
+      },
+      {
+        name: 'Monto Prepagado',
+        type: 'column',
+        data: [],
+        tooltip: {
+            valuePrefix: '$'
+        },
+        color: '#8bc34a',
+    },{
+      name: 'Meta del Mes',
+      type: 'spline',
+      data: [],
+      tooltip: {
+          valuePrefix: '$'
+      },
+      color: '#ff9800',
+    },
+    {
+      name: 'Meta al dia',
+      type: 'spline',
+      data: [],
+      tooltip: {
+          valuePrefix: '$'
+      },
+      color: '#62efff',
+    }]
   }
 
   loading = {}
@@ -157,17 +174,23 @@ export class DasboardVentaPrepagoPorAsesorComponent implements OnInit {
     let categories = []
     let series = {
       montoPrepago: [],
-      montoPH: []
+      montoPH: [],
+      metaDia: [],
+      metaMes: []
     }
     for( let r of this.dataExample ){
       categories.push( r['asesor'] )
       series['montoPrepago'].push(Math.round(r['montoPrepago']))
       series['montoPH'].push(Math.round(r['montoPH'] * 100) / 100)
+      series['metaDia'].push(Math.round(r['metaDia']))
+      series['metaMes'].push(Math.round(r['metaMes']))
     }
 
     this.chart.xAxis[0].setCategories( categories )
     this.chart.series[1].setData( series['montoPrepago'] )
     this.chart.series[0].setData( series['montoPH'] )
+    this.chart.series[3].setData( series['metaDia'] )
+    this.chart.series[2].setData( series['metaMes'] )
   }
 
   getData( ft = false) {

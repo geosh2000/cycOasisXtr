@@ -47,7 +47,7 @@ export class DasboardVentaAlDiaComponent implements OnInit {
   public options: any = {
       chart: {
           zoomType: 'xy',
-          height: '85%'
+          // height: '85%'
       },
       title: {
           text: 'Venta por asesor vs. Meta Mensual / diaria'

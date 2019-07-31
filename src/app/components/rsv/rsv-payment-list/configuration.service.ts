@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Config } from 'ngx-easy-table';
+import { Config, STYLE, THEME } from 'ngx-easy-table';
 
 @Injectable()
-export class EasyTableServiceService {
+export class ConfigService {
   public static config: Config = {
     searchEnabled: true,
     headerEnabled: true,
     orderEnabled: true,
-    orderEventOnly: false,
-    // globalSearchEnabled: true,
-    paginationEnabled: false,
-    exportEnabled: true,
+    paginationEnabled: true,
+    exportEnabled: false,
     clickEvent: false,
     selectRow: false,
     selectCol: false,
     selectCell: false,
-    rows: 10000,
+    rows: 20,
     additionalActions: false,
     serverPagination: false,
     isLoading: false,
@@ -24,21 +22,20 @@ export class EasyTableServiceService {
     paginationRangeEnabled: true,
     collapseAllRows: false,
     checkboxes: false,
-    resizeColumn: true,
-    fixedColumnWidth: false,
+    resizeColumn: false,
+    fixedColumnWidth: true,
     horizontalScroll: false,
     draggable: false,
     logger: false,
     showDetailsArrow: false,
     showContextMenu: false,
     persistState: false,
-    paginationMaxSize: 10,
     tableLayout: {
-      style: 'tiny', // or big or tiny
-      theme: 'normal', // or dark
+      style: STYLE.NORMAL,
+      theme: THEME.LIGHT,
       borderless: false,
       hover: true,
-      striped: true,
-    }
+      striped: false,
+    },
   };
 }
