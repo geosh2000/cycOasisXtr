@@ -160,7 +160,7 @@ export class DasboardVentaPrepagoPorDiaComponent implements OnInit {
       montoPH: []
     }
     for( let r of this.dataExample ){
-      categories.push( moment().format('DD-MMM') )
+      categories.push( moment(r['Fecha']).format('DD-MMM') )
       series['montoPrepago'].push(Math.round(r['montoPrepago']))
       series['montoPH'].push(Math.round(r['montoPH'] * 100) / 100)
     }

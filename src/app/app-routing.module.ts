@@ -15,6 +15,7 @@ import { RsvListComponent } from './components/rsv/rsv-list/rsv-list.component';
 import { RsvPaymentListComponent } from './components/rsv/rsv-payment-list/rsv-payment-list.component';
 import { CieloListComponent } from './components/cielo/cielo-list/cielo-list.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-day-pass-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'rsv/:loc', component: RsvManageComponent },
   { path: 'rsvList', component: RsvListComponent },
   { path: 'rsvPaymentList', component: RsvPaymentListComponent },
+  { path: 'dayPassList', component: RsvDayPassListComponent },
   
   { path: 'cieloList', component: CieloListComponent },
 

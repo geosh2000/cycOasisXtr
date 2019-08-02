@@ -144,6 +144,7 @@ import { DasboardVentaPrepagoPorDiaComponent } from './components/dashboard/dasb
 import { DasboardVentaPrepagoPorAsesorComponent } from './components/dashboard/dasboard-venta-prepago-por-asesor/dasboard-venta-prepago-por-asesor.component';
 import { XlsDownloadComponent } from './shared/xls-download/xls-download.component';
 import { DasboardComisionesComponent } from './components/dashboard/dasboard-comisiones/dasboard-comisiones.component';
+import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-day-pass-list.component';
 
 @NgModule({
   declarations: [
@@ -228,6 +229,7 @@ import { DasboardComisionesComponent } from './components/dashboard/dasboard-com
     DasboardVentaPrepagoPorAsesorComponent,
     XlsDownloadComponent,
     DasboardComisionesComponent,
+    RsvDayPassListComponent,
 
   ],
   imports: [
