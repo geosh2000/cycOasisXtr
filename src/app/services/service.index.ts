@@ -7,4 +7,5 @@ export { LoginService } from './login.service';
 export { NavbarService } from './navbar.service';
 export { TokenCheckService } from './token-check.service';
 export { ZonaHorariaService } from './zona-horaria.service';
+export { RrobinService } from './rrobin.service';
 

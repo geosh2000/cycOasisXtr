@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 
 //Services
-import { NavbarService, AsesoresService, LoginService, CredentialsService, TokenCheckService, ApiService, InitService, GlobalServicesService } from './services/service.index';
+import { NavbarService, AsesoresService, LoginService, CredentialsService, TokenCheckService, ApiService, InitService, GlobalServicesService, RrobinService } from './services/service.index';
 
 
 //Components
@@ -145,6 +145,7 @@ import { DasboardVentaPrepagoPorAsesorComponent } from './components/dashboard/d
 import { XlsDownloadComponent } from './shared/xls-download/xls-download.component';
 import { DasboardComisionesComponent } from './components/dashboard/dasboard-comisiones/dasboard-comisiones.component';
 import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-day-pass-list.component';
+import { RrobinComponent } from './shared/rrobin/rrobin.component';
 
 @NgModule({
   declarations: [
@@ -230,6 +231,7 @@ import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-
     XlsDownloadComponent,
     DasboardComisionesComponent,
     RsvDayPassListComponent,
+    RrobinComponent,
 
   ],
   imports: [
@@ -315,7 +317,8 @@ import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-
     TokenCheckService,
     ApiService,
     InitService,
-    GlobalServicesService
+    GlobalServicesService,
+    RrobinService
   ],
   bootstrap: [AppComponent]
 })

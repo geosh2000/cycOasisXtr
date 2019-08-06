@@ -124,7 +124,7 @@
                           </span>
                     <span style="font-size: smaller" *ngSwitchCase="'status'">
                               <mat-chip-list>
-                                <mat-chip [color]="row[item['key']] == 1 ? (row[item['key']] == null ? 'alert' : 'success') : 'accent'" selected>{{row[item['key']] == 1 ? (row[item['key']] == null ? 'En espera' : 'Confirmado') : 'Cancelado' }}</mat-chip>
+                                <mat-chip [color]="row[item['key']] == 1 ? (row[item['key']] == null ? 'alert' : row['o'] == 1 ? 'success' : 'primary') : 'accent'" selected>{{row[item['key']] == 1 ? (row[item['key']] == null ? 'En espera' : row['o'] == 1 ? 'Efectivo' : 'Confirmado') : 'Cancelado' }}</mat-chip>
                               </mat-chip-list>
                           </span>
                     <span style="font-size: smaller" *ngSwitchCase="'conf'">
