@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  CHAT_URL: 'wss://rtm.zopim.com/stream',
+  CHAT_ECHO: 'ws://echo.websocket.org/'
 };
 
 /*

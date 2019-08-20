@@ -146,6 +146,9 @@ import { XlsDownloadComponent } from './shared/xls-download/xls-download.compone
 import { DasboardComisionesComponent } from './components/dashboard/dasboard-comisiones/dasboard-comisiones.component';
 import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-day-pass-list.component';
 import { RrobinComponent } from './shared/rrobin/rrobin.component';
+import { ChatMonitorComponent } from './components/chat/chat-monitor.component';
+import { TelefoniaComponent } from './components/monitores/telefonia/telefonia.component';
+import { TelAgentComponent } from './components/monitores/telefonia/tel-agent/tel-agent.component';
 
 @NgModule({
   declarations: [
@@ -232,6 +235,9 @@ import { RrobinComponent } from './shared/rrobin/rrobin.component';
     DasboardComisionesComponent,
     RsvDayPassListComponent,
     RrobinComponent,
+    ChatMonitorComponent,
+    TelefoniaComponent,
+    TelAgentComponent,
 
   ],
   imports: [

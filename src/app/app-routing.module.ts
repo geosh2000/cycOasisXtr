@@ -16,9 +16,13 @@ import { RsvPaymentListComponent } from './components/rsv/rsv-payment-list/rsv-p
 import { CieloListComponent } from './components/cielo/cielo-list/cielo-list.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-day-pass-list.component';
+import { ChatMonitorComponent } from './components/chat/chat-monitor.component';
+import { TelefoniaComponent } from './components/monitores/telefonia/telefonia.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
+
+  { path: 'chat', component: ChatMonitorComponent },
 
   { path: 'home', component: HomeComponent },
   { path: 'detalle-asesores', component: DetalleAsesoresComponent },
@@ -27,13 +31,16 @@ const routes: Routes = [
 
   { path: 'asistencia', component: AsistenciaComponent },
   { path: 'asistencia/editarHorarios', component: CargaHorariosComponent },
-  
+
   { path: 'config/addExternal', component: AddExternalUserComponent },
 
   { path: 'cotizador', component: CotizadorV2Component },
   // { path: 'cotizadorV2', component: CotizadorV2Component },
 
   { path: 'dashboard', component: DashboardComponent },
+
+  { path: 'monitores/telefonia', component: TelefoniaComponent },
+  { path: 'monitores/:a', component: TelefoniaComponent },
 
   { path: 'rsv', component: RsvManageComponent },
   { path: 'rsv/:loc', component: RsvManageComponent },
