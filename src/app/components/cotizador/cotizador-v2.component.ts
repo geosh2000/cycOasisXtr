@@ -48,6 +48,10 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   templateUrl: './cotizador-v2.component.html',
   providers: [NgbDatepickerConfig],
   styles: [`
+    .exp-height {
+      height: auto !important;
+      padding: 6px !important;
+    }
     .custom-day {
       text-align: center;
       padding: 0.185rem 0.25rem;
@@ -75,9 +79,22 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
       max-width: 780px
     }
 
+    .mat-radio-button ~ .mat-radio-button {
+      margin-left: 16px;
+    }
+
     .acc-headers .mat-expansion-panel-header-description {
       justify-content: space-between;
       align-items: center;
+    }
+
+    .mat-l3 {
+      background-color: #bb9e11;
+      color: white;
+    }
+    .mat-l4 {
+      background-color: #b360bd;
+      color: white;
     }
 
     mat-form-field {
@@ -257,6 +274,10 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                 });
   }
 
+  test(e){
+    console.log(e)
+  }
+
   getCotizacion() {
 
     this.loading['cotizador'] = true;
@@ -349,6 +370,12 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                   mxn_total: 0,
                   l1usd_totalDisc: 0,
                   l1mxn_totalDisc: 0,
+                  l2usd_totalDisc: 0,
+                  l2mxn_totalDisc: 0,
+                  l3usd_totalDisc: 0,
+                  l3mxn_totalDisc: 0,
+                  l4usd_totalDisc: 0,
+                  l4mxn_totalDisc: 0,
                   usd_totalDisc: 0,
                   mxn_totalDisc: 0,
                   totalOpaque: 0,
@@ -357,6 +384,7 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                   habs: [],
                   adults: 0,
                   minors: 0,
+                  lSelected: '2',
                   bo: data['habs'][h['code']]['disp']
                 }
                 for(let hab in data['habs'][h['code']]['cot'][cat] ){
@@ -369,6 +397,12 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                     arr['usd_total'] = arr['usd_total'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['USD'])
                     arr['l1mxn_totalDisc'] = arr['l1mxn_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['l1MXN_total'])
                     arr['l1usd_totalDisc'] = arr['l1usd_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['l1USD_total'])
+                    arr['l2mxn_totalDisc'] = arr['l2mxn_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['MXN_total'])
+                    arr['l2usd_totalDisc'] = arr['l2usd_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['USD_total'])
+                    arr['l3mxn_totalDisc'] = arr['l3mxn_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['l3MXN_total'])
+                    arr['l3usd_totalDisc'] = arr['l3usd_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['l3USD_total'])
+                    arr['l4mxn_totalDisc'] = arr['l4mxn_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['l4MXN_total'])
+                    arr['l4usd_totalDisc'] = arr['l4usd_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['l4USD_total'])
                     arr['mxn_totalDisc'] = arr['mxn_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['MXN_total'])
                     arr['usd_totalDisc'] = arr['usd_totalDisc'] + parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['USD_total'])
                     if( parseInt(data['habs'][h['code']]['cot'][cat][hab][0]['isOk']) == 0 ){
@@ -394,11 +428,23 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
                       arr['usd_total'] = 0
                       arr['mxn_totalDisc'] = 0
                       arr['usd_totalDisc'] = 0
+                      arr['l1mxn_totalDisc'] = 0
+                      arr['l1usd_totalDisc'] = 0
+                      arr['l2mxn_totalDisc'] = 0
+                      arr['l2usd_totalDisc'] = 0
+                      arr['l3mxn_totalDisc'] = 0
+                      arr['l3usd_totalDisc'] = 0
+                      arr['l4mxn_totalDisc'] = 0
+                      arr['l4usd_totalDisc'] = 0
                     }
                     arr['desc'] = parseFloat(data['habs'][h['code']]['cot'][cat][hab][0]['lv'])
                     arr['habitacion'] = data['habs'][h['code']]['cot'][cat][hab][0]['habName']
                     arr['habCat'] = data['habs'][h['code']]['cot'][cat][hab][0]['cat']
                     arr['habs'].push(data['habs'][h['code']]['cot'][cat][hab][0])
+                    arr['spl3'] = data['habs'][h['code']]['cot'][cat][hab][0]['spl3']
+                    arr['spl4'] = data['habs'][h['code']]['cot'][cat][hab][0]['spl4']
+                    arr['spl3Desc'] = data['habs'][h['code']]['cot'][cat][hab][0]['spl3Desc']
+                    arr['spl4Desc'] = data['habs'][h['code']]['cot'][cat][hab][0]['spl4Desc']
                   }
                 }
                 result.push(arr)

@@ -4,7 +4,7 @@
             <mat-card-header [style.width.px]="270">
                 <div mat-card-avatar [style.backgroundImage]="'url(' + f['avatar_url'] + ')'" class="example-header-image"></div>
                 <mat-card-title class="text-truncate">{{ f['name'] }}</mat-card-title>
-                <mat-card-subtitle>{{ f['status'] }} <b>(AHT: {{ printVal('time', f['average_talk_time']+f['average_hold_time']+f['average_wrap_up_time']) }})</b></mat-card-subtitle>
+                <mat-card-subtitle>{{ f['status'] == 'En una llamada' ? 'En llamada' : f['status'] }} <b>(AHT: {{ printVal('time', f['average_talk_time']+f['average_hold_time']+f['average_wrap_up_time']) }})</b></mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
                 <table style="width: 100%">

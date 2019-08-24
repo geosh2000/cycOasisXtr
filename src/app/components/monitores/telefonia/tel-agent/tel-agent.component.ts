@@ -90,7 +90,7 @@ export class TelAgentComponent implements OnInit, OnDestroy {
                   this.data = data
                   this.lu = moment(res['lu']).format('DD/MMM HH:mm:ss')
 
-                  // this.timeout = setTimeout( () => this.getData('agStatus' ), 2000 )
+                  this.timeout = setTimeout( () => this.getData('agStatus' ), 2000 )
 
                 }, err => {
                   this.loading['data'] = false;

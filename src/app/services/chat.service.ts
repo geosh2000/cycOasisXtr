@@ -11,14 +11,14 @@ export class ChatService {
   message: Subject<any>
 
   constructor( private wsService: WebsocketService ) {
-    this.message = wsService
-      .connect(environment.CHAT_URL)
-      .map((response: MessageEvent): any => {
-        let data = JSON.parse(response.data)
-        return {
-          author: data.author,
-          message: data.message
-        }
-      }) as Subject<any>
+    // this.message = wsService
+    //   .connect(environment.CHAT_URL)
+    //   .map((response: MessageEvent): any => {
+    //     let data = JSON.parse(response.data)
+    //     return {
+    //       author: data.author,
+    //       message: data.message
+    //     }
+    //   }) as Subject<any>
    }
 }

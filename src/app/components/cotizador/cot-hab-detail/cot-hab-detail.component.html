@@ -32,16 +32,20 @@
                             <div [style.width.px]="45" class='text-right pl-3 text-success font-weight-bold'>
                                 <p>{{ (1-(hb['l1USD_total']/hb['USD'])) | percent:'.0-0' }}</p>
                             </div>
-                            <div [style.width.px]="110" class="text-right text-primary font-weight-bold">
-                                <h6>{{ (moneda ? hb['l1MXN_total'] : hb['l1USD_total']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</h6>
-                            </div>
-                            <div [style.width.px]="45" class='text-right pl-3 text-success font-weight-bold'>
-                                {{ (1-(hb['USD_total']/hb['l1USD_total'])) | percent:'.0-0' }}
-                            </div>
                             <div [style.width.px]="130" class="text-right text-success pl-3 font-weight-bold">
                                 <mat-chip-list aria-label="Fish selection">
-                                    <mat-chip color='primary' selected>
-                                        <span [style.width.px]="120">{{ (moneda ? hb['MXN_total'] : hb['USD_total']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</span>
+                                    <mat-chip>
+                                        <span [style.width.px]="120">{{ (moneda ? hb['l1MXN_total'] : hb['l1USD_total']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</span>
+                                    </mat-chip>
+                                </mat-chip-list>
+                            </div>
+                            <div [style.width.px]="45" class='text-right pl-3 text-success font-weight-bold' *ngIf="hb['l'+level+'USD_total'] != hb['l1USD_total']">
+                                {{ (1-((level == '2' ? hb['USD_total'] : hb['l'+level+'USD_total'])/hb['l1USD_total'])) | percent:'.0-0' }}
+                            </div>
+                            <div [style.width.px]="130" class="text-right text-success pl-3 font-weight-bold" *ngIf="hb['l'+level+'USD_total'] != hb['l1USD_total']">
+                                <mat-chip-list aria-label="Fish selection">
+                                    <mat-chip [color]="level == '1' ? '' : level == '3' ? 'l3' : level == '4' ? 'l4' : 'primary'" selected>
+                                        <span [style.width.px]="120">{{ (moneda ? (level == '2' ? hb['MXN_total'] : hb['l'+level+'MXN_total']) : level == '2' ? hb['USD_total'] : hb['l'+level+'USD_total']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }}</span>
                                     </mat-chip>
                                 </mat-chip-list>
                             </div>
@@ -55,10 +59,10 @@
                             <div [style.width.px]="110" class="text-right text-secondary font-weight-bold">
                                 <p><small><span class='pl-1'>({{ ((moneda ? hb['l1MXN_total'] : hb['l1USD_total']) / hb['noches']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }} p/n)</span></small></p>
                             </div>
-                            <div [style.width.px]="45" class='text-right pl-3 text-secondary font-weight-bold'>
+                            <div [style.width.px]="45" class='text-right pl-3 text-secondary font-weight-bold' *ngIf="hb['l'+level+'USD_total'] != hb['l1USD_total']">
                             </div>
-                            <div [style.width.px]="130" class="text-center text-secondary pl-3 font-weight-bold">
-                                <p><small><span class='pl-1'>({{ ((moneda ? hb['MXN_total'] : hb['USD_total']) / hb['noches']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }} p/n)</span></small></p>
+                            <div [style.width.px]="130" class="text-center text-secondary pl-3 font-weight-bold" *ngIf="hb['l'+level+'USD_total'] != hb['l1USD_total']">
+                                <p><small><span class='pl-1'>({{ ((moneda ? (level == '2' ? hb['MXN_total'] : hb['l'+level+'MXN_total']) : level == '2' ? hb['USD_total'] : hb['l'+level+'USD_total']) / hb['noches']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }} p/n)</span></small></p>
                             </div>
                         </div>
                     </div>
