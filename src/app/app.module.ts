@@ -149,6 +149,8 @@ import { RrobinComponent } from './shared/rrobin/rrobin.component';
 import { ChatMonitorComponent } from './components/chat/chat-monitor.component';
 import { TelefoniaComponent } from './components/monitores/telefonia/telefonia.component';
 import { TelAgentComponent } from './components/monitores/telefonia/tel-agent/tel-agent.component';
+import { CallStatisticsComponent } from './components/monitores/calls/call-statistics.component';
+import { GraphCallStatsComponent } from './components/monitores/calls/statistics/graph-call-stats/graph-call-stats.component';
 
 @NgModule({
   declarations: [
@@ -238,6 +240,8 @@ import { TelAgentComponent } from './components/monitores/telefonia/tel-agent/te
     ChatMonitorComponent,
     TelefoniaComponent,
     TelAgentComponent,
+    CallStatisticsComponent,
+    GraphCallStatsComponent
 
   ],
   imports: [

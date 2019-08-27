@@ -18,6 +18,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-day-pass-list.component';
 import { ChatMonitorComponent } from './components/chat/chat-monitor.component';
 import { TelefoniaComponent } from './components/monitores/telefonia/telefonia.component';
+import { CallStatisticsComponent } from './components/monitores/calls/call-statistics.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -40,7 +41,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
 
   { path: 'monitores/telefonia', component: TelefoniaComponent },
-  { path: 'monitores/:a', component: TelefoniaComponent },
+  { path: 'monitores/telefonia/:a', component: TelefoniaComponent },
+  { path: 'monitores/callStatistics', component: CallStatisticsComponent },
 
   { path: 'rsv', component: RsvManageComponent },
   { path: 'rsv/:loc', component: RsvManageComponent },
