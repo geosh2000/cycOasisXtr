@@ -60,8 +60,8 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   @Input() dt:any
 
   currentUser: any
-  showContents:boolean = false
-  mainCredential:string = 'monitor_participacion_cc'
+  showContents = false
+  mainCredential = 'monitor_participacion_cc'
 
   timeout:any
 
@@ -71,7 +71,7 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   loading:Object = {}
   total:any
   aht:any
-  monitor:boolean = true
+  monitor = true
   data:any
   locs:any
   dataH:Object = {}
@@ -84,8 +84,8 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   skills:any = []
   skillSelected:any
 
-  timerFlag:boolean= false
-  timeCount:number= 300
+  timerFlag = false
+  timeCount = 300
 
   inicio:any = moment().format('YYYY-MM-DD')
   fin:any = moment().format('YYYY-MM-DD')
@@ -98,6 +98,7 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   groupBy:any = 'hora'
 
   dataLive:any = []
+  dataSum:any = []
   timerLive:any
 
   constructor(public _api: ApiService,
@@ -235,7 +236,7 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
                                           data  : [],
                                           aht   : []
                                         },
-                              Mixcoac : { name  : 'Mixcoac',
+                              Mixcoac : { name  : 'Otros',
                                           color : '#a78116',
                                           data  : [],
                                           aht   : []
@@ -317,6 +318,26 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
               })
   }
 
+  getDataSum(){
+    this.loading['dataLive'] = true
+    this._api.restfulGet( '1', 'Calls/talkAgentStatus')
+              .subscribe( res => {
+
+                this.loading['dataLive'] = false
+
+                this.dataSum = res['data']
+
+              }, err => {
+                console.log('ERROR', err)
+                this.loading['dataLive'] = false
+
+                let error = err.error
+                this.toastr.error( error.error ? error.error.message : error.msg, error.error ? error.msg : 'Error' )
+                console.error(err.statusText, error.msg)
+
+              })
+  }
+
   getDataLive(){
     this.loading['dataLive'] = true
     this._api.restfulGet( '', 'Calls/talkStatus')
@@ -325,6 +346,7 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
                 this.loading['dataLive'] = false
 
                 this.dataLive = res['data']
+                this.getDataSum()
                 this.timerLive = setTimeout( () => this.getDataLive(), 3000);
 
               }, err => {

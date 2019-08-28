@@ -23,8 +23,8 @@ export class GraphCallStatsComponent implements AfterViewInit, OnChanges {
     @Input() data = []
     @Input() h = []
     @Input() date = []
-    @Input() multi:boolean = false
-    divWidth:number = 1200
+    @Input() multi = false
+    divWidth = 1200
 
     chart:Object = {}
 
@@ -47,7 +47,7 @@ export class GraphCallStatsComponent implements AfterViewInit, OnChanges {
                     text: 'Participación por 800'
                 },
                 chart: {
-                  width: 1400,
+                  width: 1200,
                   height: 600,
                   type: 'column'
                 },
@@ -228,7 +228,7 @@ export class GraphCallStatsComponent implements AfterViewInit, OnChanges {
       this.chart['calls'] = Highcharts.chart('chartDiv', this.options);
     }
 
-    console.log(this.data) 
+    console.log(this.data)
 
     if( this.chart['calls'] ){
       if( this.h && this.h['ly'] && this.h['ly']['name'] ){
@@ -280,17 +280,16 @@ export class GraphCallStatsComponent implements AfterViewInit, OnChanges {
 
   resizeChart(){
     // guard against resize before view is rendered
-    // if(this.parentDiv) {
-    //   this.divWidth = this.parentDiv.nativeElement.clientWidth;
-
-    //   if( this.chart ){
-    //     // tslint:disable-next-line:forin
-    //     for( let group in this.chart ){
-    //       let h = this.divWidth*1000/2200
-    //       this.chart['calls'].setSize(this.divWidth, h);
-    //     }
-    //   }
-    // }
+    if(this.parentDiv) {
+      this.divWidth = this.parentDiv.nativeElement.clientWidth;
+      if( this.chart ){
+        // tslint:disable-next-line:forin
+        for( let group in this.chart ){
+          let h = this.divWidth*1000/2200
+          this.chart['calls'].setSize(this.divWidth, h);
+        }
+      }
+    }
   }
 
 

@@ -130,11 +130,11 @@
             <!-- CONTENIDO -->
             <app-graph-call-stats [data]="data" [date]="date" [h]="dataH" [multi]="multi"></app-graph-call-stats>
         </div>
-        <div class="col-4">
+        <div class="col-2" *ngIf="dataLive['data']">
             <mat-card class="m-2">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
-                        <h3>Agentes Online</h3>
+                        <h3>Online</h3>
                         <h1>{{ dataLive['data']['current_queue_activity']['agents_online'] }}</h1>
                     </div>
                 </mat-card-content>
@@ -142,7 +142,7 @@
             <mat-card class="m-2">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
-                        <h3>Llamadas en Espera</h3>
+                        <h3>Espera</h3>
                         <h1>{{ dataLive['data']['current_queue_activity']['calls_waiting'] }}</h1>
                     </div>
                 </mat-card-content>
@@ -150,7 +150,7 @@
             <mat-card class="m-2">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
-                        <h3>Tiempo Promedio de Espera</h3>
+                        <h3>AWT</h3>
                         <h1>{{ dataLive['data']['current_queue_activity']['average_wait_time'] }}</h1>
                     </div>
                 </mat-card-content>
@@ -158,7 +158,7 @@
             <mat-card class="m-2">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
-                        <h3>Llamada más larga en espera</h3>
+                        <h3>Longest Wait</h3>
                         <h1>{{ dataLive['data']['current_queue_activity']['longest_wait_time'] }}</h1>
                     </div>
                 </mat-card-content>
@@ -166,20 +166,71 @@
             <mat-card class="m-2">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
-                        <h3>CallBacks en espera</h3>
+                        <h3>Wait. CallBacks</h3>
                         <h1>{{ dataLive['data']['current_queue_activity']['callbacks_waiting'] }}</h1>
                     </div>
                 </mat-card-content>
             </mat-card>
-            <mat-card class="m-2">
+            <!-- <mat-card class="m-2">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
                         <h3>CallBacks en espera (widget)</h3>
                         <h1>{{ dataLive['data']['current_queue_activity']['embeddable_callbacks_waiting'] }}</h1>
                     </div>
                 </mat-card-content>
+            </mat-card> -->
+            <!-- <pre>{{ dataLive | json }}</pre> -->
+        </div>
+        <div class="col-2">
+            <mat-card class="m-2">
+                <mat-card-content>
+                    <div class="d-flex justify-content-between">
+                        <h3>Avail</h3>
+                        <h1>{{ dataSum['avail'] }}</h1>
+                    </div>
+                </mat-card-content>
             </mat-card>
-            <pre>{{ dataLive | json }}</pre>
+            <mat-card class="m-2">
+                <mat-card-content>
+                    <div class="d-flex justify-content-between">
+                        <h3>Away</h3>
+                        <h1>{{ dataSum['pause'] }}</h1>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="m-2">
+                <mat-card-content>
+                    <div class="d-flex justify-content-between">
+                        <h3>Wrap</h3>
+                        <h1>{{ dataSum['wrap'] }}</h1>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="m-2">
+                <mat-card-content>
+                    <div class="d-flex justify-content-between">
+                        <h3>En llamada</h3>
+                        <h1>{{ dataSum['call'] }}</h1>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="m-2">
+                <mat-card-content>
+                    <div class="d-flex justify-content-between">
+                        <h3>AHT</h3>
+                        <h1>{{ dataSum['aht'] | number:'.0-0' }}</h1>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <!-- <mat-card class="m-2">
+                <mat-card-content>
+                    <div class="d-flex justify-content-between">
+                        <h3>CallBacks en espera (widget)</h3>
+                        <h1>{{ dataLive['data']['current_queue_activity']['embeddable_callbacks_waiting'] }}</h1>
+                    </div>
+                </mat-card-content>
+            </mat-card> -->
+            <!-- <pre>{{ dataLive | json }}</pre> -->
         </div>
     </div>
 
