@@ -1,0 +1,21 @@
+<div class="container-fluid p-0">
+    <div class='container-fluid p-0'>
+        <mat-progress-bar mode="query" *ngIf="loading['services']"></mat-progress-bar>
+        <mat-tab-group (selectedTabChange)="tabChg($event.index)" mat-stretch-tabs [color]="'warn'" *ngIf="!loading['services']">
+            <mat-tab *ngFor="let m of products" [disabled]="m['enabled'] != 1">
+                <ng-template mat-tab-label>
+                    <mat-icon style="margin-right: 8px;">{{ m['icon'] }}</mat-icon>
+                    {{ m['title'] }}
+                </ng-template>
+
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+
+<div class="p-3">
+    <app-cotizador-v2 (rsv)="popReserve($event)" *ngIf="shownIndex == 0"></app-cotizador-v2>
+    <app-cotiza-day-pass (rsv)="popReserve($event)" *ngIf="shownIndex == 1"></app-cotiza-day-pass>
+</div>
+
+<app-cot-create-rsv></app-cot-create-rsv>

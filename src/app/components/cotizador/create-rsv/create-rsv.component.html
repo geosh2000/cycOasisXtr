@@ -2,6 +2,8 @@
 <div class="modal fade" id="rsvPop" tabindex="-1" role="dialog" aria-labelledby="rsvModal" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
+
+            <!-- BEGIN SELECT NEW OR EXISTENT -->
             <div class="modal-header">
                 <div class="d-flex justify-content-end">
                     <div class="p-1 mr-3">
@@ -11,15 +13,18 @@
                         <ui-switch color="#a8b5ff" (change)="chgUser()" size="small" name='exist' [(ngModel)]="isNew" checkedLabel='Nueva' uncheckedLabel='Existente'></ui-switch>
                     </div>
                 </div>
-
-
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <!-- END SELECT NEW OR EXISTENT -->
+
             <div class="modal-body">
+
+                <!-- BEGIN SEARCH APPS -->
                 <app-search-zd-user (selected)="selectedUser($event)" *ngIf="searchUserFlag && isNew"></app-search-zd-user>
                 <app-search-loc (selected)="selectedUser($event)" *ngIf="searchUserFlag && !isNew"></app-search-loc>
+
                 <form [formGroup]="newRsvForm" *ngIf="!searchUserFlag">
                     <div class='container d-flex justify-content-center'>
                         <table class="example-full-width" cellspacing="0" [style.width.px]="880">
@@ -57,7 +62,10 @@
                         </div>
                     </div>
                 </form>
-                <div *ngIf="!searchUserFlag">
+                <!-- END SEARCH APPS -->
+
+                <!-- BEGIN RSV HOTEL -->
+                <div *ngIf="!searchUserFlag && tipo == 'hotel'">
                     <div class="d-flex justify-content-center pb-2">
                         <div class="p-2" style="background-size: cover; background-position: center; width: 140px; height: 75px; border-radius: 10px" [style.background-image]="data['hotelUrl']"></div>
                         <div class="p-2">
@@ -65,7 +73,7 @@
                             <p><span class=''>Categoría: {{ data['habitacion'] }}</span><span class="text-info"> ({{ data['habCat']}})</span></p>
                         </div>
                     </div>
-                    <app-cot-hab-detail [habs]="data['habs']" (total)="total = $event" [moneda]="moneda" [paymentSelect]="true"></app-cot-hab-detail>
+                    <app-cot-hab-detail [habs]="data['habs']" [level]="data['lSelected']" (total)="total = $event" [moneda]="moneda" [paymentSelect]="true"></app-cot-hab-detail>
                     <div class="d-flex justify-content-end pr-3">
 
                         <div class="font-weight-bold pr-4">
@@ -74,11 +82,35 @@
 
                     </div>
                 </div>
+                <!-- END RSV HOTEL -->
+
+                <!-- BEGIN RSV DAYPASS -->
+                <div class="d-flex justify-content-center flex-wrap align-items-center " *ngIf="!searchUserFlag && tipo == 'daypass'">
+                    <div class="d-flex justify-content-center pb-2">
+                        <div class="p-2" style="background-size: cover; background-position: center; width: 140px; height: 75px; border-radius: 10px" [style.background-image]="data['hotelUrl']"></div>
+                        <div class="p-2">
+                            <h3>{{ data['hotel'] }}</h3>
+                            <p><span class=''>{{ data['dayPassType'] }}</span></p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end ml-5">
+
+                        <div class="font-weight-bold pr-4">
+                            <h5>Fecha: {{ printDate(data['fecha'], 'ddd DD MMM \'YY') }} </h5>
+                            <h5>para {{ data['adultos'] }} Adultos, {{ data['menores'] }} Menores por <span class="text-primary">{{ (moneda ? data['totalMXN'] : data['totalUSD']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }} {{ moneda ? 'MXN' : 'USD' }}</span></h5>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- END RSV DAYPASS -->
             </div>
+
+            <!-- BEGIN BOTONES COTIZACION Y RESERVA -->
             <div class="modal-footer">
                 <button type="button" mat-raised-button color="warn" data-dismiss="modal" (click)="chgUser()" [disabled]="loading['save']">Cancelar</button>
                 <button type="button" mat-raised-button color="primary" (click)="saveRsv()" [disabled]="newRsvForm.status=='INVALID' || loading['save'] || searchUserFlag">Reservar  <span *ngIf="loading['save']"><i class="fas fa-spinner fa-pulse"></i></span></button>
             </div>
+            <!-- END BOTONES COTIZACION Y RESERVA -->
         </div>
     </div>
 </div>

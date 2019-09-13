@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService, InitService, TokenCheckService } from '../../../services/service.index';
 import { ToastrService } from 'ngx-toastr';
 import { SearchZdUserComponent } from '../../../shared/search-zd-user/search-zd-user.component';
 
 declare var jQuery: any;
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-create-rsv',
@@ -14,16 +15,20 @@ declare var jQuery: any;
 export class CreateRsvComponent implements OnInit {
 
   @ViewChild( SearchZdUserComponent ,{static:false}) private zdSearch: SearchZdUserComponent
+  // tslint:disable-next-line: no-output-native
   @Output() error = new EventEmitter<any>()
   @Output() save = new EventEmitter<any>()
 
-  loading:Object = {}
+  moneda = true
+  tipo = 'hotel'
   data:Object = {}
-  moneda:boolean = true
-  isNew:boolean = true
-  searchUserFlag:boolean = true
+  loading:Object = {}
+  isNew = true
+  searchUserFlag = true
   newRsvForm:FormGroup
   masterLoc:any
+  total = 0
+  all:any
 
   constructor(public _api: ApiService,
               public _init: InitService,
@@ -74,48 +79,55 @@ export class CreateRsvComponent implements OnInit {
     let arr = {
       master: this.newRsvForm.value,
       item: this.data,
-      habs: []
+      habs: [],
+      type: this.tipo,
+      moneda: this.moneda
     }
 
     if( !this.isNew ){
       arr['masterLoc'] = this.masterLoc
     }
 
-    for( let h of arr['item']['habs'] ){
-      if( !h['fdp'] ){
-        this.error.emit('Debes elegir una forma de pago para cada habitación')
-        return
+    if( this.tipo == 'hotel' ){
+      for( let h of arr['item']['habs'] ){
+        if( !h['fdp'] ){
+          this.error.emit('Debes elegir una forma de pago para cada habitación')
+          return
+        }
+  
+        let hab = {
+            hotel: {
+              hotel: h['hotel'],
+              categoria: h['cat'],
+              mdo: h['mayorista'],
+              agencia: this.moneda ? h['agenciaMX'] : h['agenciaUS'],
+              gpoTfa: this.moneda ? h['cieloMXN'] : h['cieloUSD'],
+              titular: this.newRsvForm.controls['nombreCliente'].value,
+              adultos: h['rateAdults'],
+              juniors: parseInt(h['rateMinors']) > 2 ? 1 : 0,
+              menores: parseInt(h['rateMinors']) > 2 ? 2 : h['rateMinors'],
+              inicio: h['@inicio'],
+              fin: h['@fin'],
+              noches: h['noches'],
+              isNR: h['isNR'],
+              isLocal: h['grupo'] == 'CCQROO' ? 1 : 0,
+            },
+            monto: {
+              montoOriginal: this.moneda ? h['MXN'] : h['USD'],
+              lv: this.data['lSelected'],
+              monto: Math.round((this.moneda ? h['l' + this.data['lSelected'] + 'MXN_total'] : h['l' + this.data['lSelected'] + 'USD_total']) * 100) / 100,
+              moneda: this.moneda ? 'MXN' : 'USD',
+              isPagoHotel: h['fdp']
+            },
+            item: {
+              itemType: 1,
+              isQuote: h['fdp'] == 1 ? 0 : 1,
+              userCreated: this._init.currentUser.hcInfo.id
+            }
+        }
+  
+        arr['habs'].push(hab)
       }
-
-      let hab = {
-        mdo: h['mayorista'],
-        agencia: this.moneda ? h['agenciaMX'] : h['agenciaUS'],
-        hotel: h['hotel'],
-        cat: h['cat'],
-        grupo: h['grupoCielo'],
-        lv: h['fdp'] == 1 ? 1 : 2,
-        llegada: h['@inicio'],
-        salida: h['@fin'],
-        noches: h['noches'],
-        titular: this.newRsvForm.controls['nombreCliente'].value,
-        a: h['rateAdults'],
-        j: parseInt(h['rateMinors']) > 2 ? 1 : 0,
-        m: parseInt(h['rateMinors']) > 2 ? 2 : h['rateMinors'],
-        disp_a: h['adults'],
-        disp_m: h['minors'],
-        edad_1: h['m1'],
-        edad_2: h['m2'],
-        edad_3: h['m3'],
-        isNR: h['isNR'],
-        montoOriginal: this.moneda ? h['MXN'] : h['USD'],
-        monto: Math.round((this.moneda ? (h['fdp'] == 0 ? h['MXN_total'] : h['l1MXN_total']) : (h['fdp'] == 0 ? h['USD_total'] : h['l1USD_total'])) * 100) / 100,
-        mon: this.moneda ? 'MXN' : 'USD',
-        fdp: h['fdp'],
-        userCreated: this._init.currentUser['hcInfo']['id'],
-        userLastEdit: this._init.currentUser['hcInfo']['id']
-      }
-
-      arr['habs'].push(hab)
     }
 
     this.saveRsvPut( arr )
@@ -142,7 +154,20 @@ export class CreateRsvComponent implements OnInit {
                   this.toastr.error( error.msg, err.status );
                   console.error(err.statusText, error.msg);
 
-                }); 
+                });
+  }
+
+  popReserve( h ){
+    console.log(h)
+    this.all = h
+    this.data = h['data']
+    this.moneda = h['moneda']
+    this.tipo = h['tipo']
+    jQuery('#rsvPop').modal('show')
+  }
+
+  printDate(d,f){
+    return moment(d).format(f)
   }
 
 }

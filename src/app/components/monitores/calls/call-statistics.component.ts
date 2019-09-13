@@ -49,6 +49,33 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
     .custom-day.faded {
       background-color: rgba(2, 117, 216, 0.5);
     }
+    .example-card {
+      max-width: 400px;
+    }
+
+    .example-header-image {
+      background-size: cover;
+    }
+    .mat-call {
+      background-color: #8bc34a;
+      color: 'black';
+    }
+    .mat-pause {
+      background-color: #f1d449;
+      color: 'black';
+    }
+    .mat-avail {
+      background-color: #efefef;
+      color: 'black';
+    }
+    .mat-unavail {
+      background-color: #7e8184;
+      color: #bfbcb8;
+    }
+    .mat-wrap {
+      background-color: #71c4ff;
+      color: 'black';
+    }
     `],
     // providers: [{provide: NgbDateAdapter, useClass: NgbDateNativeAdapter}]
   })

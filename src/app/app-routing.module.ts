@@ -19,6 +19,8 @@ import { RsvDayPassListComponent } from './components/rsv/rsv-day-pass-list/rsv-
 import { ChatMonitorComponent } from './components/chat/chat-monitor.component';
 import { TelefoniaComponent } from './components/monitores/telefonia/telefonia.component';
 import { CallStatisticsComponent } from './components/monitores/calls/call-statistics.component';
+import { TestComponent } from './components/test/test.component';
+import { MainCotizadorComponent } from './components/cotizador/main-cotizador.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -35,7 +37,7 @@ const routes: Routes = [
 
   { path: 'config/addExternal', component: AddExternalUserComponent },
 
-  { path: 'cotizador', component: CotizadorV2Component },
+  { path: 'cotizador', component: MainCotizadorComponent },
   // { path: 'cotizadorV2', component: CotizadorV2Component },
 
   { path: 'dashboard', component: DashboardComponent },
@@ -49,10 +51,12 @@ const routes: Routes = [
   { path: 'rsvList', component: RsvListComponent },
   { path: 'rsvPaymentList', component: RsvPaymentListComponent },
   { path: 'dayPassList', component: RsvDayPassListComponent },
-  
+
   { path: 'cieloList', component: CieloListComponent },
 
   { path: 'config/chgSuperCC', component: CcSuperAssignComponent },
+
+  { path: 'geosh/test', component: TestComponent },
 
 ];
 
@@ -61,4 +65,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 
-export class AppRoutingModule { }
+export class AppRoutingModule {}

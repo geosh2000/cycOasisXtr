@@ -139,7 +139,7 @@
                     </div>
                 </mat-card-content>
             </mat-card>
-            <mat-card class="m-2">
+            <mat-card class="m-2" [ngClass]="{'mat-pause': dataLive['data']['current_queue_activity']['calls_waiting'] > 0}">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
                         <h3>Espera</h3>
@@ -190,7 +190,7 @@
                     </div>
                 </mat-card-content>
             </mat-card>
-            <mat-card class="m-2">
+            <mat-card class="m-2" [ngClass]="{'mat-pause': dataSum['call'] > 2}">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
                         <h3>Away</h3>
@@ -206,7 +206,7 @@
                     </div>
                 </mat-card-content>
             </mat-card>
-            <mat-card class="m-2">
+            <mat-card class="m-2" [ngClass]="{'mat-pause': dataSum['call'] > 4}">
                 <mat-card-content>
                     <div class="d-flex justify-content-between">
                         <h3>En llamada</h3>

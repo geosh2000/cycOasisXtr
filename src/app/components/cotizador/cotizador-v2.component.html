@@ -3,35 +3,24 @@
 </div>
 <div class="container-fluid" *ngIf="showContents">
 
-    <div class="jumbotron jumbotron-fluid text-white blueBkg animated fadeIn">
-        <div class="container">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <span><h1 class="display-3">Cotizador</h1></span>
-                    <p class="lead">Ingresa fechas, cantidad de habitaciones, ocupación y edades de los menores</p>
-                </div>
-                <!-- <div>
-                <img src="assets/img/bePriceBCO.png" height="150" width="150" alt="">
-            </div> -->
-            </div>
-        </div>
-        <br>
+    <div class="jumbotron jumbotron-fluid text-white blueBkg animated fadeIn" style="padding-top: 0px">
+
         <div class='container'>
             <div class="container-fluid d-flex flex-wrap justify-content-start align-items-baseline">
                 <div class="form d-flex justify-content-start pr-3">
                     <div class="form-group p-1">
                         <label for="habs">No. Habs</label>
                         <select [(ngModel)]="habs" name="habs" id="adults" class="form-control" [style.width.px]="60">
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                  </select>
+                                            <option value="1" selected>1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                        </select>
                     </div>
                     <div class="form-group p-1">
                         <label for="fechas">Fechas</label>
@@ -39,8 +28,8 @@
                             <input class="form-control" id="fechas" placeholder="yyyy-mm-dd" [autoClose]="false" (click)="d.toggle()" id="picker" name="dp" ngbDatepicker #d="ngbDatepicker" [dayTemplate]="t" (dateSelect)="onDateSelection($event, d)" autocomplete="off" [style.width.px]="150">
                             <ng-template #t let-date="date" let-focused="focused">
                                 <span class="custom-day" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
-                      {{ date.day }}
-                    </span>
+                                            {{ date.day }}
+                                            </span>
                             </ng-template>
                             <div class="input-group-append">
                                 <div class="input-group-text"><i class="fa fa-calendar fa-fw"></i></div>
@@ -50,8 +39,8 @@
                     <div class="form-group p-1">
                         <label for="grupo">Código</label>
                         <select [(ngModel)]="selectedCode" name="grupo" id="grupo" class="form-control">
-                          <option [value]="gp['grupo']" *ngFor="let gp of groupsTfa">{{ gp['grupo'] }}</option>
-                      </select>
+                                                <option [value]="gp['grupo']" *ngFor="let gp of groupsTfa">{{ gp['grupo'] }}</option>
+                                            </select>
                     </div>
 
 
@@ -85,6 +74,10 @@
                 <button mat-raised-button color="primary" type="button" (click)="getCotizacion()" [disabled]="loading['cotizador']">Cotizar <span *ngIf="loading['cotizador']"><i class="fa fa-fw fa-spinner fa-pulse"></i></span></button>
             </div>
         </div>
+
+
+
+
     </div>
     <div class="container" *ngIf="resultCot['habs']">
         <mat-card>
@@ -288,43 +281,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" [disabled]="loading['cotizando']">Cancelar</button>
                 <button type="button" class="btn btn-primary" [disabled]="loading['cotizando'] || (budgetExistTicket && budgetTicket=='') ||  (!budgetExistTicket && searchUserFlag)" (click)="sendBudget()">Enviar  <span *ngIf="loading['cotizando']"><i class="fas fa-spinner fa-pulse"></i></span></button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- RSV Modal -->
-<app-create-rsv (error)="rsvError($event)" (save)="endRsv($event)"></app-create-rsv>
-<!-- Confirm Rsv Modal -->
-<div class="modal fade" id="confirmRsv" tabindex="-1" role="dialog" aria-labelledby="confirmRsvModal" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmRsvModal">Reservación Finalizada</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <h3>Localizador creado / modificado:</h3>
-                <h2><b>{{ lastLocCreated }}</b></h2>
-                <br>
-                <div *ngIf="!loading['callTicket']">
-                    <p class="text-alert" *ngIf="!flagSearchTicket && !linkedTicketFlag && updateTicket['ticket'] == ''">No se encontraron tickets de llamada</p>
-                    <p *ngIf="!flagSearchTicket && !linkedTicketFlag && updateTicket['ticket'] != ''">Desea ligar el ticket <b>{{ linkedTicket }}</b> a esta reserva?</p>
-                    <p *ngIf="!flagSearchTicket && linkedTicketFlag && updateTicket['ticket'] != ''"><b>{{ updateTicket['ticket'] != '' ? linkedTicket : 'Sin ticket' }}</b> Ligado</p>
-                    <mat-form-field class="example-full-width" *ngIf="flagSearchTicket">
-                        <input matInput placeholder="# ticket" [(ngModel)]="lTicket">
-                    </mat-form-field>
-                    <button class="m-1" mat-stroked-button *ngIf="flagSearchTicket" type="button" (click)="flagSearchTicket = false" [disabled]="loading['callTicket']">Cancelar</button>
-                    <button class="m-1" mat-stroked-button color="success" *ngIf="flagSearchTicket" type="button" (click)="getCallTicket( null, lTicket )" [disabled]="loading['callTicket']">Link</button>
-                    <div class="d-flex justify-content-end">
-                        <button class="m-1" mat-stroked-button type="button" (click)="omitLink()" [disabled]="loading['linkingTicket']">Omitir</button>
-                        <button class="m-1" mat-stroked-button color="accent" type="button" (click)="chgTicketLink()" [disabled]="loading['linkingTicket']" *ngIf="!flagSearchTicket">Cambiar Ticket</button>
-                        <button class="m-1" mat-stroked-button color="success" type="button" (click)="linkTickets()" [disabled]="loading['linkingTicket'] || flagSearchTicket || updateTicket['ticket'] == ''" *ngIf="!linkedTicketFlag">Si</button>
-                    </div>
-                </div>
-                <mat-progress-bar mode="query" *ngIf="loading['callTicket'] || loading['linkingTicket']"></mat-progress-bar>
-                <button mat-raised-button color="accent" type="button" (click)="viewRsv()" [disabled]="!flagManage">Gestionar Reserva</button>
             </div>
         </div>
     </div>

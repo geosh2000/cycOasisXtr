@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-cot-hab-detail',
@@ -14,7 +14,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   .mat-l4 {
     background-color: #b360bd;
     color: white;
-  }`]
+  }`],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CotHabDetailComponent implements OnInit {
 
@@ -37,7 +38,7 @@ export class CotHabDetailComponent implements OnInit {
       if( i['fdp'] ){
         let m = this.level == '2' ? i['MXN_total'] : i['l' + this.level + 'MXN_total']
         let u = this.level == '2' ? i['USD_total'] : i['l' + this.level + 'USD_total']
-        t += parseFloat( i['fdp'] == 1 ? (this.moneda ? i['l1MXN_total'] : i['l1USD_total']) : (this.moneda ? m : u) )
+        t += parseFloat( i['fdp'] == 1 ? (this.moneda ? i['l' + this.level + 'MXN_total'] : i['l' + this.level + 'USD_total']) : (this.moneda ? m : u) )
       }
     }
 

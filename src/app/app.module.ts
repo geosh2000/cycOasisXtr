@@ -151,6 +151,14 @@ import { TelefoniaComponent } from './components/monitores/telefonia/telefonia.c
 import { TelAgentComponent } from './components/monitores/telefonia/tel-agent/tel-agent.component';
 import { CallStatisticsComponent } from './components/monitores/calls/call-statistics.component';
 import { GraphCallStatsComponent } from './components/monitores/calls/statistics/graph-call-stats/graph-call-stats.component';
+import { TestComponent } from './components/test/test.component';
+import { HotelSearchComponent } from './components/cotizador/search-hotel-module/hotel-search.component';
+import { HotelResultsComponent } from './components/cotizador/search-hotel-module/hotel-results.component';
+import { MainCotizadorComponent } from './components/cotizador/main-cotizador.component';
+import { CotizaDayPassComponent } from './components/cotizador/cotiza-day-pass/cotiza-day-pass.component';
+import { SearchBarCotizadorComponent } from './components/cotizador/search-bar-cotizador/search-bar-cotizador.component';
+import { CotCreateRsvComponent } from './components/cotizador/cot-create-rsv/cot-create-rsv.component';
+import { RsvDetailComponent } from './components/cotizador/rsv-detail/rsv-detail.component';
 
 @NgModule({
   declarations: [
@@ -241,7 +249,15 @@ import { GraphCallStatsComponent } from './components/monitores/calls/statistics
     TelefoniaComponent,
     TelAgentComponent,
     CallStatisticsComponent,
-    GraphCallStatsComponent
+    GraphCallStatsComponent,
+    TestComponent,
+    HotelSearchComponent,
+    HotelResultsComponent,
+    MainCotizadorComponent,
+    CotizaDayPassComponent,
+    SearchBarCotizadorComponent,
+    CotCreateRsvComponent,
+    RsvDetailComponent
 
   ],
   imports: [

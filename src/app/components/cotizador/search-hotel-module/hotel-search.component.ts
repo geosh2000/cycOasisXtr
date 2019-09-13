@@ -1,17 +1,17 @@
-import { Component, OnInit, Injectable, ViewChildren, QueryList, ViewChild, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChildren, QueryList, ViewChild, OnDestroy } from '@angular/core';
 
 import { ToastrService } from 'ngx-toastr';
 import { Title, DomSanitizer } from '@angular/platform-browser';
 import { NgbDateAdapter, NgbDateStruct, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { OrderPipe } from 'ngx-order-pipe';
 
-import { ApiService, InitService, TokenCheckService } from '../../services/service.index';
-import { SearchHotelModuleComponent } from './search-hotel-module/search-hotel-module.component';
-import { CreateRsvComponent } from './create-rsv/create-rsv.component';
+import { ApiService, InitService, TokenCheckService } from '../../../services/service.index';
+import { SearchHotelModuleComponent } from '../search-hotel-module/search-hotel-module.component';
+import { CreateRsvComponent } from '../create-rsv/create-rsv.component';
 
 declare var jQuery: any;
 import * as moment from 'moment-timezone';
-import * as Globals from '../../globals';
+import * as Globals from '../../../globals';
 import { Router } from '@angular/router';
 import { SearchZdUserComponent } from 'src/app/shared/search-zd-user/search-zd-user.component';
 
@@ -44,8 +44,8 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
 }
 
 @Component({
-  selector: 'app-cotizador-v2',
-  templateUrl: './cotizador-v2.component.html',
+  selector: 'app-hotel-search',
+  templateUrl: './hotel-search.component.html',
   providers: [NgbDatepickerConfig],
   styles: [`
     .exp-height {
@@ -112,9 +112,8 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
   }
   `]
 })
-export class CotizadorV2Component implements OnInit, OnDestroy {
+export class HotelSearchComponent implements OnInit, OnDestroy {
 
-  @Output() rsv = new EventEmitter<any>()
   @ViewChildren('fltr') _filters: QueryList<SearchHotelModuleComponent>;
   @ViewChildren('zdu') _zdUser: QueryList<SearchZdUserComponent>;
   @ViewChild(CreateRsvComponent,{static:false}) _rsv:CreateRsvComponent;
@@ -462,12 +461,11 @@ export class CotizadorV2Component implements OnInit, OnDestroy {
     return result
   }
 
-  popReserve( h: any ){
-    this.rsv.emit({
-      data: h,
-      moneda: this.moneda,
-      tipo: 'hotel'
-    })
+  popReserve( h ){
+    console.log(h)
+    this._rsv['data'] = h
+    this._rsv['moneda'] = this.moneda
+    jQuery('#rsvPop').modal('show')
   }
 
   sendCotizacion( h ){
