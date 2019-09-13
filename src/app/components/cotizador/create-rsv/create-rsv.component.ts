@@ -94,7 +94,7 @@ export class CreateRsvComponent implements OnInit {
           this.error.emit('Debes elegir una forma de pago para cada habitación')
           return
         }
-  
+
         let hab = {
             hotel: {
               hotel: h['hotel'],
@@ -125,7 +125,7 @@ export class CreateRsvComponent implements OnInit {
               userCreated: this._init.currentUser.hcInfo.id
             }
         }
-  
+
         arr['habs'].push(hab)
       }
     }

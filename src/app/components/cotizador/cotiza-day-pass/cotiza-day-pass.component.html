@@ -56,7 +56,7 @@
                 </div>
                 <mat-action-row *ngIf="!(this._search.moneda && h['totalMXN'] == 0) && !(!this._search.moneda && h['totalUSD'] == 0)">
                     <div class="d-flex justify-content-around flex-wrap p-2">
-                        <button mat-raised-button class="m-1" color="accent" (click)="sendCotizacion(h)" *ngIf="_init.checkSingleCredential('app_cotizador_budget')">Enviar Cotización</button>
+                        <!-- <button mat-raised-button class="m-1" color="accent" (click)="sendCotizacion(h)" *ngIf="_init.checkSingleCredential('app_cotizador_budget')">Enviar Cotización</button> -->
                         <button mat-raised-button class="m-1" color="primary" (click)="popReserve(h)" *ngIf="_init.checkSingleCredential('app_cotizador_rsv')">Reservar</button>
                     </div>
                 </mat-action-row>

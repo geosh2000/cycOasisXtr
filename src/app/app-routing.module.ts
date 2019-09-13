@@ -21,6 +21,7 @@ import { TelefoniaComponent } from './components/monitores/telefonia/telefonia.c
 import { CallStatisticsComponent } from './components/monitores/calls/call-statistics.component';
 import { TestComponent } from './components/test/test.component';
 import { MainCotizadorComponent } from './components/cotizador/main-cotizador.component';
+import { Rsv2ManageComponent } from './components/rsv2/rsv2-manage/rsv2-manage.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -46,6 +47,11 @@ const routes: Routes = [
   { path: 'monitores/telefonia/:a', component: TelefoniaComponent },
   { path: 'monitores/callStatistics', component: CallStatisticsComponent },
 
+  // RSV 2
+  { path: 'rsv2', component: Rsv2ManageComponent },
+  { path: 'rsv2/:loc', component: Rsv2ManageComponent },
+
+  // OLD RSV
   { path: 'rsv', component: RsvManageComponent },
   { path: 'rsv/:loc', component: RsvManageComponent },
   { path: 'rsvList', component: RsvListComponent },

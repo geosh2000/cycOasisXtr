@@ -4,11 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 
-//Services
+// Services
 import { NavbarService, AsesoresService, LoginService, CredentialsService, TokenCheckService, ApiService, InitService, GlobalServicesService, RrobinService } from './services/service.index';
 
 
-//Components
+// Components
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatAutocompleteModule,
   MatBadgeModule,
@@ -159,6 +159,7 @@ import { CotizaDayPassComponent } from './components/cotizador/cotiza-day-pass/c
 import { SearchBarCotizadorComponent } from './components/cotizador/search-bar-cotizador/search-bar-cotizador.component';
 import { CotCreateRsvComponent } from './components/cotizador/cot-create-rsv/cot-create-rsv.component';
 import { RsvDetailComponent } from './components/cotizador/rsv-detail/rsv-detail.component';
+import { Rsv2ManageComponent } from './components/rsv2/rsv2-manage/rsv2-manage.component';
 
 @NgModule({
   declarations: [
@@ -171,7 +172,7 @@ import { RsvDetailComponent } from './components/cotizador/rsv-detail/rsv-detail
     DomseguroPipe,
     NoAcentosPipe,
 
-    //Components
+    // Components
     AsistenciaBadgeComponent,
     BonoApproveComponent,
     ExtraSwitchComponent,
@@ -257,7 +258,8 @@ import { RsvDetailComponent } from './components/cotizador/rsv-detail/rsv-detail
     CotizaDayPassComponent,
     SearchBarCotizadorComponent,
     CotCreateRsvComponent,
-    RsvDetailComponent
+    RsvDetailComponent,
+    Rsv2ManageComponent
 
   ],
   imports: [
@@ -274,9 +276,9 @@ import { RsvDetailComponent } from './components/cotizador/rsv-detail/rsv-detail
     UiSwitchModule.forRoot({
       size: 'small',
     }),
-    NgbModule.forRoot(),
+    NgbModule,
     ToastrModule.forRoot(),
-    
+
     OrderModule,
     MultiselectDropdownModule,
     Daterangepicker,

@@ -1,0 +1,181 @@
+<div class="alert alert-danger" role="alert" *ngIf="!showContents">
+    <p>No cuentas con los permisos para poder visualizar este módulo. Por favor contacta a <span class="font-weight-bold">WFM</span> si necesitas accesos.</p>
+</div>
+<div class="container-fluid" *ngIf="showContents">
+    <!-- <div class='container bg-light text-dark'>
+        <app-search-loc (selected)="selectLoc($event)" [maxHeight]="200"></app-search-loc>
+    </div> -->
+
+    <!-- ====================== INICIO CUADRO PRINCIPAL ====================== -->
+    <div class="container mainFrame p-2">
+
+        <!-- ====================== INICIO TITULAR ====================== -->
+        <div class="p-0 row m-0" [style.height.px]="90">
+            <div class="locFrame col-2">
+                <b>{{ viewLoc }}</b>
+            </div>
+            <div class="col-8" matTooltipPosition="above" matTooltip="Info about the action">
+                <div>
+                    <h2 class="text-truncate"><b>NOMBRE COMPLETO DEL CLIENTE EN BASE DE DATOS</b></h2>
+                </div>
+                <p>Creada el <b>29 Septiembre 2019</b> por <b>Jorge Sanchez</b></p>
+            </div>
+            <div class="col-2 d-flex justify-content-end text-center">
+                <mat-chip-list aria-label="Fish selection">
+                    <mat-chip color="alert" selected>Cotización</mat-chip>
+                </mat-chip-list>
+            </div>
+        </div>
+        <!-- ====================== FIN TITULAR ====================== -->
+
+        <!-- ====================== INICIO CUERPO MEDIO ====================== -->
+        <div class="container m-2 row">
+
+            <!-- ====================== INICIO CUADRO ITEMS ====================== -->
+            <div class="itemsFrame col-9 pb-4">
+                <div class="d-flex justify-content-end">
+                    <span class="pl-2">Modificar</span>
+                    <span class="pl-2">Saldar</span>
+                </div>
+                <div class="container p-1 bg-light">
+                    <div class="container row rowItemNoBorder">
+                        <div class="col-6"></div>
+                        <div class="col-2 text-center"><b>Conf.</b></div>
+                        <div class="col-2 text-center"><b>Total</b></div>
+                        <div class="col-2 text-center"><b>Saldo</b></div>
+                    </div>
+                    <hr class="hrItems">
+                    <mat-accordion>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <div class="container row rowItem">
+                                    <div class="col-6">
+                                        <button mat-icon-button color="primary">
+                                            <span class="mr-2">{{ viewLoc }}-1</span>
+                                            <mat-icon>hotel</mat-icon><span class="ml-2">Hospedaje en GOC</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-2 mt-auto mb-auto text-center text-info">028975</div>
+                                    <div class="col-2 mt-auto mb-auto text-right">{{ 5267 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
+                                    <div class="col-2 mt-auto mb-auto text-right">{{ 1200 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
+                                </div>
+                            </mat-expansion-panel-header>
+
+                            <mat-form-field>
+                                <input matInput placeholder="First name">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Age">
+                            </mat-form-field>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <div class="container row rowItem">
+                                    <div class="col-6">
+                                        <button mat-icon-button color="primary">
+                                                    <span class="mr-2">{{ viewLoc }}-2</span>
+                                                    <mat-icon>airport_shuttle</mat-icon><span class="ml-2">Traslado Redondo</span>
+                                                </button>
+                                    </div>
+                                    <div class="col-2 mt-auto mb-auto text-center text-info">MajoOK</div>
+                                    <div class="col-2 mt-auto mb-auto text-right">{{ 460 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
+                                    <div class="col-2 mt-auto mb-auto text-right">{{ 0 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
+                                </div>
+                            </mat-expansion-panel-header>
+
+                            <mat-form-field>
+                                <input matInput placeholder="First name">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Age">
+                            </mat-form-field>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <div class="container row rowItem">
+                                    <div class="col-6">
+                                        <button mat-icon-button color="primary">
+                                                    <span class="mr-2">{{ viewLoc }}-3</span>
+                                                    <mat-icon>pool</mat-icon><span class="ml-2">Tour</span>
+                                                </button>
+                                    </div>
+                                    <div class="col-2 mt-auto mb-auto text-center text-info">0zfllese</div>
+                                    <div class="col-2 mt-auto mb-auto text-right">{{ 1900 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
+                                    <div class="col-2 mt-auto mb-auto text-right">{{ 0 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
+                                </div>
+                            </mat-expansion-panel-header>
+
+                            <mat-form-field>
+                                <input matInput placeholder="First name">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Age">
+                            </mat-form-field>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+
+
+                    <hr class="hrItems">
+                    <div class="container row rowItemNoBorder">
+                        <div class="col-6"><b>TOTAL</b></div>
+                        <div class="col-2"></div>
+                        <div class="col-2 text-right"><b>{{ 7827 | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
+                        <div class="col-2 text-right"><b>{{ 1200 | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
+                    </div>
+                </div>
+            </div>
+            <!-- ====================== FIN CUADRO ITEMS ====================== -->
+
+            <!-- ====================== INICIO LATERAL CLIENTE ====================== -->
+            <div class="clientFrame col-3">
+                <hr>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Titular:</b></div>
+                    <div class="clientInfo">Jorge Alberto Sánchez Hernández</div>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Tel:</b></div>
+                    <div class="clientInfo">+529982140469</div>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Correo:</b></div>
+                    <div class="clientInfo">geosh2000@gmail.com</div>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Whatsapp:</b></div>
+                    <div class="clientInfo">+529982140469</div>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Llegada:</b></div>
+                    <div class="clientInfo">26 Oct 2019</div>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Grupo:</b></div>
+                    <div class="clientInfo">WBC57</div>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Forma Pago:</b></div>
+                    <div class="clientInfo">PDT, PT, PH</div>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Tickets:</b></div>
+                    <div class="clientInfo">
+                        <p><a href="">77890</a></p>
+                        <p><a href="">77891</a></p>
+                        <p><a href="">77892</a></p>
+                        <p><a href="">77893</a></p>
+                    </div>
+                </div>
+            </div>
+            <!-- ====================== FIN LATERAL CLIENTE ====================== -->
+        </div>
+        <!-- ====================== FIN CUERPO MEDIO ====================== -->
+    </div>
+    <!-- ====================== FIN CUADRO PRINCIPAL ====================== -->
+
+</div>
