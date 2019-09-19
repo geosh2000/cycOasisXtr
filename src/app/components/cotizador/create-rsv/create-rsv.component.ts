@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ApiService, InitService, TokenCheckService } from '../../../services/service.index';
 import { ToastrService } from 'ngx-toastr';
 import { SearchZdUserComponent } from '../../../shared/search-zd-user/search-zd-user.component';
+import { NgbDateAdapter, NgbDateStruct, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 
 declare var jQuery: any;
 import * as moment from 'moment-timezone';
@@ -10,7 +11,29 @@ import * as moment from 'moment-timezone';
 @Component({
   selector: 'app-create-rsv',
   templateUrl: './create-rsv.component.html',
-  styles: []
+  styles: [`
+  .exp-height {
+    height: auto !important;
+    padding: 6px !important;
+  }
+  .custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.focused {
+    background-color: #e6e6e6;
+  }
+  .custom-day.range, .custom-day:hover {
+    background-color: rgb(2, 117, 216);
+    color: white;
+  }
+  .custom-day.faded {
+    background-color: rgba(2, 117, 216, 0.5);
+  }
+  `]
 })
 export class CreateRsvComponent implements OnInit {
 
@@ -29,6 +52,14 @@ export class CreateRsvComponent implements OnInit {
   masterLoc:any
   total = 0
   all:any
+
+  fechaSalida:any
+
+  minDate:NgbDateStruct = {
+    day: parseInt(moment().add(1, 'days').format('DD')),
+    month: parseInt(moment().add(1, 'days').format('MM')),
+    year: parseInt(moment().add(1, 'days').format('YYYY'))
+  }
 
   constructor(public _api: ApiService,
               public _init: InitService,
@@ -130,6 +161,7 @@ export class CreateRsvComponent implements OnInit {
       }
     }
 
+    // console.log(arr)
     this.saveRsvPut( arr )
   }
 
@@ -158,6 +190,12 @@ export class CreateRsvComponent implements OnInit {
   }
 
   popReserve( h ){
+    let minDate:NgbDateStruct = {
+      day: parseInt(moment(h['fecha']).format('DD')),
+      month: parseInt(moment(h['fecha']).format('MM')),
+      year: parseInt(moment(h['fecha']).format('YYYY'))
+    }
+    this.minDate = minDate
     console.log(h)
     this.all = h
     this.data = h['data']
@@ -168,6 +206,51 @@ export class CreateRsvComponent implements OnInit {
 
   printDate(d,f){
     return moment(d).format(f)
+  }
+
+  isToday( date ) {
+    if ( moment(date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') ) {
+      return 'bg-success text-light';
+    }
+  }
+
+  onDateSelection(date: NgbDateStruct, el ) {
+    this.data['fechaSalida'] = moment({year: date.year, month: date.month - 1, day: date.day}).format('YYYY-MM-DD');
+    jQuery('#picker').val(`${moment({year: date.year, month: date.month - 1, day: date.day}).format('DD/MM/YYYY')}`);
+    el.close();
+  }
+
+  validateRsv(){
+    if( this.tipo == 'xfer' ){
+      if( !this.data['hotel'] || (this.data['hotel'] && this.data['hotel'] == '') ){
+        return false
+      }
+      if( !this.data['horaLlegada'] || (this.data['horaLlegada'] && this.data['horaLlegada'] == '') ){
+        return false
+      }
+      if( !this.data['vueloLlegada'] || (this.data['vueloLlegada'] && this.data['vueloLlegada'] == '') ){
+        return false
+      }
+      if( !this.data['alLlegada'] || (this.data['alLlegada'] && this.data['alLlegada'] == '') ){
+        return false
+      }
+
+      if( this.data['xferType'] == 'round' ){
+        if( !this.data['horaSalida'] || (this.data['horaSalida'] && this.data['horaSalida'] == '') ){
+          return false
+        }
+        if( !this.data['vueloSalida'] || (this.data['vueloSalida'] && this.data['vueloSalida'] == '') ){
+          return false
+        }
+        if( !this.data['alSalida'] || (this.data['alSalida'] && this.data['alSalida'] == '') ){
+          return false
+        }
+        if( !this.data['fechaSalida'] || (this.data['fechaSalida'] && this.data['fechaSalida'] == '') ){
+          return false
+        }
+      }
+    }
+    return true
   }
 
 }

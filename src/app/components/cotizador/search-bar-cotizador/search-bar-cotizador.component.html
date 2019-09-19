@@ -5,7 +5,7 @@
             <div class="form-group p-1">
                 <label for="fechas">Fechas</label>
                 <div class="input-group">
-                    <input class="form-control" id="fechas" placeholder="yyyy-mm-dd" [autoClose]="false" (click)="d.toggle()" id="picker" name="dp" ngbDatepicker #d="ngbDatepicker" (dateSelect)="onDateSelection($event, d)" autocomplete="off" [style.width.px]="150">
+                    <input class="form-control" id="fechas" [minDate]="minDate" placeholder="yyyy-mm-dd" [autoClose]="false" (click)="d.toggle()" id="picker" name="dp" ngbDatepicker #d="ngbDatepicker" (dateSelect)="onDateSelection($event, d)" autocomplete="off" [style.width.px]="150">
                     <div class="input-group-append">
                         <div class="input-group-text"><i class="fa fa-calendar fa-fw"></i></div>
                     </div>
@@ -95,6 +95,12 @@
                                   <option value="16">16</option>
                                   <option value="17">17</option>
                                 </select>
+                </div>
+                <div class="form-group p-1">
+                    <label for="grupo">Código</label>
+                    <select [(ngModel)]="selectedCode" name="grupo" id="grupo" class="form-control" *ngIf="isCode">
+                                            <option [value]="gp['grupo']" *ngFor="let gp of groupsTfa">{{ gp['grupo'] }}</option>
+                                        </select>
                 </div>
             </div>
         </div>

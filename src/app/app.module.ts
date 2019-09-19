@@ -160,6 +160,7 @@ import { SearchBarCotizadorComponent } from './components/cotizador/search-bar-c
 import { CotCreateRsvComponent } from './components/cotizador/cot-create-rsv/cot-create-rsv.component';
 import { RsvDetailComponent } from './components/cotizador/rsv-detail/rsv-detail.component';
 import { Rsv2ManageComponent } from './components/rsv2/rsv2-manage/rsv2-manage.component';
+import { CotizaXferComponent } from './components/cotizador/cotiza-xfer/cotiza-xfer.component';
 
 @NgModule({
   declarations: [
@@ -259,7 +260,8 @@ import { Rsv2ManageComponent } from './components/rsv2/rsv2-manage/rsv2-manage.c
     SearchBarCotizadorComponent,
     CotCreateRsvComponent,
     RsvDetailComponent,
-    Rsv2ManageComponent
+    Rsv2ManageComponent,
+    CotizaXferComponent
 
   ],
   imports: [

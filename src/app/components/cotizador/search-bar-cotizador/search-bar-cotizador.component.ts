@@ -98,6 +98,13 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
       top: -33px;
       left: -13px;
   }
+
+  ul.uib-datepicker-popup.dropdown-menu.ng-scope { z-index: 1090 !important; }
+
+  .ngb-dp-month {
+    pointer-events: none;
+    background: aliceblue!important;
+  }
   `]
 })
 export class SearchBarCotizadorComponent implements OnInit {
@@ -106,12 +113,21 @@ export class SearchBarCotizadorComponent implements OnInit {
   @Input() loading = false
   @Input() local = false
   @Input() group = false
+  @Input() isCode = false
+  @Input() groupsTfa = []
 
   pickNum:any = []
   adults:any = 1
   min:any = 0
   moneda = true
   minA = []
+  selectedCode:any
+
+  minDate:NgbDateStruct = {
+    day: parseInt(moment().add(1, 'days').format('DD')),
+    month: parseInt(moment().add(1, 'days').format('MM')),
+    year: parseInt(moment().add(1, 'days').format('YYYY'))
+  }
 
   isLocal = false
   isGroup = false
@@ -171,7 +187,8 @@ export class SearchBarCotizadorComponent implements OnInit {
       moneda: this.moneda,
       ages: ageSum,
       isLocal: this.isLocal,
-      isGroup: this.isGroup
+      isGroup: this.isGroup,
+      selectedCode: this.selectedCode
     })
   }
 

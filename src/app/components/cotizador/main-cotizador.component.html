@@ -16,6 +16,7 @@
 <div class="p-3">
     <app-cotizador-v2 (rsv)="popReserve($event)" *ngIf="shownIndex == 0"></app-cotizador-v2>
     <app-cotiza-day-pass (rsv)="popReserve($event)" *ngIf="shownIndex == 1"></app-cotiza-day-pass>
+    <app-cotiza-xfer (rsv)="popReserve($event)" *ngIf="shownIndex == 4"></app-cotiza-xfer>
 </div>
 
 <app-cot-create-rsv></app-cot-create-rsv>

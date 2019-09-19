@@ -103,12 +103,120 @@
                     </div>
                 </div>
                 <!-- END RSV DAYPASS -->
+
+                <!-- BEGIN RSV XFER -->
+                <div class="p-2" *ngIf="!searchUserFlag && tipo == 'xfer'">
+                    <div class="d-flex justify-content-center p-2">
+                        <div class="p-2">
+                            <h5>
+                                {{ data['vehiculo'] }}{{ data['isShared'] == '1' ? ' (compartido)' : '' }} a {{ data['Zona'] }} para {{ data['adultos'] }} Adultos, {{ data['menores'] }} Menores y {{ data['infantes'] }} Infantes {{ data['xferType'] == 'abierto' ? ' por ' + data['vehiculo'].substr(-8,10).trim()
+                                : '' }}
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center p-2">
+
+                        <div class="font-weight-bold pr-4">
+                            <h6>Fecha: {{ printDate(data['fecha'], 'ddd DD MMM \'YY') }} por <span class="text-primary">{{ (moneda ? data['totalMXN'] : data['totalUSD']) | currency:(moneda ? 'MXN' : 'USD'):'symbol-narrow':'.2-2' }} {{ moneda ? 'MXN' : 'USD' }}</span></h6>
+                        </div>
+
+                    </div>
+
+                    <div class="form d-flex justify-content-center pr-3">
+                        <div class="form-group p-1">
+                            <label for="fechas">Hotel</label>
+                            <div class="input-group">
+                                <input class="form-control" id="hotel" [(ngModel)]="data['hotel']" placeholder="Hotel Destino" id="hotel" name="htl" autocomplete="off" [style.width.px]="150">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fas fa-hotel"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group p-1">
+                            <label for="fechas">Hora Llegada</label>
+                            <div class="input-group">
+                                <input class="form-control" id="horaLlegada" [(ngModel)]="data['horaLlegada']" placeholder="24:00" id="horaLlegada" name="hl" autocomplete="off" [style.width.px]="150">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group p-1">
+                            <label for="fechas">Vuelo Llegada</label>
+                            <div class="input-group">
+                                <input class="form-control" id="vueloLlegada" [(ngModel)]="data['vueloLlegada']" placeholder="No. de Vuelo" id="vueloLlegada" name="vl" autocomplete="off" [style.width.px]="150">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fas fa-plane-arrival"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group p-1">
+                            <label for="fechas">Aerolínea Llegada</label>
+                            <div class="input-group">
+                                <input class="form-control" id="alLlegada" [(ngModel)]="data['alLlegada']" placeholder="Aerolinea" id="alLlegada" name="all" autocomplete="off" [style.width.px]="150">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fas fa-plane"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form d-flex justify-content-center pr-3" *ngIf="this.data['xferType'] == 'round'">
+                        <div class="form-group p-1">
+                            <label for="fechas">Fecha Salida</label>
+                            <div class="input-group">
+                                <input class="form-control" id="fechas" [minDate]="minDate" placeholder="yyyy-mm-dd" [autoClose]="false" (click)="d.toggle()" id="picker" name="dp" ngbDatepicker #d="ngbDatepicker" (dateSelect)="onDateSelection($event, d)" autocomplete="off" [style.width.px]="150">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fa fa-calendar fa-fw"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group p-1">
+                            <label for="fechas">Hora Salida</label>
+                            <div class="input-group">
+                                <input class="form-control" id="horaSalida" [(ngModel)]="data['horaSalida']" placeholder="24:00" id="horaSalida" name="hs" autocomplete="off" [style.width.px]="150">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group p-1">
+                            <label for="fechas">Vuelo Salida</label>
+                            <div class="input-group">
+                                <input class="form-control" id="vueloSalida" [(ngModel)]="data['vueloSalida']" placeholder="No. de Vuelo" id="vueloSalida" name="vs" autocomplete="off" [style.width.px]="150">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fas fa-plane-departure"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group p-1">
+                            <label for="fechas">Aerolínea Salida</label>
+                            <div class="input-group">
+                                <input class="form-control" id="alSalida" [(ngModel)]="data['alSalida']" placeholder="Aerolinea" id="alSalida" name="als" autocomplete="off" [style.width.px]="150">
+                                <div class="input-group-append">
+                                    <div class="input-group-text"><i class="fas fa-plane"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form d-flex justify-content-center pr-3">
+                        <div class="form-group p-1">
+                            <label for="fechas">Notas (opcional)</label>
+                            <div class="input-group">
+                                <textarea rows="5" cols="120" [(ngModel)]="data['notasOperador']" placeholder="Notas para el operador" id="notas"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- END RSV XFER -->
             </div>
 
             <!-- BEGIN BOTONES COTIZACION Y RESERVA -->
             <div class="modal-footer">
                 <button type="button" mat-raised-button color="warn" data-dismiss="modal" (click)="chgUser()" [disabled]="loading['save']">Cancelar</button>
-                <button type="button" mat-raised-button color="primary" (click)="saveRsv()" [disabled]="newRsvForm.status=='INVALID' || loading['save'] || searchUserFlag">Reservar  <span *ngIf="loading['save']"><i class="fas fa-spinner fa-pulse"></i></span></button>
+                <button type="button" mat-raised-button color="primary" (click)="saveRsv()" [disabled]="!validateRsv() || newRsvForm.status=='INVALID' || loading['save'] || searchUserFlag">Reservar  <span *ngIf="loading['save']"><i class="fas fa-spinner fa-pulse"></i></span></button>
             </div>
             <!-- END BOTONES COTIZACION Y RESERVA -->
         </div>
