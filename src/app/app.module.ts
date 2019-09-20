@@ -161,6 +161,7 @@ import { CotCreateRsvComponent } from './components/cotizador/cot-create-rsv/cot
 import { RsvDetailComponent } from './components/cotizador/rsv-detail/rsv-detail.component';
 import { Rsv2ManageComponent } from './components/rsv2/rsv2-manage/rsv2-manage.component';
 import { CotizaXferComponent } from './components/cotizador/cotiza-xfer/cotiza-xfer.component';
+import { PagosAdminComponent } from './components/pagos/pagos-admin/pagos-admin.component';
 
 @NgModule({
   declarations: [
@@ -261,7 +262,8 @@ import { CotizaXferComponent } from './components/cotizador/cotiza-xfer/cotiza-x
     CotCreateRsvComponent,
     RsvDetailComponent,
     Rsv2ManageComponent,
-    CotizaXferComponent
+    CotizaXferComponent,
+    PagosAdminComponent
 
   ],
   imports: [

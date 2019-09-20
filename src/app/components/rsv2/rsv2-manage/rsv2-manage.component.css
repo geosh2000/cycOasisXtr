@@ -66,6 +66,19 @@
     width: 80px;
 }
 
+.productConcept {
+    width: 100px;
+    color: rgb(95, 154, 243)
+}
+
+.productConceptXL {
+    width: 190px;
+    color: rgb(95, 154, 243)
+}
+
 .clientInfo {
     width: 160px;
+    font-family: sans-serif;
+    color: grey;
+    font-size: 12px;
 }

@@ -112,6 +112,9 @@
                                 {{ data['vehiculo'] }}{{ data['isShared'] == '1' ? ' (compartido)' : '' }} a {{ data['Zona'] }} para {{ data['adultos'] }} Adultos, {{ data['menores'] }} Menores y {{ data['infantes'] }} Infantes {{ data['xferType'] == 'abierto' ? ' por ' + data['vehiculo'].substr(-8,10).trim()
                                 : '' }}
                             </h5>
+                            <h5 class="text-center text-primary">
+                                {{ data['xferType'] }}
+                            </h5>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center p-2">

@@ -28,6 +28,7 @@ export class CotizaXferComponent implements OnInit {
   results:any = []
   occup:Object = {}
   groupsTfa = []
+  flag:boolean = false
 
   constructor(public _api: ApiService,
               public _init: InitService,
@@ -51,7 +52,7 @@ export class CotizaXferComponent implements OnInit {
 
                   this.results = res['data']
                   this.occup = res['occup']
-                  // this._search.reset()
+                  this.flag = true
 
                 }, err => {
                   this.loading['cotizar'] = false;

@@ -28,6 +28,11 @@ export class Rsv2ManageComponent implements OnInit {
   loading:Object = {}
   viewLoc:any
 
+  data:Object = {
+    master: {},
+    items: []
+  }
+
   constructor(public _api: ApiService,
               public _init: InitService,
               private titleService: Title,
@@ -52,15 +57,17 @@ export class Rsv2ManageComponent implements OnInit {
           });
 
       this.activatedRoute.params.subscribe( params => {
-        if ( params.loc ){
-          this.viewLoc = params.loc;
-          this.getLoc( params.loc )
-          let title = 'CyC - Rsv Manager'
-          if( this.viewLoc ){
-            title += ` Loc: ${this.viewLoc}`
+        if( this.showContents ){
+          if ( params.loc ){
+            this.viewLoc = params.loc;
+            this.getLoc( params.loc )
+            let title = 'CyC - Rsv Manager'
+            if( this.viewLoc ){
+              title += ` Loc: ${this.viewLoc}`
+            }
+            this.titleService.setTitle(title);
+            jQuery('div.modal').modal('hide');
           }
-          this.titleService.setTitle(title);
-          jQuery('div.modal').modal('hide');
         }
       });
   }
@@ -70,11 +77,66 @@ export class Rsv2ManageComponent implements OnInit {
   }
 
   getLoc( l ){
+    this.loading['loc'] = true
 
+    this._api.restfulGet( l, 'Rsv/manage2Loc' )
+                .subscribe( res => {
+
+                  this.loading['loc'] = false;
+
+                  if( res['data']['master'] ){
+                    let data = {
+                      master: res['data']['master'],
+                      items: res['data']['items']
+                    }
+
+                    data['master']['tickets'] = data['master']['tickets'] != null ? data['master']['tickets'].split(',') : []
+
+                    this.data = data
+                  }else{
+                    this.data = {
+                      master: {},
+                      items: []
+                    }
+                  }
+
+
+
+
+                }, err => {
+                  this.loading['loc'] = false;
+
+                  const error = err.error;
+                  this.toastr.error( error.msg, err.status );
+                  console.error(err.statusText, error.msg);
+
+                });
   }
 
   selectLoc( e ){
     this.route.navigateByUrl(`/rsv2/${e['masterlocatorid']}`);
+  }
+
+  formatDate( d, f ){
+    return moment(d).format(f)
+  }
+
+  colorConfirm( i ){
+    switch( i ){
+      case 'Cancelada':
+        return 'text-danger'
+      case 'Cotización':
+      case 'Cotizacion':
+        return 'text-warning'
+      case 'Pendiente':
+        return 'text-info'
+      default:
+        return 'text-success'
+    }
+  }
+
+  getDiff( a, b ){
+    return parseFloat(a)-parseFloat(b)
   }
 
 }

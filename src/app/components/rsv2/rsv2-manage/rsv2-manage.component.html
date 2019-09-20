@@ -1,7 +1,15 @@
 <div class="alert alert-danger" role="alert" *ngIf="!showContents">
     <p>No cuentas con los permisos para poder visualizar este módulo. Por favor contacta a <span class="font-weight-bold">WFM</span> si necesitas accesos.</p>
 </div>
-<div class="container-fluid" *ngIf="showContents">
+<div class="d-flex justify-content-center p-5" *ngIf="showContents && loading['loc']">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="container-fluid" *ngIf="showContents && !loading['loc'] && data['items'].length == 0">
+    <div class="alert alert-danger" role="alert">
+        <p>El localizador no existe o no tiene items agregados</p>
+    </div>
+</div>
+<div class="container-fluid" *ngIf="showContents && !loading['loc'] && data['items'].length > 0">
     <!-- <div class='container bg-light text-dark'>
         <app-search-loc (selected)="selectLoc($event)" [maxHeight]="200"></app-search-loc>
     </div> -->
@@ -12,13 +20,13 @@
         <!-- ====================== INICIO TITULAR ====================== -->
         <div class="p-0 row m-0" [style.height.px]="90">
             <div class="locFrame col-2">
-                <b>{{ viewLoc }}</b>
+                <b>{{ data['master']['masterlocatorid'] }}</b>
             </div>
-            <div class="col-8" matTooltipPosition="above" matTooltip="Info about the action">
+            <div class="col-8" matTooltipPosition="above" [matTooltip]="data['master']['nombreCliente']">
                 <div>
-                    <h2 class="text-truncate"><b>NOMBRE COMPLETO DEL CLIENTE EN BASE DE DATOS</b></h2>
+                    <h2 class="text-truncate"><b>{{ data['master']['nombreCliente'] }}</b></h2>
                 </div>
-                <p>Creada el <b>29 Septiembre 2019</b> por <b>Jorge Sanchez</b></p>
+                <p>Creada el <b>{{ formatDate(data['master']['dtCreated'], 'DD MMM YYYY HH:mm') }} hrs.</b> por <b>{{ data['master']['creador'] }}</b></p>
             </div>
             <div class="col-2 d-flex justify-content-end text-center">
                 <mat-chip-list aria-label="Fish selection">
@@ -33,9 +41,9 @@
 
             <!-- ====================== INICIO CUADRO ITEMS ====================== -->
             <div class="itemsFrame col-9 pb-4">
-                <div class="d-flex justify-content-end">
-                    <span class="pl-2">Modificar</span>
-                    <span class="pl-2">Saldar</span>
+                <div class="d-flex justify-content-end p-1">
+                    <button mat-button style="zoom: 0.8" color="warn"><mat-icon>edit</mat-icon> Modificar</button>
+                    <button mat-button style="zoom: 0.8" color="primary"><mat-icon>payment</mat-icon> Saldar</button>
                 </div>
                 <div class="container p-1 bg-light">
                     <div class="container row rowItemNoBorder">
@@ -46,74 +54,188 @@
                     </div>
                     <hr class="hrItems">
                     <mat-accordion>
-                        <mat-expansion-panel>
+                        <mat-expansion-panel *ngFor="let i of data['items']">
                             <mat-expansion-panel-header>
                                 <div class="container row rowItem">
                                     <div class="col-6">
                                         <button mat-icon-button color="primary">
-                                            <span class="mr-2">{{ viewLoc }}-1</span>
-                                            <mat-icon>hotel</mat-icon><span class="ml-2">Hospedaje en GOC</span>
+                                            <span class="mr-2">{{ i['itemLocatorId'] }}</span>
+                                            <mat-icon>{{ i['icon'] }}</mat-icon><span class="ml-2">{{ i['tipoServicio'] }}</span>
                                         </button>
                                     </div>
-                                    <div class="col-2 mt-auto mb-auto text-center text-info">028975</div>
-                                    <div class="col-2 mt-auto mb-auto text-right">{{ 5267 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
-                                    <div class="col-2 mt-auto mb-auto text-right">{{ 1200 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
+                                    <div class="col-2 mt-auto mb-auto text-center" [ngClass]="colorConfirm(i['confirm'])">{{ i['confirm'] }}</div>
+                                    <div class="col-2 mt-auto mb-auto text-right">{{ i['monto'] | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
+                                    <div class="col-2 mt-auto mb-auto text-right">{{ (i['monto'] - i['montoPagado']) | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
                                 </div>
                             </mat-expansion-panel-header>
 
-                            <mat-form-field>
-                                <input matInput placeholder="First name">
-                            </mat-form-field>
-
-                            <mat-form-field>
-                                <input matInput placeholder="Age">
-                            </mat-form-field>
-                        </mat-expansion-panel>
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                <div class="container row rowItem">
-                                    <div class="col-6">
-                                        <button mat-icon-button color="primary">
-                                                    <span class="mr-2">{{ viewLoc }}-2</span>
-                                                    <mat-icon>airport_shuttle</mat-icon><span class="ml-2">Traslado Redondo</span>
-                                                </button>
+                            <div class="container p-2 pt-3">
+                                <ng-container *ngIf="i['itemType'] == 1">
+                                    <div class="container row p-2">
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Hotel:</b></div>
+                                                <div class="clientInfo">{{ i['hotel'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Categoria:</b></div>
+                                                <div class="clientInfo">{{ i['categoria'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Tipo Tarifa:</b></div>
+                                                <div class="clientInfo">{{ i['isNR'] == 1 ? 'No Reembolsable' : 'Flexible' }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Agencia:</b></div>
+                                                <div class="clientInfo">{{ i['agencia'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Grupo:</b></div>
+                                                <div class="clientInfo">{{ i['grupo'] }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Llegada:</b></div>
+                                                <div class="clientInfo">{{ formatDate(i['llegada'], 'DD MMM YYYY') }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Salida:</b></div>
+                                                <div class="clientInfo">{{ formatDate(i['salida'], 'DD MMM YYYY') }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Adultos:</b></div>
+                                                <div class="clientInfo">{{ i['adultos'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Menores:</b></div>
+                                                <div class="clientInfo">{{ i['menores'] }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Método de Pago:</b></div>
+                                                <div class="clientInfo">{{ i['isPagoHotel'] == 1 ? 'PH' : i['isParcial'] == 1 ? 'PP' : 'PT' }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Monto a pagar:</b></div>
+                                                <div class="clientInfo">{{ (i['isParcial'] == 1 ? i['montoParcial'] : i['monto']) | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Status de pago:</b></div>
+                                                <div class="clientInfo">{{ i['tipoPago'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Moneda:</b></div>
+                                                <div class="clientInfo">{{ i['moneda'] }}</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-2 mt-auto mb-auto text-center text-info">MajoOK</div>
-                                    <div class="col-2 mt-auto mb-auto text-right">{{ 460 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
-                                    <div class="col-2 mt-auto mb-auto text-right">{{ 0 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
-                                </div>
-                            </mat-expansion-panel-header>
-
-                            <mat-form-field>
-                                <input matInput placeholder="First name">
-                            </mat-form-field>
-
-                            <mat-form-field>
-                                <input matInput placeholder="Age">
-                            </mat-form-field>
-                        </mat-expansion-panel>
-                        <mat-expansion-panel>
-                            <mat-expansion-panel-header>
-                                <div class="container row rowItem">
-                                    <div class="col-6">
-                                        <button mat-icon-button color="primary">
-                                                    <span class="mr-2">{{ viewLoc }}-3</span>
-                                                    <mat-icon>pool</mat-icon><span class="ml-2">Tour</span>
-                                                </button>
+                                </ng-container>
+                                <ng-container *ngIf="i['itemType'] == 2">
+                                    <div class="container row p-2">
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Categoria:</b></div>
+                                                <div class="clientInfo">{{ i['categoria'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Hotel:</b></div>
+                                                <div class="clientInfo">{{ i['hotel'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Fecha:</b></div>
+                                                <div class="clientInfo">{{ formatDate(i['llegada'], 'DD MMM YYYY') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Adultos:</b></div>
+                                                <div class="clientInfo">{{ i['adultos'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Menores:</b></div>
+                                                <div class="clientInfo">{{ i['menores'] }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Monto a pagar:</b></div>
+                                                <div class="clientInfo">{{ (i['monto']) | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Status de pago:</b></div>
+                                                <div class="clientInfo">{{ i['tipoPago'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Moneda:</b></div>
+                                                <div class="clientInfo">{{ i['moneda'] }}</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-2 mt-auto mb-auto text-center text-info">0zfllese</div>
-                                    <div class="col-2 mt-auto mb-auto text-right">{{ 1900 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
-                                    <div class="col-2 mt-auto mb-auto text-right">{{ 0 | currency:'MXN':'symbol-narrow':'.2-2' }} </div>
-                                </div>
-                            </mat-expansion-panel-header>
+                                </ng-container>
+                                <ng-container *ngIf="i['itemType'] == 5">
+                                    <div class="container row p-2">
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Servicio:</b></div>
+                                                <div class="clientInfo">{{ i['categoria'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Hotel:</b></div>
+                                                <div class="clientInfo">{{ i['hotel'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Adultos:</b></div>
+                                                <div class="clientInfo">{{ i['adultos'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Menores:</b></div>
+                                                <div class="clientInfo">{{ i['menores'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConcept"><b>Infantes:</b></div>
+                                                <div class="clientInfo">{{ i['infantes'] }}</div>
+                                            </div>
 
-                            <mat-form-field>
-                                <input matInput placeholder="First name">
-                            </mat-form-field>
-
-                            <mat-form-field>
-                                <input matInput placeholder="Age">
-                            </mat-form-field>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Llegada:</b></div>
+                                                <div class="clientInfo">{{ formatDate(i['llegada'], 'DD/MM/YY') }} {{ i['hora_in'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Vuelo In:</b></div>
+                                                <div class="clientInfo">{{ i['aerolinea_in'] }} {{ i['vuelo_in'] }}</div>
+                                            </div>
+                                            <ng-container *ngIf="i['salida'] != null">
+                                                <div class="d-flex justify-content-start">
+                                                    <div class="productConceptXL"><b>Salida:</b></div>
+                                                    <div class="clientInfo">{{ formatDate(i['salida'], 'DD/MM/YY') }} {{ i['hora_out'] }}</div>
+                                                </div>
+                                                <div class="d-flex justify-content-start">
+                                                    <div class="productConceptXL"><b>Vuelo Out:</b></div>
+                                                    <div class="clientInfo">{{ i['aerolinea_out'] }} {{ i['vuelo_out'] }}</div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Monto a pagar:</b></div>
+                                                <div class="clientInfo">{{ i['monto'] | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Status de pago:</b></div>
+                                                <div class="clientInfo">{{ i['tipoPago'] }}</div>
+                                            </div>
+                                            <div class="d-flex justify-content-start">
+                                                <div class="productConceptXL"><b>Moneda:</b></div>
+                                                <div class="clientInfo">{{ i['moneda'] }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
                         </mat-expansion-panel>
                     </mat-accordion>
 
@@ -121,10 +243,10 @@
 
                     <hr class="hrItems">
                     <div class="container row rowItemNoBorder">
-                        <div class="col-6"><b>TOTAL</b></div>
+                        <div class="col-6"><b>TOTAL {{ data['master']['moneda'] }}</b></div>
                         <div class="col-2"></div>
-                        <div class="col-2 text-right"><b>{{ 7827 | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
-                        <div class="col-2 text-right"><b>{{ 1200 | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
+                        <div class="col-2 text-right"><b>{{ data['master']['montoTotal'] | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
+                        <div class="col-2 text-right"><b>{{ getDiff(data['master']['montoTotal'], data['master']['montoPagadoTotal']) | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
                     </div>
                 </div>
             </div>
@@ -135,41 +257,47 @@
                 <hr>
                 <div class="d-flex justify-content-start">
                     <div class="clientConcept"><b>Titular:</b></div>
-                    <div class="clientInfo">Jorge Alberto Sánchez Hernández</div>
+                    <div class="clientInfo">{{ data['master']['nombreCliente'] }}</div>
                 </div>
                 <div class="d-flex justify-content-start">
                     <div class="clientConcept"><b>Tel:</b></div>
-                    <div class="clientInfo">+529982140469</div>
+                    <div class="clientInfo">{{ data['master']['telCliente'] }}</div>
                 </div>
                 <div class="d-flex justify-content-start">
                     <div class="clientConcept"><b>Correo:</b></div>
-                    <div class="clientInfo">geosh2000@gmail.com</div>
+                    <div class="clientInfo">{{ data['master']['correoCliente'] }}</div>
                 </div>
                 <div class="d-flex justify-content-start">
                     <div class="clientConcept"><b>Whatsapp:</b></div>
-                    <div class="clientInfo">+529982140469</div>
+                    <div class="clientInfo">{{ data['master']['whatsCliente'] }}</div>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Zendesk:</b></div>
+                    <div class="clientInfo"><a target="_blank" [href]=" data['master']['zdUserId'] | domseguro:'https://oasishoteles.zendesk.com/agent/users/' ">{{ data['master']['zdUserId'] }}</a></div>
                 </div>
                 <hr>
                 <div class="d-flex justify-content-start">
                     <div class="clientConcept"><b>Llegada:</b></div>
-                    <div class="clientInfo">26 Oct 2019</div>
+                    <div class="clientInfo">{{ formatDate(data['master']['llegada'], 'DD MMM YYYY') }}</div>
                 </div>
                 <div class="d-flex justify-content-start">
                     <div class="clientConcept"><b>Grupo:</b></div>
-                    <div class="clientInfo">WBC57</div>
+                    <div class="clientInfo">{{ data['master']['grupos'] }}</div>
                 </div>
                 <div class="d-flex justify-content-start">
                     <div class="clientConcept"><b>Forma Pago:</b></div>
-                    <div class="clientInfo">PDT, PT, PH</div>
+                    <div class="clientInfo">{{ data['master']['tiposPago'] }}</div>
                 </div>
                 <div class="d-flex justify-content-start">
                     <div class="clientConcept"><b>Tickets:</b></div>
                     <div class="clientInfo">
-                        <p><a href="">77890</a></p>
-                        <p><a href="">77891</a></p>
-                        <p><a href="">77892</a></p>
-                        <p><a href="">77893</a></p>
+                        <p *ngFor="let t of data['master']['tickets']"><a target="_blank" [href]=" t | domseguro:'https://oasishoteles.zendesk.com/agent/users/372040096451/tickets' ">{{ t }}</a></p>
                     </div>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-start">
+                    <div class="clientConcept"><b>Comision:</b></div>
+                    <div class="clientInfo">{{ data['master']['comision'] | currency:'MXN':'symbol-narrow':'.2-2' }} MXN</div>
                 </div>
             </div>
             <!-- ====================== FIN LATERAL CLIENTE ====================== -->

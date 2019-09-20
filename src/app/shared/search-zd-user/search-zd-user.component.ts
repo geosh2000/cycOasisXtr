@@ -14,6 +14,7 @@ export class SearchZdUserComponent implements OnInit {
 // tslint:disable-next-line: new-parens
   @Output() selected = new EventEmitter
 
+  orderChosen:any = 'name'
 
   mail:any = ''
   loading:Object = {
@@ -26,9 +27,10 @@ export class SearchZdUserComponent implements OnInit {
                 private orderPipe: OrderPipe,
                 public toastr: ToastrService) { 
                   this.newClientForm =  new FormGroup({
-                    ['name']:    new FormControl('', [ Validators.required, Validators.pattern('^[A-ZÁÉÍÓÚ]{1}[a-záéíóúA-ZÁÉÍÓÚ\\s]*$')]),
+                    ['name']:    new FormControl('', [ Validators.required, Validators.pattern('^[A-ZÁÉÍÓÚ]{1}[a-záéíóúA-ZÁÉÍÓÚ\\sñ]*$')]),
                     ['email']:   new FormControl('', [ Validators.required, Validators.pattern('^(.)+@(.)+\\.(.)+$')]),
-                    ['phone']:   new FormControl('', [ Validators.pattern('^(\\+){1}[1-9]\\d{11,14}$')])
+                    ['phone']:   new FormControl('', [ Validators.pattern('^(\\+){1}[1-9]\\d{10,14}$')]),
+                    ['wa']:   new FormControl('', [ ]),
                   })
                 }
 
@@ -48,7 +50,7 @@ export class SearchZdUserComponent implements OnInit {
 
                   this.loading['search'] = false;
                   let result = res['data']
-                  result = this.orderPipe.transform(result, 'email')
+                  result = this.orderPipe.transform(result, this.orderChosen)
 
                   this.data = result
                   if( this.data.length == 0 ){
@@ -78,6 +80,13 @@ export class SearchZdUserComponent implements OnInit {
     this.data= []
   }
 
+  edit( i ){
+    this.newClientForm.controls['name'].setValue(i['name'])
+    this.newClientForm.controls['phone'].setValue(i['phone'])
+    this.newClientForm.controls['wa'].setValue(i['user_fields']['whatsapp'])
+    this.newClientForm.controls['email'].setValue(i['email'])
+  }
+
   newClient(){
 
     let item
@@ -99,6 +108,11 @@ export class SearchZdUserComponent implements OnInit {
                 });
 
 
+  }
+
+  orderBy( e ){
+    this.orderChosen = e.value
+    this.data = this.orderPipe.transform(this.data, e.value)
   }
 
 }

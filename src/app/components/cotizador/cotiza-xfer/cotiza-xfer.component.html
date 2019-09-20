@@ -1,5 +1,5 @@
 <app-search-bar-cotizador (search)="search($event)" [isCode]="true" [groupsTfa]="groupsTfa" [loading]="loading['cotizar']"></app-search-bar-cotizador>
-<div class="container" *ngIf="!loading['cotizar']">
+<div class="container" *ngIf="!loading['cotizar'] && flag">
     <mat-card style="z-index: -1;">
         <div class="d-flex justify-content-between">
             <span><h3><i class="far fa-calendar-alt p-1"></i> {{ formatDate(occup['inicio'],'DD MMM \'YY') }}</h3></span>
@@ -56,5 +56,4 @@
         </mat-tab>
     </mat-tab-group>
 
-    <pre>{{ results | json }}</pre>
 </div>
