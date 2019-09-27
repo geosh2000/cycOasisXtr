@@ -12,16 +12,6 @@
     color: #fff;
 }
 
-.mat-danger {
-    background-color: #9c1414;
-    color: #fff;
-}
-
-.mat-button.mat-danger {
-    color: #9c1414;
-    background-color: #fff!important;
-}
-
 .mat-info {
     background-color: #34a3b5;
     color: #fff;
@@ -91,11 +81,4 @@
     font-family: sans-serif;
     color: grey;
     font-size: 12px;
-}
-
-.itemCancelled {
-    color: red;
-    font-stretch: extra-expanded;
-    font-style: italic;
-    font-family: sans-serif;
 }

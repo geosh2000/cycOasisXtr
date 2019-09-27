@@ -19,6 +19,9 @@ export class RsvLinkAnyPaymentComponent implements OnInit {
   op:any
   pid:any
 
+  params:Object = {}
+  genData:Object = {}
+
   constructor(public _api: ApiService,
               public _init: InitService,
               public toastr: ToastrService ) { }
@@ -42,32 +45,25 @@ export class RsvLinkAnyPaymentComponent implements OnInit {
   }
 
   locSelected( e ){
-    if( e[1] ){
-      this.ml = e[0]['Locs']
-      this.pid = e[0]['id']
-    }else{
-      this.ml = null
-      this.pid = null
+    this.params = {
+      op: this.op,
+      zdUserId: e.zdUserId
     }
+
+    this.genData = e
   }
 
   linkRsv(){
 
-    let params = {
-      link: {
-        paymentId: this.pid
-      },
-      operacion: this.op,
-      last_id: this.pid,
-      unset: null
-    }
-
     this.loading['save'] = true;
 
-    this._api.restfulPut( params, 'Rsv/linkPayment' )
+    this._api.restfulPut( this.params, 'Rsv/linkPaymentV2' )
                 .subscribe( res => {
 
                   this.loading['save'] = false;
+                  this.toastr.success( res['msg'], res['msg'] );
+                  this.params = {}
+                  this.genData = {}
                   this.linked.emit( true )
 
                 }, err => {

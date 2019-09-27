@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </mat-card>
-                <mat-card [style.width.px]="230">
+                <!-- <mat-card [style.width.px]="230">
                     <mat-card-content>
                         <div class="d-flex justify-content-between">
                             <mat-form-field [style.width.px]="150">
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                     </mat-card-content>
-                </mat-card>
+                </mat-card> -->
                 <mat-card [style.width.px]="230">
                     <mat-card-content>
                         <div class="d-flex justify-content-between">
@@ -85,7 +85,7 @@
                 <ng-template let-row>
                     <td class="row__email" *ngFor="let item of columns">
                         <span [ngSwitch]="item['type']">
-                          <span [matTooltip]="row[item['key']]" matTooltipPosition="above" style="font-size: smaller; max-width: 110px" class="d-inline-block text-truncate" *ngSwitchCase="'default'">
+                          <span [matTooltip]="row[item['key']]" matTooltipPosition="above" style="font-size: smaller; max-width: 110px" class="d-inline-block text-truncate ml-auto mr-auto" *ngSwitchCase="'default'">
                           {{ row[item['key']] }}
                           </span>
                         <span [matTooltip]="row[item['key']]" matTooltipPosition="above" class="d-inline-block" style="font-size: smaller" *ngSwitchCase="'npropio'">

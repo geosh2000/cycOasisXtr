@@ -162,6 +162,10 @@ import { RsvDetailComponent } from './components/cotizador/rsv-detail/rsv-detail
 import { Rsv2ManageComponent } from './components/rsv2/rsv2-manage/rsv2-manage.component';
 import { CotizaXferComponent } from './components/cotizador/cotiza-xfer/cotiza-xfer.component';
 import { PagosAdminComponent } from './components/pagos/pagos-admin/pagos-admin.component';
+import { DoPaymentComponent } from './components/rsv2/do-payment/do-payment.component';
+import { EditMontoParcialComponent } from './components/rsv2/rsv2-manage/edit-monto-parcial/edit-monto-parcial.component';
+import { ExtranetComponent } from './components/extranet/extranet.component';
+import { ExtPapeletaComponent } from './components/extranet/ext-papeleta.component';
 
 @NgModule({
   declarations: [
@@ -263,7 +267,11 @@ import { PagosAdminComponent } from './components/pagos/pagos-admin/pagos-admin.
     RsvDetailComponent,
     Rsv2ManageComponent,
     CotizaXferComponent,
-    PagosAdminComponent
+    PagosAdminComponent,
+    DoPaymentComponent,
+    EditMontoParcialComponent,
+    ExtranetComponent,
+    ExtPapeletaComponent
 
   ],
   imports: [

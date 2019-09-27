@@ -164,7 +164,7 @@ export class CotCreateRsvComponent implements OnInit {
   }
 
   viewRsv(){
-    this.route.navigateByUrl(`/rsv/${this.lastLocCreated}`);
+    this.route.navigateByUrl(`/rsv2/${this.lastLocCreated}`);
   }
 
   popReserve( h ){

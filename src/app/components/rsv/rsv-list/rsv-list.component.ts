@@ -82,6 +82,11 @@ export class NgbDateNativeAdapter extends NgbDateAdapter<any> {
       color: #fff;
     }
 
+    .mat-danger {
+      background-color: #9c1414;
+      color: #fff;
+    }
+
     mat-accordion{
       width: 100% !important;
       max-width: 780px
@@ -132,27 +137,18 @@ export class RsvListComponent implements OnInit {
 
   config:EasyTableServiceService
   columns:any = [
-    { type: 'default', key: 'masterItemLocator', title: 'Loc.' },
-    { type: 'default', key: 'hotel', title: 'Hotel' },
-    { type: 'default', key: 'cat', title: 'Cat.' },
-    { type: 'default', key: 'grupo', title: 'Grupo Tfa' },
-    { type: 'nr', key: 'isNR', title: 'NR' },
-    { type: 'npropio', key: 'titular', title: 'Nombre' },
-    { type: 'date', key: 'llegada', title: 'Inicio' },
-    { type: 'date', key: 'salida', title: 'Fin' },
-    { type: 'default', key: 'noches', title: 'Noches' },
-    { type: 'ocup', key: 'a', title: 'Ocup' },
-    // { type: 'default', key: 'j', title: 'Jrs' },
-    // { type: 'default', key: 'm', title: 'Mnrs' },
-    { type: 'money', key: 'monto', title: 'Monto' },
-    { type: 'default', key: 'mon', title: 'Moneda' },
-    { type: 'money', key: 'montoPendiente', title: 'Pagos Pdt' },
-    { type: 'money', key: 'montoPagado', title: 'Pagos OK' },
-    { type: 'status', key: 'pySt', title: 'Status Pago' },
-    { type: 'default', key: 'cieloConf', title: 'Conf.' },
-    { type: 'conf', key: 'e', title: 'Status Rsva' },
+    { type: 'default', key: 'masterlocatorid', title: 'Loc.' },
+    { type: 'npropio', key: 'nombreCliente', title: 'Nombre' },
+    { type: 'default', key: 'grupos', title: 'Grupos Tfa' },
+    { type: 'default', key: 'servicios', title: 'Servicios' },
+    { type: 'nr', key: 'nrCount', title: 'NR' },
+    { type: 'date', key: 'llegadaOK', title: 'Inicio' },
+    { type: 'date', key: 'salidaOK', title: 'Fin' },
+    { type: 'money', key: 'montoMXN', title: 'Monto MXN' },
+    { type: 'moneySaldo', key: 'saldoMXN', title: 'Saldo MXN' },
+    { type: 'conf', key: 'sumConfirm', title: 'Conf' },
     { type: 'date', key: 'dtCreated', title: 'Creacion' },
-    { type: 'default', key: 'creador', title: 'Creador' },
+    { type: 'default', key: 'agentName', title: 'Creador' },
     { type: 'button', key: 'view', title: 'Ver' }
   ]
 
@@ -183,6 +179,14 @@ export class RsvListComponent implements OnInit {
     this.config['paginationEnabled'] = true
     this.config['rows'] = 20
     this.config['paginationRangeEnabled'] = true
+  }
+
+  getDif( i ){
+    if( parseFloat(i['montoMXN']) + parseFloat(i['montoUSD']) == 0 ){
+      return true
+    }else{
+      return false
+    }
   }
 
   getTableConfig(){
@@ -239,8 +243,10 @@ export class RsvListComponent implements OnInit {
     this.loading['locs'] = true;
 
 
-    this._api.restfulPut( this.search, 'Rsv/manageLoc' )
+    this._api.restfulPut( this.search, 'Rsv/listLoc' )
                 .subscribe( res => {
+
+                  console.log(res['data'])
 
                   this.loading['locs'] = false;
                   this.searchFlag = true

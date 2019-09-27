@@ -30,7 +30,7 @@
             </div>
             <div class="col-2 d-flex justify-content-end text-center">
                 <mat-chip-list aria-label="Fish selection">
-                    <mat-chip color="alert" selected>Cotización</mat-chip>
+                    <mat-chip [color]="rsvType == 'Cotizacion' ? 'alert' : rsvType == 'Reserva' ? 'primary' : 'danger'" selected>{{ rsvType }}</mat-chip>
                 </mat-chip-list>
             </div>
         </div>
@@ -42,211 +42,72 @@
             <!-- ====================== INICIO CUADRO ITEMS ====================== -->
             <div class="itemsFrame col-9 pb-4">
                 <div class="d-flex justify-content-end p-1">
-                    <button mat-button style="zoom: 0.8" color="warn"><mat-icon>edit</mat-icon> Modificar</button>
-                    <button mat-button style="zoom: 0.8" color="primary"><mat-icon>payment</mat-icon> Saldar</button>
+                    <!-- <button mat-button style="zoom: 0.8" color="warn"><mat-icon>edit</mat-icon> Modificar</button> -->
+                    <button mat-button style="zoom: 0.8" color="primary" (click)="_payment.openModal( data['master']['zdUserId'], data['items'] )"><mat-icon>payment</mat-icon> Saldar</button>
                 </div>
                 <div class="container p-1 bg-light">
                     <div class="container row rowItemNoBorder">
-                        <div class="col-6"></div>
+                        <div class="col-4"></div>
                         <div class="col-2 text-center"><b>Conf.</b></div>
                         <div class="col-2 text-center"><b>Total</b></div>
-                        <div class="col-2 text-center"><b>Saldo</b></div>
+                        <div class="col-4 text-center row">
+                            <div class="col-6 text-right text-success"><small>Saldo Prepago</small></div>
+                            <div class="col-6 text-right">Saldo Total</div>
+                        </div>
                     </div>
                     <hr class="hrItems">
                     <mat-accordion>
-                        <mat-expansion-panel *ngFor="let i of data['items']">
+                        <mat-expansion-panel *ngFor="let i of data['items']" [disabled]="i['isCancel'] == 1">
                             <mat-expansion-panel-header>
                                 <div class="container row rowItem">
-                                    <div class="col-6">
+                                    <div class="col-4">
                                         <button mat-icon-button color="primary">
                                             <span class="mr-2">{{ i['itemLocatorId'] }}</span>
                                             <mat-icon>{{ i['icon'] }}</mat-icon><span class="ml-2">{{ i['tipoServicio'] }}</span>
                                         </button>
                                     </div>
-                                    <div class="col-2 mt-auto mb-auto text-center" [ngClass]="colorConfirm(i['confirm'])">{{ i['confirm'] }}</div>
-                                    <div class="col-2 mt-auto mb-auto text-right">{{ i['monto'] | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
-                                    <div class="col-2 mt-auto mb-auto text-right">{{ (i['monto'] - i['montoPagado']) | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
+                                    <ng-container *ngIf="i['isCancel'] == 0">
+                                        <div class="col-2 mt-auto mb-auto text-center text-truncate p-0" [ngClass]="colorConfirm(i['confirm'])" [matTooltip]="i['confirm']" [matTooltipPosition]="'above'">
+                                            <span class="badge badge-pill badge-success" *ngIf="i['tipoPago'] == 'PT'">PT</span>
+                                            <span class="badge badge-pill badge-info" *ngIf="i['tipoPago'] == 'PP'">PP</span>
+                                            <span class="badge badge-pill badge-primary" *ngIf="i['tipoPago'] == 'PH'">PH</span>
+                                            <span class="badge badge-pill badge-alert" *ngIf="i['tipoPago'] == 'PDT'">PDT</span> {{ i['confirm'] }}
+                                        </div>
+                                        <div class="col-2 mt-auto mb-auto text-right">{{ i['monto'] | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
+                                        <div class="col-4 mt-auto mb-auto text-right row">
+                                            <div class="col-6 text-right">
+                                                <p [ngClass]="{'text-danger': (i['montoParcial'] - i['montoPagado']) > 0, 'text-success': (i['montoParcial'] - i['montoPagado']) <= 0}"><small>{{ (i['montoParcial'] - i['montoPagado']) | currency:'MXN':'symbol-narrow':'.2-2' }}</small></p>
+                                                <p style="font-size: 10px" class='text-success'>(paid: {{ (i['montoPagado']) | currency:'MXN':'symbol-narrow':'.2-2' }})</p>
+                                            </div>
+                                            <div class="col-6 text-right" [ngClass]="{'text-danger': (i['monto'] - i['montoPagado']) > 0, 'text-success': (i['monto'] - i['montoPagado']) <= 0}"><b>{{ (i['monto'] - i['montoPagado']) | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="i['isCancel'] == 1">
+                                        <div class="col-8 mt-auto mb-auto text-center itemCancelled">Item Cancelado</div>
+                                    </ng-container>
                                 </div>
                             </mat-expansion-panel-header>
 
-                            <div class="container p-2 pt-3">
-                                <ng-container *ngIf="i['itemType'] == 1">
-                                    <div class="container row p-2">
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Hotel:</b></div>
-                                                <div class="clientInfo">{{ i['hotel'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Categoria:</b></div>
-                                                <div class="clientInfo">{{ i['categoria'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Tipo Tarifa:</b></div>
-                                                <div class="clientInfo">{{ i['isNR'] == 1 ? 'No Reembolsable' : 'Flexible' }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Agencia:</b></div>
-                                                <div class="clientInfo">{{ i['agencia'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Grupo:</b></div>
-                                                <div class="clientInfo">{{ i['grupo'] }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Llegada:</b></div>
-                                                <div class="clientInfo">{{ formatDate(i['llegada'], 'DD MMM YYYY') }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Salida:</b></div>
-                                                <div class="clientInfo">{{ formatDate(i['salida'], 'DD MMM YYYY') }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Adultos:</b></div>
-                                                <div class="clientInfo">{{ i['adultos'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Menores:</b></div>
-                                                <div class="clientInfo">{{ i['menores'] }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Método de Pago:</b></div>
-                                                <div class="clientInfo">{{ i['isPagoHotel'] == 1 ? 'PH' : i['isParcial'] == 1 ? 'PP' : 'PT' }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Monto a pagar:</b></div>
-                                                <div class="clientInfo">{{ (i['isParcial'] == 1 ? i['montoParcial'] : i['monto']) | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Status de pago:</b></div>
-                                                <div class="clientInfo">{{ i['tipoPago'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Moneda:</b></div>
-                                                <div class="clientInfo">{{ i['moneda'] }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </ng-container>
-                                <ng-container *ngIf="i['itemType'] == 2">
-                                    <div class="container row p-2">
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Categoria:</b></div>
-                                                <div class="clientInfo">{{ i['categoria'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Hotel:</b></div>
-                                                <div class="clientInfo">{{ i['hotel'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Fecha:</b></div>
-                                                <div class="clientInfo">{{ formatDate(i['llegada'], 'DD MMM YYYY') }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Adultos:</b></div>
-                                                <div class="clientInfo">{{ i['adultos'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Menores:</b></div>
-                                                <div class="clientInfo">{{ i['menores'] }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Monto a pagar:</b></div>
-                                                <div class="clientInfo">{{ (i['monto']) | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Status de pago:</b></div>
-                                                <div class="clientInfo">{{ i['tipoPago'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Moneda:</b></div>
-                                                <div class="clientInfo">{{ i['moneda'] }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </ng-container>
-                                <ng-container *ngIf="i['itemType'] == 5">
-                                    <div class="container row p-2">
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Servicio:</b></div>
-                                                <div class="clientInfo">{{ i['categoria'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Hotel:</b></div>
-                                                <div class="clientInfo">{{ i['hotel'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Adultos:</b></div>
-                                                <div class="clientInfo">{{ i['adultos'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Menores:</b></div>
-                                                <div class="clientInfo">{{ i['menores'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConcept"><b>Infantes:</b></div>
-                                                <div class="clientInfo">{{ i['infantes'] }}</div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Llegada:</b></div>
-                                                <div class="clientInfo">{{ formatDate(i['llegada'], 'DD/MM/YY') }} {{ i['hora_in'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Vuelo In:</b></div>
-                                                <div class="clientInfo">{{ i['aerolinea_in'] }} {{ i['vuelo_in'] }}</div>
-                                            </div>
-                                            <ng-container *ngIf="i['salida'] != null">
-                                                <div class="d-flex justify-content-start">
-                                                    <div class="productConceptXL"><b>Salida:</b></div>
-                                                    <div class="clientInfo">{{ formatDate(i['salida'], 'DD/MM/YY') }} {{ i['hora_out'] }}</div>
-                                                </div>
-                                                <div class="d-flex justify-content-start">
-                                                    <div class="productConceptXL"><b>Vuelo Out:</b></div>
-                                                    <div class="clientInfo">{{ i['aerolinea_out'] }} {{ i['vuelo_out'] }}</div>
-                                                </div>
-                                            </ng-container>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Monto a pagar:</b></div>
-                                                <div class="clientInfo">{{ i['monto'] | currency:'MXN':'symbol-narrow':'.2-2' }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Status de pago:</b></div>
-                                                <div class="clientInfo">{{ i['tipoPago'] }}</div>
-                                            </div>
-                                            <div class="d-flex justify-content-start">
-                                                <div class="productConceptXL"><b>Moneda:</b></div>
-                                                <div class="clientInfo">{{ i['moneda'] }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </ng-container>
+                            <app-edit-monto-parcial [i]="i" (saveMonto)="saveMonto( $event )"></app-edit-monto-parcial>
+                            <div class="container d-flex justify-content-end">
+                                <button class='p-1' mat-button style="zoom: 0.8" color="danger" (click)="cancelItem(i)"><mat-icon>remove_circle</mat-icon> Cancelar</button>
+                                <button class='p-1' mat-button style="zoom: 0.8" color="primary" (click)="confirmItem(i)" *ngIf="i['isQuote'] == 0 && i['confirmOK'] == null"><mat-icon>done_outline</mat-icon> Confirmar</button>
                             </div>
+
                         </mat-expansion-panel>
                     </mat-accordion>
 
 
 
                     <hr class="hrItems">
-                    <div class="container row rowItemNoBorder">
-                        <div class="col-6"><b>TOTAL {{ data['master']['moneda'] }}</b></div>
+                    <div class="container row rowItemNoBorder" style="padding-right: 35px;">
+                        <div class="col-4"><b>TOTAL {{ data['master']['moneda'] }}</b></div>
                         <div class="col-2"></div>
                         <div class="col-2 text-right"><b>{{ data['master']['montoTotal'] | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
-                        <div class="col-2 text-right"><b>{{ getDiff(data['master']['montoTotal'], data['master']['montoPagadoTotal']) | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
+                        <div class="col-4 text-right row">
+                            <div class="col-6 text-right" [ngClass]="{'text-danger': getDiff(data['master']['montoParcialTotal'], data['master']['montoPagadoTotal']) > 0, 'text-success': getDiff(data['master']['montoParcialTotal'], data['master']['montoPagadoTotal']) <= 0}"><b><small>{{ getDiff(data['master']['montoParcialTotal'], data['master']['montoPagadoTotal']) | currency:'MXN':'symbol-narrow':'.2-2' }}</small></b></div>
+                            <div class="col-6 text-right" [ngClass]="{'text-danger': getDiff(data['master']['montoTotal'], data['master']['montoPagadoTotal']) > 0, 'text-success': getDiff(data['master']['montoTotal'], data['master']['montoPagadoTotal']) <= 0}"><b>{{ getDiff(data['master']['montoTotal'], data['master']['montoPagadoTotal']) | currency:'MXN':'symbol-narrow':'.2-2' }}</b></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -255,47 +116,47 @@
             <!-- ====================== INICIO LATERAL CLIENTE ====================== -->
             <div class="clientFrame col-3">
                 <hr>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Titular:</b></div>
                     <div class="clientInfo">{{ data['master']['nombreCliente'] }}</div>
                 </div>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Tel:</b></div>
                     <div class="clientInfo">{{ data['master']['telCliente'] }}</div>
                 </div>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Correo:</b></div>
                     <div class="clientInfo">{{ data['master']['correoCliente'] }}</div>
                 </div>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Whatsapp:</b></div>
                     <div class="clientInfo">{{ data['master']['whatsCliente'] }}</div>
                 </div>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Zendesk:</b></div>
                     <div class="clientInfo"><a target="_blank" [href]=" data['master']['zdUserId'] | domseguro:'https://oasishoteles.zendesk.com/agent/users/' ">{{ data['master']['zdUserId'] }}</a></div>
                 </div>
                 <hr>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Llegada:</b></div>
                     <div class="clientInfo">{{ formatDate(data['master']['llegada'], 'DD MMM YYYY') }}</div>
                 </div>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Grupo:</b></div>
                     <div class="clientInfo">{{ data['master']['grupos'] }}</div>
                 </div>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Forma Pago:</b></div>
                     <div class="clientInfo">{{ data['master']['tiposPago'] }}</div>
                 </div>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Tickets:</b></div>
                     <div class="clientInfo">
                         <p *ngFor="let t of data['master']['tickets']"><a target="_blank" [href]=" t | domseguro:'https://oasishoteles.zendesk.com/agent/users/372040096451/tickets' ">{{ t }}</a></p>
                     </div>
                 </div>
                 <hr>
-                <div class="d-flex justify-content-start">
+                <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Comision:</b></div>
                     <div class="clientInfo">{{ data['master']['comision'] | currency:'MXN':'symbol-narrow':'.2-2' }} MXN</div>
                 </div>
@@ -303,7 +164,98 @@
             <!-- ====================== FIN LATERAL CLIENTE ====================== -->
         </div>
         <!-- ====================== FIN CUERPO MEDIO ====================== -->
+
+        <div class="container p-2">
+            <div class="form d-flex justify-content-between align-items-center pr-3">
+                <div class="form-group p-1">
+                    <div class="input-group">
+                        <textarea rows="4" cols="136" [(ngModel)]="comment" placeholder="Agrega notas a la reserva" id="notas"></textarea>
+                    </div>
+                </div>
+                <div class="p-1">
+                    <button mat-raised-button color='primary' (click)="sendComment()" [disabled]="comment==''"><span *ngIf="!loading['comment']">Enviar</span><span *ngIf="loading['comment']"><i class="fa fa-spinner fa-pulse"></i></span></button>
+                </div>
+            </div>
+            <div class="container d-flex justify-content-lg-center" *ngIf="loading['history']">
+                <mat-spinner></mat-spinner>
+            </div>
+            <mat-list *ngIf="!loading['history']">
+                <ng-container *ngFor="let c of history">
+                    <!-- <mat-list-item> -->
+                    <div class="container row  p-2">
+                        <div class="ml-3" [style.width.px]="130">
+                            <small><b>{{ formatDate(c['Fecha'], 'ddd DD MMM YYYY') }} <span class="text-info">{{ formatDate(c['Fecha'], 'HH:mm') }} hrs</span>:</b></small>
+                        </div>
+                        <div class="col pl-0">
+                            <span class="text-secondary">{{ c['msg'] }}</span>
+                        </div>
+                    </div>
+
+                    <!-- </mat-list-item> -->
+                    <mat-divider></mat-divider>
+                </ng-container>
+            </mat-list>
+        </div>
     </div>
     <!-- ====================== FIN CUADRO PRINCIPAL ====================== -->
 
 </div>
+
+<!-- ====================== CONFIRMAR CANCELACION ====================== -->
+<div class="modal fade" id="cancelConfirm" tabindex="-1" role="dialog" aria-labelledby="cancelConfirmLabel" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelConfirmLabel">Confirmar cancelación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                Estás seguro que deseas cancelar este item?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" [disabled]="loading['cancel']">Cerrar</button>
+                <button type="button" class="btn btn-danger" (click)="confirmCancel()" [disabled]="loading['cancel']"><span *ngIf="!loading['cancel']">Aceptar</span><span *ngIf="loading['cancel']"><i class="fa fa-spinner fa-pulse"></i></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ====================== FIN CONFIRMAR CANCELACION ====================== -->
+
+<!-- ====================== INGRESAR CONFIRMACION ====================== -->
+<div class="modal fade" id="regConfirm" tabindex="-1" role="dialog" aria-labelledby="regConfirmLabel" aria-hidden="true" backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="regConfirmLabel">Confirmar Reserva</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label for="confNum" class="col-sm-4 col-form-label">Confirmacion</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="confNum" [(ngModel)]="confirm['confirm']" placeholder="Clave Confirmacion">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="notasConf" class="col-sm-4 col-form-label">Notas</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="notasConf" [(ngModel)]="confirm['notas']" placeholder="Anotaciones">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" [disabled]="loading['cancel']">Cerrar</button>
+                <button type="button" class="btn btn-danger" (click)="saveConfirm()" [disabled]="confirm['confirm'] == '' || confirm['notas'] == '' || loading['cancel']"><span *ngIf="!loading['confirm']">Aceptar</span><span *ngIf="loading['confirm']"><i class="fa fa-spinner fa-pulse"></i></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ====================== FIN INGRESAR CONFIRMACION  ====================== -->
+
+<!-- ====================== MODAL DE PAGO ====================== -->
+<app-do-payment (paid)="paid($event)"></app-do-payment>
+<!-- ====================== FIN MODAL DE PAGO ====================== -->

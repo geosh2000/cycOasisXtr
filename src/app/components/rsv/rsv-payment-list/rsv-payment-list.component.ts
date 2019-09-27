@@ -150,15 +150,11 @@ export class RsvPaymentListComponent implements OnInit {
     { type: 'default', key: 'moneda', title: 'Mon' },
     { type: 'ref', key: 'referencia', title: 'Ref.' },
     { type: 'default', key: 'aut', title: 'Aut.' },
-    { type: 'date', key: 'fechaCreacion', title: 'F. Creada' },
     { type: 'date', key: 'dtCreated', title: 'F. Pago' },
-    { type: 'default', key: 'creador', title: 'Creador' },
-    { type: 'default', key: 'paymentId', title: 'Id Pago' },
+    { type: 'default', key: 'accountId', title: 'Id Cuenta' },
     // { type: 'default', key: 'j', title: 'Jrs' },
     // { type: 'default', key: 'm', title: 'Mnrs' },
-    { type: 'locs', key: 'Locs', title: 'Locs' },
-    { type: 'consist', key: 'consistencia', title: 'Consistente' },
-    { type: 'posib', key: 'possibleLink', title: 'Posibles' },
+    { type: 'default', key: 'clientName', title: 'Titular Cuenta' },
     { type: 'button', key: 'view', title: 'Ver' }
   ]
 
@@ -232,7 +228,7 @@ export class RsvPaymentListComponent implements OnInit {
     this.loading['locs'] = true;
 
 
-    this._api.restfulPut( this.search, 'Rsv/listPayments' )
+    this._api.restfulPut( this.search, 'Rsv/listPaymentsV2' )
                 .subscribe( res => {
 
                   this.loading['locs'] = false;
