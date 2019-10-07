@@ -115,19 +115,21 @@ export class SearchBarCotizadorComponent implements OnInit {
   @Input() group = false
   @Input() isCode = false
   @Input() groupsTfa = []
+  @Input() pax = true
+  @Input() minDate:NgbDateStruct = {
+    day: parseInt(moment().add(1, 'days').format('DD')),
+    month: parseInt(moment().add(1, 'days').format('MM')),
+    year: parseInt(moment().add(1, 'days').format('YYYY'))
+  }
 
   pickNum:any = []
   adults:any = 1
   min:any = 0
   moneda = true
   minA = []
-  selectedCode:any
+  selectedCode:any = 'ccenter'
 
-  minDate:NgbDateStruct = {
-    day: parseInt(moment().add(1, 'days').format('DD')),
-    month: parseInt(moment().add(1, 'days').format('MM')),
-    year: parseInt(moment().add(1, 'days').format('YYYY'))
-  }
+  
 
   isLocal = false
   isGroup = false

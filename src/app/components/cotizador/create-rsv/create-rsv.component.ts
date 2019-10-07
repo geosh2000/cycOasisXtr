@@ -197,6 +197,13 @@ export class CreateRsvComponent implements OnInit {
     }
     this.minDate = minDate
     console.log(h)
+
+    if( h['tipo'] == 'tour' ){
+      h['data']['menores'] = 0
+      h['data']['adultos'] = 1
+      h['data']['totalMXN'] = Math.round(parseFloat(h['data']['adultUSD'])* parseFloat(h['data']['tc']) * 100) / 100
+      h['data']['totalUSD'] = parseFloat(h['data']['adultUSD'])
+    }
     this.all = h
     this.data = h['data']
     this.moneda = h['moneda']
@@ -218,6 +225,19 @@ export class CreateRsvComponent implements OnInit {
     this.data['fechaSalida'] = moment({year: date.year, month: date.month - 1, day: date.day}).format('YYYY-MM-DD');
     jQuery('#picker').val(`${moment({year: date.year, month: date.month - 1, day: date.day}).format('DD/MM/YYYY')}`);
     el.close();
+  }
+
+  calcTotal( e, f ){
+    let a = f == 'adult' ? parseInt(e.target.value) : this.data['adultos']
+    let m = f == 'menor' ? parseInt(e.target.value) : this.data['menores']
+
+    if( this.data['menorUSD'] == null){
+      this.data['totalUSD'] = Math.round(((parseFloat(this.data['adultUSD']) * a)) * 100) / 100
+    }else{
+      this.data['totalUSD'] = Math.round(((parseFloat(this.data['adultUSD']) * a) + (parseFloat(this.data['menorUSD']) * m)) * 100) / 100
+    }
+    this.data['totalMXN'] = Math.round(this.data['totalUSD'] * this.data['tc'] * 100) / 100
+
   }
 
   validateRsv(){
@@ -250,7 +270,21 @@ export class CreateRsvComponent implements OnInit {
         }
       }
     }
+
+    if( this.tipo == 'tour' ){
+      if( !this.data['pickup'] || (this.data['pickup'] && this.data['pickup'] == '') ){
+        return false
+      }
+    }
     return true
+  }
+
+  formatSalida( t ){
+    let h = Math.floor(t)
+    let m = Math.round(t % h * 100)
+
+    // return moment(`${h}:${m}:00`).format('HH:mm')
+    return `${h}:${m < 10 ? '0' + m : m}`
   }
 
 }

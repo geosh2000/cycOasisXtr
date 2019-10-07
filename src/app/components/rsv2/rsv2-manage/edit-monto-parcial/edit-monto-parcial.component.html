@@ -124,7 +124,7 @@
             <div class="col-4">
                 <div class="d-flex justify-content-start align-items-center">
                     <div class="productConcept"><b>Servicio:</b></div>
-                    <div class="clientInfo">{{ i['categoria'] }}</div>
+                    <div class="clientInfo">{{ i['categoria'] }} <span class="text-info">{{ i['xferType'] }} {{ i['isShared'] == 1  ? 'compartido' : i['xferType'] == 'abierto' ? '' : 'privado' }}</span> {{ i['Zona'] }}</div>
                 </div>
                 <div class="d-flex justify-content-start align-items-center">
                     <div class="productConcept"><b>Hotel:</b></div>

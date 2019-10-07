@@ -60,6 +60,10 @@ export class MainCotizadorComponent implements OnInit {
   }
 
   popReserve( h ){
-    this._cot.popReserve(h)
+    if(this._init.checkSingleCredential('app_cotizador_rsv')){
+      this._cot.popReserve(h)
+    }else{
+      this.toastr.error('No cuentas con los permisos necesarios para realizar esta acción', 'Permiso Denegado')
+    }
   }
 }
