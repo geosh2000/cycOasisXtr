@@ -60,7 +60,7 @@
                         <mat-expansion-panel *ngFor="let i of data['items']" [disabled]="i['isCancel'] == 1">
                             <mat-expansion-panel-header>
                                 <div class="container row rowItem">
-                                    <div class="col-4">
+                                    <div class="col-4 text-truncate" [matTooltip]="i['tipoServicio']" matTooltipPosition="above">
                                         <button mat-icon-button color="primary">
                                             <span class="mr-2">{{ i['itemLocatorId'] }}</span>
                                             <mat-icon>{{ i['icon'] }}</mat-icon><span class="ml-2">{{ i['tipoServicio'] }}</span>
@@ -90,6 +90,7 @@
 
                             <app-edit-monto-parcial [i]="i" (saveMonto)="saveMonto( $event )"></app-edit-monto-parcial>
                             <div class="container d-flex justify-content-end">
+                                <div class="mr-auto"><span class="productConceptXL">Notas: </span><span class="clientInfo">{{ i['notas'] }}</span></div>
                                 <button class='p-1' mat-button style="zoom: 0.8" color="danger" (click)="cancelItem(i)"><mat-icon>remove_circle</mat-icon> Cancelar</button>
                                 <button class='p-1' mat-button style="zoom: 0.8" color="primary" (click)="confirmItem(i)" *ngIf="i['isQuote'] == 0 && i['confirmOK'] == null"><mat-icon>done_outline</mat-icon> Confirmar</button>
                             </div>
@@ -152,7 +153,7 @@
                 <div class="d-flex justify-content-start align-items-center">
                     <div class="clientConcept"><b>Tickets:</b></div>
                     <div class="clientInfo">
-                        <p *ngFor="let t of data['master']['tickets']"><a target="_blank" [href]=" t | domseguro:'https://oasishoteles.zendesk.com/agent/users/372040096451/tickets/' ">{{ t }}</a></p>
+                        <p *ngFor="let t of data['master']['tickets']"><a target="_blank" [href]=" t | domseguro:'https://oasishoteles.zendesk.com/tickets/' ">{{ t }}</a></p>
                     </div>
                 </div>
                 <hr>

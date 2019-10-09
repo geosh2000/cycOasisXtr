@@ -142,8 +142,8 @@ export class RsvListComponent implements OnInit {
     { type: 'default', key: 'grupos', title: 'Grupos Tfa' },
     { type: 'default', key: 'servicios', title: 'Servicios' },
     { type: 'nr', key: 'nrCount', title: 'NR' },
-    { type: 'date', key: 'llegadaOK', title: 'Inicio' },
-    { type: 'date', key: 'salidaOK', title: 'Fin' },
+    { type: 'date', key: 'llegadaOk', title: 'Inicio' },
+    { type: 'date', key: 'salidaOk', title: 'Fin' },
     { type: 'money', key: 'montoMXN', title: 'Monto MXN' },
     { type: 'moneySaldo', key: 'saldoMXN', title: 'Saldo MXN' },
     { type: 'conf', key: 'sumConfirm', title: 'Conf' },
@@ -263,6 +263,7 @@ export class RsvListComponent implements OnInit {
   }
 
   formatDate( e, f ){
+    // return e
     return moment(e).format(f)
   }
 

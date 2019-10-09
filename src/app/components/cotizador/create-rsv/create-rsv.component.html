@@ -231,7 +231,7 @@
                             <label for="horaSalida">Hora Llegada</label>
                             <div class="input-group">
                                 <select class="form-control" id="horaSalida" [(ngModel)]="data['pickup']" placeholder="24:00" id="horaSalida" name="horaSalida" autocomplete="off" [style.width.px]="300">
-                                    <option *ngFor="let h of data['salidaHora']; index as i" [value]="i">{{ formatSalida(h) }} hrs. - {{ data['salidaHotel'][i] }}</option>
+                                    <option *ngFor="let h of data['salidaHora']; index as i" [value]="formatSalida(h) +' hrs. - ' + data['salidaHotel'][i]">{{ formatSalida(h) }} hrs. - {{ data['salidaHotel'][i] }}</option>
                                 </select>
                             </div>
                         </div>
