@@ -9,3 +9,12 @@
 .rsvList {
     overflow: auto;
 }
+
+.tab-icon {
+    margin-right: 8px;
+}
+
+mat-tab {
+    padding: 0px!important;
+    min-width: 10px!important;
+}

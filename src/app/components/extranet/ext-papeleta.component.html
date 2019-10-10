@@ -9,7 +9,7 @@
         <p>No hay items para mostrar</p>
     </div>
 </div>
-<div class="container-fluid" *ngIf="showContents && !loading['loc'] && data['items'].length > 0">
+<div class="container-fluid" id="thisPaperConfirmView" *ngIf="showContents && !loading['loc'] && data['items'].length > 0">
     <div class="container-fluid" *ngIf="data['items'][0]['isQuote'] == '1'">
         <div class="alert alert-info" role="alert">
             <p>El localizador no ha recibido pago por lo que no se ha mandado a confirmación</p>
@@ -34,7 +34,8 @@
                 <p style="color: darkgrey">Creada el <b>{{ formatDate(data['items'][0]['dtCreated'], 'DD MMM YYYY HH:mm') }} hrs.</b> por <b><a [href]="mailTo(data)">{{ data['items'][0]['creador'] }}</a></b></p>
 
             </div>
-            <div class="col-2 d-flex justify-content-end text-center">
+            <div class="col-2">
+                <button mat-button color="primary" (click)="printP()"><mat-icon>print</mat-icon> Imprimir</button>
                 <mat-chip-list aria-label="Fish selection">
                     <mat-chip color="primary" selected>{{ data['items'][0]['Servicio'] }}</mat-chip>
                 </mat-chip-list>
@@ -50,14 +51,14 @@
                 <div class="d-flex justify-content-end p-1">
                 </div>
                 <div class="container p-1 bg-light">
-                    <div class="container d-flex justify-content-md-around align-items-center" [ngClass]="{'textXld': data['items'][0]['isCancel'] == '1'}">
+                    <div class="container d-flex justify-content-start align-items-center" [ngClass]="{'textXld': data['items'][0]['isCancel'] == '1'}">
                         <div class='p-4'>
                             <h2>{{ data['items'][0]['tipoServicio'] }}</h2>
                             <h4><span class="text-info" [ngClass]="{'textXld': data['items'][0]['isCancel'] == '1'}">{{ data['items'][0]['categoria'] }}</span></h4>
                         </div>
-                        <div class='p-1' [ngClass]="{'iconConfirm': data['items'][0]['isCancel'] == '0', 'iconCancel': data['items'][0]['isCancel'] == '1'}">
+                        <div class='p-1' [style.width.px]="120" [ngClass]="{'iconConfirm': data['items'][0]['isCancel'] == '0', 'iconCancel': data['items'][0]['isCancel'] == '1'}">
                             <h1>
-                                <mat-icon>{{ data['items'][0]['icon'] }}</mat-icon>
+                                <mat-icon style="font-size: 70px">{{ data['items'][0]['icon'] }}</mat-icon>
                             </h1>
                         </div>
                     </div>

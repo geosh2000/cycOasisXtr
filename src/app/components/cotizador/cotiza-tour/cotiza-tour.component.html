@@ -8,21 +8,37 @@
         <mat-card-content>
             <mat-drawer-container [hasBackdrop]="true">
                 <mat-drawer #drawer [mode]="'over'">
-                    <div class="row p-2 container">
-                        <div class='col-6'>
-                            <div class='alert alert-warning'>
-                                <p>Incluye: </p>
-                                <ul>
-                                    <li *ngFor="let i of t['incluye']"><small>{{ i }}</small></li>
-                                </ul>
+
+                    <!-- HORARIOS -->
+                    <div class="alert alert-info" role="alert">
+                        <ul>Horarios:
+                            <li *ngFor="let h of t['salidaHora']; index as x">{{ formatSalida(h) }} hrs. - {{ t['salidaHotel'][x] }}</li>
+                        </ul>
+                    </div>
+
+                    <!-- Duracion -->
+                    <div class="alert alert-warning" role="alert">
+                        Duración aprox: {{ t['duracion'] }}
+                    </div>
+
+                    <!-- INCLUYE -->
+                    <div class="alert alert-info" role="alert">
+                        <div class="row p-2 container">
+                            <div class='col-6'>
+                                <div class='alert alert-warning'>
+                                    <p>Incluye: </p>
+                                    <ul>
+                                        <li *ngFor="let i of t['incluye']"><small>{{ i }}</small></li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class='col-6'>
-                            <div class='alert alert-danger'>
-                                <p>No Incluye: </p>
-                                <ul>
-                                    <li *ngFor="let i of t['no_incluye']"><small>{{ i }}</small></li>
-                                </ul>
+                            <div class='col-6'>
+                                <div class='alert alert-danger'>
+                                    <p>No Incluye: </p>
+                                    <ul>
+                                        <li *ngFor="let i of t['no_incluye']"><small>{{ i }}</small></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>

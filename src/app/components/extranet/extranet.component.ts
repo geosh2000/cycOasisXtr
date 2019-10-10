@@ -66,7 +66,7 @@ export class ExtranetComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    
+
   }
 
   getRsvs(){

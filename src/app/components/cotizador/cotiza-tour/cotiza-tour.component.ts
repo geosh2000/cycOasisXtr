@@ -119,4 +119,12 @@ export class CotizaTourComponent implements OnInit {
                 });
   }
 
+  formatSalida( t ){
+    let h = Math.floor(t)
+    let m = Math.round(t % h * 100)
+
+    // return moment(`${h}:${m}:00`).format('HH:mm')
+    return `${h}:${m < 10 ? '0' + m : m}`
+  }
+
 }

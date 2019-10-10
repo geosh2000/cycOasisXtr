@@ -23,6 +23,7 @@ import { TestComponent } from './components/test/test.component';
 import { MainCotizadorComponent } from './components/cotizador/main-cotizador.component';
 import { Rsv2ManageComponent } from './components/rsv2/rsv2-manage/rsv2-manage.component';
 import { ExtranetComponent } from './components/extranet/extranet.component';
+import { ExtranetListComponent } from './components/extranet/extranet-list/extranet-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -54,6 +55,7 @@ const routes: Routes = [
 
   // Extranet
   { path: 'extranet', component: ExtranetComponent },
+  { path: 'extranetList', component: ExtranetListComponent },
   { path: 'extranet/:loc', component: ExtranetComponent },
 
   // OLD RSV

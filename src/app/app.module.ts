@@ -167,6 +167,7 @@ import { EditMontoParcialComponent } from './components/rsv2/rsv2-manage/edit-mo
 import { ExtranetComponent } from './components/extranet/extranet.component';
 import { ExtPapeletaComponent } from './components/extranet/ext-papeleta.component';
 import { CotizaTourComponent } from './components/cotizador/cotiza-tour/cotiza-tour.component';
+import { ExtranetListComponent } from './components/extranet/extranet-list/extranet-list.component';
 
 @NgModule({
   declarations: [
@@ -273,7 +274,8 @@ import { CotizaTourComponent } from './components/cotizador/cotiza-tour/cotiza-t
     EditMontoParcialComponent,
     ExtranetComponent,
     ExtPapeletaComponent,
-    CotizaTourComponent
+    CotizaTourComponent,
+    ExtranetListComponent
 
   ],
   imports: [
