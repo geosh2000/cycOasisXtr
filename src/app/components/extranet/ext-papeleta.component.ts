@@ -12,6 +12,7 @@ import * as moment from 'moment-timezone';
 import * as Globals from '../../globals';
 import { OrderPipe } from 'ngx-order-pipe';
 
+
 @Component({
   selector: 'app-ext-papeleta',
   templateUrl: './ext-papeleta.component.html',
@@ -33,6 +34,8 @@ export class ExtPapeletaComponent implements OnInit {
   mlTicket:any
   confirmation:any = ''
   confirmationCancel:any = ''
+  puoRo = true
+  puiRo = true
 
   data:Object = {
     master: {},
@@ -49,6 +52,7 @@ export class ExtPapeletaComponent implements OnInit {
   }
 
   rsvType = 'Cotizacion'
+  hrIndex = Globals.HREF
 
   constructor(public _api: ApiService,
               public _init: InitService,
@@ -100,6 +104,36 @@ export class ExtPapeletaComponent implements OnInit {
     let t = `mailto:${m}?subject=${sb}&body=${bd}`
 
     return t
+  }
+
+  savePu( t, v ){
+
+    this.loading[t] = true
+    let params = {
+      itemId: this.data['items'][0]['itemId']
+    }
+    if( t == 'puo' ){
+      params['dtPickUpOut'] = jQuery(v).val() + ' (capturado por: ' + this._init.currentUser.username + ' ' + moment().format('YYYY-MM-DD HH:mm') + ')'
+    }else{
+      params['dtPickUpIn'] = jQuery(v).val() + ' (capturado por: ' + this._init.currentUser.username + ' ' + moment().format('YYYY-MM-DD HH:mm') + ')'
+    }
+
+    this._api.restfulPut( params, 'Rsv/editPickup' )
+                .subscribe( res => {
+
+                  this.loading[t] = false;
+
+                  this.data['items'][0][t == 'puo' ? 'dtPickUpOut' : 'dtPickUpIn'] = jQuery(v).val() + ' (capturado por: ' + this._init.currentUser.username + ')'
+                  this.puoRo = true
+
+                }, err => {
+                  this.loading[t] = false;
+
+                  const error = err.error;
+                  this.toastr.error( error.msg, err.status );
+                  console.error(err.statusText, error.msg);
+
+                });
   }
 
   getLoc( l ){
@@ -382,5 +416,6 @@ export class ExtPapeletaComponent implements OnInit {
     window.print();
     $('body').html(restorepage);
   }
+  
 
 }
